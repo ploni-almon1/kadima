@@ -1919,6 +1919,38 @@
         const participantSection = document.getElementById('chal-participant-section');
         if (isMember) {
             participantSection.style.display = 'block';
+
+            // --- ÚKOL 3: PROGRESS BAR ---
+            // Získání aktuálních statistik z paměti aplikace
+            const stats = window.challengeStatsMap ? window.challengeStatsMap[c.id] : null;
+            let displayKm = 0;
+            if (stats) {
+                // Pokud je to závod, vezmeme jen km aktuálního uživatele, jinak vezmeme součet všech
+                if (c.challengeType === 'race') {
+                    displayKm = stats.userKms && currentUser ? (stats.userKms[currentUser.uid] || 0) : 0;
+                } else {
+                    displayKm = stats.total || 0;
+                }
+            }
+            let targetKm = c.targetKm || 1; // Ochrana proti dělení nulou
+            let pct = (displayKm / targetKm) * 100;
+            if (pct > 100) pct = 100;
+
+            const progressHtml = `
+                <div style="background-color: var(--white); border: 1px solid var(--gray-border); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px;">
+                        <div>
+                            <div style="font-size: 0.85em; font-weight: 600; color: var(--text-gray); margin-bottom: 4px;">${c.challengeType === 'race' ? 'Můj postup v závodu' : 'Náš společný postup'}</div>
+                            <div style="font-size: 1.4em; font-weight: 800; color: var(--text-dark); line-height: 1;">${displayKm.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} <span style="font-size: 0.6em; color: var(--text-gray);">/ ${targetKm} km</span></div>
+                        </div>
+                        <div style="font-size: 0.9em; font-weight: 700; color: var(--primary-dark);">${Math.round(pct)} %</div>
+                    </div>
+                    <div class="chal-progress-bg"><div class="chal-progress-fill" style="width: ${pct}%;"></div></div>
+                </div>
+            `;
+            document.getElementById('chal-participant-progress').innerHTML = progressHtml;
+            // ----------------------------
+
         } else {
             participantSection.style.display = 'none';
         }
