@@ -1949,7 +1949,40 @@
                 </div>
             `;
             document.getElementById('chal-participant-progress').innerHTML = progressHtml;
-            // ----------------------------
+            // --- ÚKOL 4: ŽEBŘÍČEK NEJLEPŠÍCH ---
+            let leaderboardHtml = '';
+            if (stats && stats.userKms) {
+                // Převod uživatelů a jejich km do pole a seřazení od nejlepšího
+                let userArr = Object.keys(stats.userKms)
+                    .map(uid => ({ uid: uid, km: stats.userKms[uid] }))
+                    .sort((a, b) => b.km - a.km);
+                
+                if (userArr.length > 0) {
+                    leaderboardHtml += '<h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 10px;">Průběžné pořadí</h4>';
+                    leaderboardHtml += '<div class="leaderboard-list">';
+                    
+                    userArr.forEach((item, index) => {
+                        let userObj = globalUsersMap[item.uid] || { name: 'Neznámý', avatarUrl: '' };
+                        let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : userObj.name.charAt(0).toUpperCase();
+                        
+                        // Zvýraznění tvého vlastního řádku (tučnější písmo a jemné podbarvení)
+                        let isMe = (currentUser && item.uid === currentUser.uid);
+                        let rowStyle = isMe ? 'background-color: var(--gray-light); border-radius: 12px; padding: 10px; margin: 0 -10px;' : '';
+                        
+                        leaderboardHtml += `
+                        <div class="leaderboard-item" style="${rowStyle}" onclick="window.closeChallengeDetail(); setTimeout(() => openPublicProfile('${item.uid}'), 300);">
+                            <div class="lb-rank">${index + 1}</div>
+                            <div class="lb-avatar">${avatarHtml}</div>
+                            <div class="lb-name" style="${isMe ? 'font-weight: 800;' : ''}">${userObj.name}</div>
+                            <div class="lb-score">${item.km.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km</div>
+                        </div>`;
+                    });
+                    
+                    leaderboardHtml += '</div>';
+                }
+            }
+            document.getElementById('chal-participant-leaderboard').innerHTML = leaderboardHtml;
+            // ----------------------------------
 
         } else {
             participantSection.style.display = 'none';
