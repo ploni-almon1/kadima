@@ -523,7 +523,8 @@
               </div>
 
               <div id="chal-detail-explanation" style="background: var(--gray-light); padding: 15px; border-radius: 16px; margin-top: 30px; margin-bottom: 20px; font-size: 0.9em; color: var(--text-dark); line-height: 1.5;"></div>
-
+<!-- NOVÉ: Kontejner pro odkaz na mapu (Úkol 5) -->
+              <div id="chal-detail-map-link-container" style="margin-top: 10px; margin-bottom: 20px;"></div>
           </div>
       </div>
 
@@ -1984,8 +1985,27 @@
             document.getElementById('chal-participant-leaderboard').innerHTML = leaderboardHtml;
             // ----------------------------------
 
+            // --- ÚKOL 5: ODKAZ NA MAPU ---
+            const mapContainer = document.getElementById('chal-detail-map-link-container');
+            // Proměnná hasMap už se v tvém kódu počítá kousek výš
+            if (hasMap) {
+                mapContainer.style.display = 'block';
+                mapContainer.innerHTML = `
+                    <button style="width: 100%; background: #10B981; color: white; border: none; padding: 15px; border-radius: 16px; font-weight: 700; font-size: 1.05em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);" 
+                            onclick="window.closeChallengeDetail(); setTimeout(() => { window.switchTab('map'); window.handleMapSelect('${c.id}'); }, 300);">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+                        Otevřít mapu akce
+                    </button>
+                `;
+            } else {
+                mapContainer.style.display = 'none';
+                mapContainer.innerHTML = '';
+            }
+            // -----------------------------
+
         } else {
             participantSection.style.display = 'none';
+            document.getElementById('chal-detail-map-link-container').style.display = 'none'; // NOVÉ: Skrýt mapu pro nečleny
         }
 
         btn.onclick = () => {
