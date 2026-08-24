@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
@@ -20,28 +20,19 @@
 
   <style>
     :root { 
-      --bg-color: #F0F2F5; 
-      --text-dark: #111827; 
-      --text-gray: #6B7280;
-      --primary-dark: #1E1B4B; 
-      --primary-orange: #FF5E00; 
-      --white: #ffffff; 
-      --gray-light: #F3F4F6;
-      --gray-border: #E5E7EB;
-      --green-success: #10B981;
+      --bg-color: #F0F2F5; --text-dark: #111827; --text-gray: #6B7280;
+      --primary-dark: #1E1B4B; --primary-orange: #FF5E00; --white: #ffffff; 
+      --gray-light: #F3F4F6; --gray-border: #E5E7EB; --green-success: #10B981;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg-color); color: var(--text-dark); -webkit-font-smoothing: antialiased; }
     .hidden { display: none !important; }
-
-    button, a, .nav-item, .chip, .leaderboard-item { -webkit-tap-highlight-color: transparent; outline: none; }
-
+    button, a, .nav-item, .chip, .leaderboard-item { outline: none; }
     #private-view { max-width: 600px; margin: 0 auto; padding-bottom: 90px; }
+    
     .page-title { font-size: 1.5em; font-weight: 700; padding: 25px 20px 15px 20px; color: var(--text-dark); display: flex; justify-content: space-between; align-items: center; }
     .section-title { font-size: 1.05em; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
     .section-title span { font-size: 0.8em; font-weight: 500; color: var(--text-gray); cursor: pointer; }
-
     .card { background-color: var(--white); border-radius: 20px; padding: 20px; box-shadow: 0 6px 24px rgba(0,0,0,0.06); margin: 0 20px 20px 20px; }
     .card-no-padding { background-color: var(--white); border-radius: 20px; box-shadow: 0 6px 24px rgba(0,0,0,0.06); margin: 0 20px 20px 20px; overflow: hidden; }
 
@@ -49,7 +40,6 @@
     .main-distance-label { font-size: 0.85em; font-weight: 500; opacity: 0.9; margin-bottom: 8px; }
     .main-distance-value { font-size: 2.8em; font-weight: 600; }
     .main-distance-value span { font-size: 0.5em; font-weight: 600; opacity: 0.9; }
-
     .badge-green { position: absolute; top: 25px; right: 25px; font-size: 0.75em; font-weight: 600; padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 4px; transition: 0.3s; }
     .badge-green.active { background-color: rgba(16, 185, 129, 0.15); color: #10B981; }
     .badge-green.inactive { background-color: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.6); }
@@ -58,7 +48,6 @@
     .btn-add-activity { flex: 1; background-color: var(--white); border-radius: 20px; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; box-shadow: 0 6px 24px rgba(0,0,0,0.06); border: none; cursor: pointer; text-align: left; }
     .btn-add-icon { width: 40px; height: 40px; background-color: var(--primary-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); font-size: 1.5em; font-weight: 400; flex-shrink: 0; }
     .btn-add-text h4 { color: var(--primary-dark); font-size: 1.2em; font-weight: 700; margin: 0; }
-
     .btn-strava { width: 70px; height: 70px; border: none; cursor: pointer; flex-shrink: 0; background: transparent; padding: 0; display: block; border-radius: 20px; overflow: hidden; }
     .btn-strava img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -93,14 +82,10 @@
 
     .profile-buttons-row { display: flex; justify-content: flex-start; width: 100%; margin: 0 auto 20px auto; gap: 10px;}
     .btn-edit-prof { background: transparent; border: 1px solid var(--text-dark); color: var(--text-dark); padding: 6px 14px; border-radius: 50px; font-size: 0.85em; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: none; transition: background 0.2s;}
-    .btn-edit-prof:active { background: var(--gray-light); }
-    .btn-edit-prof svg { fill: var(--text-dark); width: 14px; height: 14px; }
-
     .btn-requests { width: 100%; background: #4F46E5; color: var(--white); border: none; padding: 12px 15px; border-radius: 20px; font-size: 0.9em; font-weight: 700; cursor: pointer; margin: -10px auto 25px auto; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2); display: none; text-align: center; }
 
     .activity-list-icon { width: 24px; height: 24px; margin-right: 15px; flex-shrink: 0; object-fit: contain; }
     .btn-inline-edit { display: none; background: transparent; border: none; padding: 5px; width: 28px; height: 28px; cursor: pointer; align-items: center; justify-content: center; margin-left: 10px; flex-shrink: 0; }
-    .btn-inline-edit svg { width: 16px; height: 16px; fill: var(--text-gray); }
     .edit-mode-active .btn-inline-edit { display: flex; } 
 
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--white); display: flex; justify-content: space-around; padding: 12px 0 20px 0; border-top: 1px solid var(--gray-border); z-index: 1000; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
@@ -113,28 +98,23 @@
     .real-map-container { position: absolute; top: 0; left: 0; right: 0; bottom: 65px; z-index: 1; }
     .map-fab-container { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); right: 20px; z-index: 1001; display: flex; flex-direction: column; gap: 12px; }
     .map-fab { width: 46px; height: 46px; background: var(--white); border: none; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-dark); transition: transform 0.2s; }
-    .map-fab:active { transform: scale(0.95); }
-    .map-fab svg { fill: currentColor; }
     .custom-map-marker { display:flex; align-items:center; justify-content:center; }
     .map-overlay-message { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 500; background: rgba(255,255,255,0.9); padding: 15px 25px; border-radius: 20px; font-weight: 600; color: var(--text-dark); text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); pointer-events: none; }
     .race-marker-container { width: 34px; height: 34px; border-radius: 50%; border: 3px solid #FC4C02; background-color: var(--primary-dark); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); font-size: 0.9em; }
     .race-marker-container img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Absolutní skrytí pomocí visibility: hidden zamezuje blokování dotyků */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.3s ease, visibility 0.3s ease; padding: 20px; }
     .modal-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
-    
     .modal-content { background-color: var(--white); padding: 25px; border-radius: 24px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; text-align: center; position: relative; }
-    .modal-content h3 { margin-bottom: 20px; color: var(--primary-dark); }
-
+    
     .chal-detail-fullscreen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 3000; background: var(--bg-color); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s ease; transform: translateY(100%); visibility: hidden; pointer-events: none; }
     .chal-detail-fullscreen.active { transform: translateY(0); visibility: visible; pointer-events: auto; }
     .chal-detail-bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 56.25vw; max-height: 338px; background-size: cover; background-position: center; background-color: var(--primary-dark); z-index: 1; }
     
-    .chal-detail-close-btn { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); left: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 100; cursor: pointer; border: 1px solid var(--gray-border); color: var(--text-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .chal-detail-share-btn { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); right: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 100; cursor: pointer; border: 1px solid var(--gray-border); color: var(--text-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    
-    .chal-detail-edit-btn { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); right: 70px; width: 40px; height: 40px; background: rgba(255,255,255,0.95); border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 100; cursor: pointer; border: 1px solid var(--gray-border); color: var(--text-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .chal-detail-close-btn, .chal-detail-share-btn, .chal-detail-edit-btn { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); width: 40px; height: 40px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 100; cursor: pointer; border: 1px solid var(--gray-border); color: var(--text-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .chal-detail-close-btn { left: 20px; }
+    .chal-detail-share-btn { right: 20px; }
+    .chal-detail-edit-btn { right: 70px; display: none; }
 
     .chal-detail-scroll-area { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; z-index: 2; }
     .chal-detail-sheet { background: var(--white); border-radius: 24px 24px 0 0; padding: 20px 20px 120px 20px; margin-top: calc(56.25vw - 20px); position: relative; min-height: 100vh; max-width: 600px; margin-left: auto; margin-right: auto; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
@@ -142,11 +122,10 @@
 
     .drag-handle { width: 40px; height: 5px; background: #D1D5DB; border-radius: 3px; margin: 0 auto 20px auto; }
     .chal-author-box { display: flex; align-items: center; gap: 15px; padding: 15px; border: 1px solid var(--gray-border); border-radius: 16px; margin-bottom: 25px; }
-    .chal-author-avatar { width: 48px; height: 48px; background: var(--primary-dark); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; overflow: hidden; font-size: 1.2em; flex-shrink: 0; transition: border-radius 0.2s;}
+    .chal-author-avatar { width: 48px; height: 48px; background: var(--primary-dark); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; overflow: hidden; font-size: 1.2em; flex-shrink: 0; border-radius: 50%;}
     .chal-author-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .chal-floating-action { position: fixed; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(255,255,255,1) 70%, rgba(255,255,255,0)); padding: 30px 20px calc(20px + env(safe-area-inset-bottom, 0px)) 20px; z-index: 10; display: flex; justify-content: center; pointer-events: none;}
     .chal-btn-main { background: #4F46E5; color: white; border: none; padding: 16px; border-radius: 50px; font-weight: 700; font-size: 1.05em; width: 100%; max-width: 560px; cursor: pointer; transition: 0.2s; pointer-events: auto;}
-    .chal-btn-main:active { transform: scale(0.98); }
     .chal-btn-main.joined { background: var(--white); color: #EF4444; border: 2px solid #FECACA; }
 
     .activity-chips { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -155,7 +134,7 @@
     .chip-small { padding: 8px 12px; font-size: 0.85em; }
 
     .color-chip { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: transform 0.2s, border-color 0.2s; }
-    .color-chip.active { border-color: var(--text-dark) !important; transform: scale(1.15); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .color-chip.active { transform: scale(1.15); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
     .km-input-wrapper { margin-bottom: 20px; }
     .km-input { width: 120px; font-size: 2.5em; font-weight: 800; text-align: center; border: none; border-bottom: 2px solid var(--primary-dark); outline: none; color: var(--text-dark); padding: 5px; }
@@ -165,22 +144,17 @@
 
     .modal-buttons-row { display: flex; gap: 10px; width: 100%; margin-top: 20px; }
     .btn-save { flex: 1; background-color: var(--primary-orange); color: var(--white); border: none; padding: 15px; border-radius: 16px; font-weight: 600; cursor: pointer; }
-    .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-cancel { flex: 1; background-color: var(--gray-light); color: var(--text-dark); border: none; padding: 15px; border-radius: 16px; font-weight: 600; cursor: pointer; }
     .btn-delete { background-color: #FEE2E2; color: #EF4444; border: none; padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 15px; font-size: 0.9em; width: 100%; }
 
-    .btn-follow, .btn-follow-requested, .btn-follow-active { border: none; padding: 10px 20px; border-radius: 16px; font-weight: 600; font-size: 0.9em; cursor: pointer; transition: 0.2s; }
+    .btn-follow, .btn-follow-requested, .btn-follow-active { border: none; padding: 10px 20px; border-radius: 16px; font-weight: 600; font-size: 0.9em; cursor: pointer; }
     .btn-follow { background-color: var(--primary-dark); color: var(--white); }
     .btn-follow-requested { background-color: var(--gray-light); color: var(--text-gray); border: 1px solid var(--gray-border); }
     .btn-follow-active { background-color: var(--gray-light); color: var(--text-dark); border: 1px solid var(--gray-border); }
-
     .btn-req-accept { background: var(--primary-dark); color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 0.8em; cursor: pointer; margin-right: 5px; }
     .btn-req-reject { background: var(--gray-light); color: var(--text-dark); border: none; padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 0.8em; cursor: pointer; }
     .btn-fetch-gpx { background-color: var(--primary-dark); color: var(--white); border: none; padding: 0 15px; border-radius: 12px; font-weight: 600; font-size: 0.85em; cursor: pointer; white-space: nowrap; transition: 0.2s; }
-    .btn-fetch-gpx:active { transform: scale(0.95); }
-
     .map-btn-large { background: var(--gray-light); color: var(--primary-dark); border: 2px solid var(--primary-dark); padding: 14px; border-radius: 16px; font-size: 1.05em; font-weight: 700; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; transition: 0.2s; }
-    .map-btn-large:active { transform: scale(0.98); }
 
     .cropper-container-wrapper { width: 100%; max-height: 220px; margin-top: 15px; background-color: #eee; overflow: hidden; border-radius: 12px; display: none; }
     .cropper-container-wrapper img { max-width: 100%; display: block; }
@@ -191,8 +165,7 @@
     .btn-login { background-color: var(--primary-orange); color: var(--white); border: none; padding: 15px; font-size: 1.1em; font-weight: 600; border-radius: 12px; cursor: pointer; width: 100%; margin-bottom: 10px; }
     .btn-register { background-color: var(--primary-dark); color: var(--white); border: none; padding: 15px; font-size: 1em; font-weight: 600; border-radius: 12px; cursor: pointer; width: 100%; margin-bottom: 15px;}
     .btn-google { background-color: var(--white); color: var(--text-dark); border: 1px solid var(--gray-border); padding: 15px; font-size: 1em; font-weight: 600; border-radius: 12px; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .chart-legend-row { display:flex; justify-content:space-between; width:100%; font-size:0.85em; font-weight:600; color:var(--text-dark); margin-bottom:8px;}
-    .chart-legend-row:last-child { margin-bottom:0; }
+    
     .members-dropdown-content { background-color: var(--bg-color); border-radius: 16px; padding: 10px 15px; margin-top: 15px; transition: all 0.3s ease; }
     .challenge-member-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
     .challenge-member-row:last-child { border-bottom: none; }
@@ -249,9 +222,7 @@
       </div>
       <div class="section-title" style="margin: 20px 20px 10px 20px;">Top 3 (Celkově)</div>
       <div class="card" style="padding: 8px 20px;">
-        <div id="dashboard-leaderboard-list" class="leaderboard-list">
-          <div style="text-align: center; color: var(--text-gray); padding: 10px; font-size:0.9em;">Načítám data...</div>
-        </div>
+        <div id="dashboard-leaderboard-list" class="leaderboard-list"><div style="text-align: center; color: var(--text-gray); padding: 10px; font-size:0.9em;">Načítám data...</div></div>
       </div>
     </div> 
 
@@ -312,11 +283,11 @@
         Můj profil
         <div style="display:flex; gap: 15px; align-items:center;">
           <svg onclick="openSearchModal()" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="cursor:pointer;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-          <svg onclick="openSettingsModal()" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="cursor:pointer;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+          <svg onclick="openSettingsModal()" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="cursor:pointer;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
         </div>
       </div>
       <div class="profile-header-new">
-        <div class="profile-avatar-giant" id="profile-avatar">J</div>
+        <div class="profile-avatar-giant" id="profile-avatar"></div>
         <div class="profile-name-giant" id="profile-name">Jméno</div>
         <button id="profile-requests-btn" class="btn-requests" onclick="openConnections('requests')">Nové žádosti o sledování</button>
         <div class="profile-stats-row">
@@ -523,7 +494,7 @@
 
       <!-- TRASA VS OKRUH -->
       <div class="date-input-wrapper" style="margin-top: 20px;">
-        <label style="text-align:center;">Režim trasy:</label>
+        <label style="text-align:center;">Režim trasy na mapě:</label>
         <div class="activity-chips" style="margin-bottom:0; display:flex; flex-wrap:nowrap; gap:10px;" id="new-chal-track-type">
           <div class="chip active" style="flex:1; text-align:center;" data-val="route" onclick="selectSingleChip(this, 'new-chal-track-type'); updateTrackTypeUI('new')">Z bodu A do B</div>
           <div class="chip" style="flex:1; text-align:center;" data-val="circuit" onclick="selectSingleChip(this, 'new-chal-track-type'); updateTrackTypeUI('new')">Okruhy (Kroužení)</div>
@@ -551,7 +522,7 @@
           </div>
       </div>
 
-      <!-- VZHLED VYZNAČENÉ TRASY (Platí nově pro GPX i Virtual) -->
+      <!-- VZHLED VYZNAČENÉ TRASY (Platí pro GPX i Virtual) -->
       <div class="date-input-wrapper" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 15px; margin-bottom: 15px;">
           <label style="text-align:center; font-weight:700;">Vzhled čáry na mapě</label>
           <div style="display:flex; gap:10px; margin-bottom:10px;">
@@ -665,8 +636,9 @@
           <div id="edit-chal-type-info" style="font-size: 0.85em; color: var(--text-gray); margin-top: 10px; text-align: left; padding: 10px; background: var(--gray-light); border-radius: 12px;">Společná výzva: Kilometry všech zúčastněných se sčítají dohromady do jednoho společného cíle.</div>
       </div>
 
+      <!-- TRASA VS OKRUH -->
       <div class="date-input-wrapper" style="margin-top: 20px;">
-        <label style="text-align:center;">Režim trasy:</label>
+        <label style="text-align:center;">Režim trasy na mapě:</label>
         <div class="activity-chips" style="margin-bottom:0; display:flex; flex-wrap:nowrap; gap:10px;" id="edit-chal-track-type">
           <div class="chip" style="flex:1; text-align:center;" data-val="route" onclick="selectSingleChip(this, 'edit-chal-track-type'); updateTrackTypeUI('edit')">Z bodu A do B</div>
           <div class="chip" style="flex:1; text-align:center;" data-val="circuit" onclick="selectSingleChip(this, 'edit-chal-track-type'); updateTrackTypeUI('edit')">Okruhy (Kroužení)</div>
@@ -688,6 +660,7 @@
           </div>
       </div>
 
+      <!-- VZHLED VYZNAČENÉ TRASY -->
       <div class="date-input-wrapper" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 15px; margin-bottom: 15px;">
           <label style="text-align:center; font-weight:700;">Vzhled čáry na mapě</label>
           <div style="display:flex; gap:10px; margin-bottom:10px;">
@@ -813,12 +786,7 @@
     import { initializeFirestore, persistentLocalCache, persistentSingleTabManager, doc, setDoc, getDoc, updateDoc, deleteDoc, increment, onSnapshot, collection, query, orderBy, addDoc, where, getDocs, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDI_7D0jyBM2LbU4hpoumGp3VPdcBn2jEY",
-      authDomain: "lech-lecha-c05ed.firebaseapp.com",
-      projectId: "lech-lecha-c05ed",
-      storageBucket: "lech-lecha-c05ed.firebasestorage.app",
-      messagingSenderId: "544542961045",
-      appId: "1:544542961045:web:a44a5cd694760302be5a9c"
+      apiKey: "AIzaSyDI_7D0jyBM2LbU4hpoumGp3VPdcBn2jEY", authDomain: "lech-lecha-c05ed.firebaseapp.com", projectId: "lech-lecha-c05ed", storageBucket: "lech-lecha-c05ed.firebasestorage.app", messagingSenderId: "544542961045", appId: "1:544542961045:web:a44a5cd694760302be5a9c"
     };
 
     const app = initializeApp(firebaseConfig); 
@@ -830,422 +798,112 @@
     let currentUser = null; let isUserAdmin = false; let unsubscribeUser = null; let unsubscribeActivities = null; let unsubscribeChallengesList = null; let unsubscribeAllActivities = null; let unsubscribeUsersList = null;
     let isSaving = false; let globalActivities = []; let globalChallenges = []; let globalUsersMap = {}; window.challengeStatsMap = {}; 
     let currentActivityType = "Chůze"; let editActivityType = ""; let selectedActivityId = null; let selectedActivityOldKm = 0; let selectedActivityDate = null; let cropper = null; 
-    let chalCropper = null; let currentEditChalBgUrl = "";
-    
-    let chalBadgeCropper = null; 
-    let currentEditChalBadgeUrl = "";
-
-    let personalFilterType = 'total'; 
-    let personalFilterFrom = ''; 
-    let personalFilterTo = '';
-
+    let chalCropper = null; let currentEditChalBgUrl = ""; let chalBadgeCropper = null; let currentEditChalBadgeUrl = "";
+    let personalFilterType = 'total'; let personalFilterFrom = ''; let personalFilterTo = '';
     let leafletMap = null; let mapLayers = []; let layerOsm = null; let layerSat = null; let currentMapLayerType = 'osm'; let currentSelectedChallengeIdForMap = null;
+    let currentChallengeIdForShare = null; let currentChallengeNameForShare = ""; let hasCheckedSharedLink = false;
 
-    let currentChallengeIdForShare = null;
-    let currentChallengeNameForShare = "";
-    let hasCheckedSharedLink = false;
+    window.togglePassword = (id) => { const input = document.getElementById(id); if (input.type === "password") input.type = "text"; else input.type = "password"; };
+    
+    // Virtual Map Helpers
+    window.handleVirtualImgUrlInput = (url) => { if (!url) return; const img = new Image(); img.onload = function() { document.getElementById('new-chal-v-w').value = this.naturalWidth; document.getElementById('new-chal-v-h').value = this.naturalHeight; }; img.src = url; };
+    window.handleVirtualFileSelect = (input) => { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { const img = new Image(); img.onload = function() { const origW = this.naturalWidth; const origH = this.naturalHeight; document.getElementById('new-chal-v-w').value = origW; document.getElementById('new-chal-v-h').value = origH; const canvas = document.createElement('canvas'); let targetW = origW; let targetH = origH; const MAX_SIZE = 2500; if (targetW > MAX_SIZE || targetH > MAX_SIZE) { const ratio = Math.min(MAX_SIZE / targetW, MAX_SIZE / targetH); targetW = Math.round(targetW * ratio); targetH = Math.round(targetH * ratio); } canvas.width = targetW; canvas.height = targetH; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, targetW, targetH); document.getElementById('new-chal-v-img').value = canvas.toDataURL('image/webp', 0.85); }; img.src = e.target.result; }; reader.readAsDataURL(file); };
+    window.handleVirtualImgUrlInputEdit = (url) => { if (!url) return; const img = new Image(); img.onload = function() { document.getElementById('edit-chal-v-w').value = this.naturalWidth; document.getElementById('edit-chal-v-h').value = this.naturalHeight; }; img.src = url; };
+    window.handleVirtualFileSelectEdit = (input) => { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { const img = new Image(); img.onload = function() { const origW = this.naturalWidth; const origH = this.naturalHeight; document.getElementById('edit-chal-v-w').value = origW; document.getElementById('edit-chal-v-h').value = origH; const canvas = document.createElement('canvas'); let targetW = origW; let targetH = origH; const MAX_SIZE = 2500; if (targetW > MAX_SIZE || targetH > MAX_SIZE) { const ratio = Math.min(MAX_SIZE / targetW, MAX_SIZE / targetH); targetW = Math.round(targetW * ratio); targetH = Math.round(targetH * ratio); } canvas.width = targetW; canvas.height = targetH; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, targetW, targetH); document.getElementById('edit-chal-v-img').value = canvas.toDataURL('image/webp', 0.85); }; img.src = e.target.result; }; reader.readAsDataURL(file); };
 
-    window.togglePassword = (id) => {
-        const input = document.getElementById(id);
-        if (input.type === "password") { input.type = "text"; } 
-        else { input.type = "password"; }
-    };
-
-    window.handleVirtualImgUrlInput = (url) => {
-        if (!url) return;
-        const img = new Image();
-        img.onload = function() {
-            document.getElementById('new-chal-v-w').value = this.naturalWidth;
-            document.getElementById('new-chal-v-h').value = this.naturalHeight;
-        };
-        img.src = url;
-    };
-
-    window.handleVirtualFileSelect = (input) => {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                const origW = this.naturalWidth;
-                const origH = this.naturalHeight;
-                document.getElementById('new-chal-v-w').value = origW;
-                document.getElementById('new-chal-v-h').value = origH;
-                const canvas = document.createElement('canvas');
-                let targetW = origW; let targetH = origH;
-                const MAX_SIZE = 2500; 
-                if (targetW > MAX_SIZE || targetH > MAX_SIZE) {
-                    const ratio = Math.min(MAX_SIZE / targetW, MAX_SIZE / targetH);
-                    targetW = Math.round(targetW * ratio); targetH = Math.round(targetH * ratio);
-                }
-                canvas.width = targetW; canvas.height = targetH;
-                const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, targetW, targetH);
-                document.getElementById('new-chal-v-img').value = canvas.toDataURL('image/webp', 0.85);
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    };
-
-    window.handleVirtualImgUrlInputEdit = (url) => {
-        if (!url) return;
-        const img = new Image();
-        img.onload = function() { document.getElementById('edit-chal-v-w').value = this.naturalWidth; document.getElementById('edit-chal-v-h').value = this.naturalHeight; };
-        img.src = url;
-    };
-
-    window.handleVirtualFileSelectEdit = (input) => {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                const origW = this.naturalWidth; const origH = this.naturalHeight;
-                document.getElementById('edit-chal-v-w').value = origW; document.getElementById('edit-chal-v-h').value = origH;
-                const canvas = document.createElement('canvas');
-                let targetW = origW; let targetH = origH;
-                const MAX_SIZE = 2500;
-                if (targetW > MAX_SIZE || targetH > MAX_SIZE) {
-                    const ratio = Math.min(MAX_SIZE / targetW, MAX_SIZE / targetH);
-                    targetW = Math.round(targetW * ratio); targetH = Math.round(targetH * ratio);
-                }
-                canvas.width = targetW; canvas.height = targetH;
-                const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, targetW, targetH);
-                document.getElementById('edit-chal-v-img').value = canvas.toDataURL('image/webp', 0.85);
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    };
-
-    window.updateTrackTypeUI = (mode) => {
-        let type = document.querySelector(`#${mode}-chal-track-type .chip.active`).getAttribute('data-val');
-        if (type === 'circuit') {
-            document.getElementById(`${mode}-chal-circuit-fields`).style.display = 'block';
-        } else {
-            document.getElementById(`${mode}-chal-circuit-fields`).style.display = 'none';
-        }
-    };
-
-    window.calcTargetFromLaps = (mode) => {
-        let type = document.querySelector(`#${mode}-chal-track-type .chip.active`).getAttribute('data-val');
-        if (type === 'circuit') {
-            let base = parseFloat(document.getElementById(`${mode}-chal-base-km`).value) || 0;
-            let laps = parseFloat(document.getElementById(`${mode}-chal-laps`).value) || 0;
-            if (base > 0 && laps > 0) {
-                document.getElementById(`${mode}-chal-km`).value = (base * laps).toFixed(1);
-            }
-        }
-    };
-
+    // Common UI Helpers
+    window.updateTrackTypeUI = (mode) => { let type = document.querySelector(`#${mode}-chal-track-type .chip.active`).getAttribute('data-val'); document.getElementById(`${mode}-chal-circuit-fields`).style.display = (type === 'circuit') ? 'block' : 'none'; };
+    window.calcTargetFromLaps = (mode) => { let type = document.querySelector(`#${mode}-chal-track-type .chip.active`).getAttribute('data-val'); if (type === 'circuit') { let base = parseFloat(document.getElementById(`${mode}-chal-base-km`).value) || 0; let laps = parseFloat(document.getElementById(`${mode}-chal-laps`).value) || 0; if (base > 0 && laps > 0) document.getElementById(`${mode}-chal-km`).value = (base * laps).toFixed(1); } };
     window.pushModalState = () => { history.pushState({ isModal: true }, ""); };
-    window.addEventListener('popstate', (e) => {
-        document.getElementById('chal-detail-fullscreen').classList.remove('active');
-        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
-        if(cropper) { cropper.destroy(); cropper = null; }
-        if(chalCropper) { chalCropper.destroy(); chalCropper = null; }
-        if(chalBadgeCropper) { chalBadgeCropper.destroy(); chalBadgeCropper = null; }
-    });
+    window.addEventListener('popstate', (e) => { document.getElementById('chal-detail-fullscreen').classList.remove('active'); document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active')); if(cropper) cropper.destroy(); cropper = null; if(chalCropper) chalCropper.destroy(); chalCropper = null; if(chalBadgeCropper) chalBadgeCropper.destroy(); chalBadgeCropper = null; });
+    window.handleUIClose = (modalId) => { if (history.state && history.state.isModal) history.back(); else { if (modalId) document.getElementById(modalId).classList.remove('active'); else { document.getElementById('chal-detail-fullscreen').classList.remove('active'); document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active')); } } };
+    window.shareChallenge = () => { if (!currentChallengeIdForShare) return; const url = window.location.origin + window.location.pathname + "?challenge=" + currentChallengeIdForShare; if (navigator.share) { navigator.share({ title: currentChallengeNameForShare, text: 'Přidej se ke mně v aplikaci Kadima!', url: url }).catch((e) => console.log('Chyba sdílení', e)); } else { prompt("Zkopírujte tento odkaz:", url); } };
+    window.gotoMapFromDetail = () => { window.closeChallengeDetail(); setTimeout(() => { window.switchTab('map'); window.handleMapSelect(currentChallengeIdForShare); }, 300); };
+    function extractStravaUrl(rawText) { if (!rawText) return ""; const match = rawText.match(/(https?:\/\/[^\s]+)/); return match ? match[0] : ""; }
+    function getCustomWeekString(date, startDay) { let d = new Date(date); d.setHours(0,0,0,0); let day = d.getDay(); let diff = (day - startDay + 7) % 7; d.setDate(d.getDate() - diff); return d.toLocaleDateString('cs-CZ'); }
 
-    window.handleUIClose = (modalId) => {
-        if (history.state && history.state.isModal) { history.back(); } 
-        else {
-            if (modalId) document.getElementById(modalId).classList.remove('active');
-            else { document.getElementById('chal-detail-fullscreen').classList.remove('active'); document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active')); }
-        }
-    };
-
-    window.shareChallenge = () => {
-        if (!currentChallengeIdForShare) return;
-        const url = window.location.origin + window.location.pathname + "?challenge=" + currentChallengeIdForShare;
-        if (navigator.share) {
-            navigator.share({ title: currentChallengeNameForShare, text: 'Přidej se ke mně do této akce v aplikaci Kadima!', url: url, })
-            .catch((error) => console.log('Chyba sdílení', error));
-        } else { prompt("Zkopírujte tento odkaz pro sdílení:", url); }
-    };
-
-    window.gotoMapFromDetail = () => {
-        window.closeChallengeDetail();
-        setTimeout(() => { window.switchTab('map'); window.handleMapSelect(currentChallengeIdForShare); }, 300);
-    };
-
-    function extractStravaUrl(rawText) {
-        if (!rawText) return ""; const match = rawText.match(/(https?:\/\/[^\s]+)/); return match ? match[0] : "";
-    }
-
-    function getCustomWeekString(date, startDay) {
-        let d = new Date(date); d.setHours(0,0,0,0); let day = d.getDay(); let diff = (day - startDay + 7) % 7; d.setDate(d.getDate() - diff); return d.toLocaleDateString('cs-CZ'); 
-    }
-
-    const icons = {
-      "Běh": `<img src="assets/run.svg" class="activity-list-icon" alt="Běh">`,
-      "Kolo": `<img src="assets/bike.svg" class="activity-list-icon" alt="Kolo">`,
-      "Chůze": `<img src="assets/walk.svg" class="activity-list-icon" alt="Chůze">`,
-      "Běh/chůze": `<img src="assets/run.svg" class="activity-list-icon" alt="Běh/chůze">`,
-      "Běžky": `<img src="assets/ski.svg" class="activity-list-icon" alt="Běžky">`
-    };
-
-    window.updateTypeInfo = (element, mode) => {
-        const isRace = element.getAttribute('data-val') === 'race';
-        const infoDiv = document.getElementById(mode + '-chal-type-info');
-        if (infoDiv) {
-            if (isRace) { infoDiv.innerText = 'Závod: Každý účastník sbírá kilometry sám za sebe a soutěží s ostatními.'; } 
-            else { infoDiv.innerText = 'Společná výzva: Kilometry všech zúčastněných se sčítají dohromady do jednoho společného cíle.'; }
-        }
-    };
-
-    window.saveCustomNote = async () => {
-        if(!currentUser) return; const noteText = document.getElementById('p-custom-note').value.trim();
-        try { await updateDoc(doc(db, "users", currentUser.uid), { customStatsNote: noteText }); } catch (e) {}
-    };
+    const icons = { "Běh": `<img src="assets/run.svg" class="activity-list-icon" alt="Běh">`, "Kolo": `<img src="assets/bike.svg" class="activity-list-icon" alt="Kolo">`, "Chůze": `<img src="assets/walk.svg" class="activity-list-icon" alt="Chůze">`, "Běh/chůze": `<img src="assets/run.svg" class="activity-list-icon" alt="Běh/chůze">`, "Běžky": `<img src="assets/ski.svg" class="activity-list-icon" alt="Běžky">` };
+    window.updateTypeInfo = (element, mode) => { const isRace = element.getAttribute('data-val') === 'race'; const infoDiv = document.getElementById(mode + '-chal-type-info'); if (infoDiv) { if (isRace) infoDiv.innerText = 'Závod: Každý účastník sbírá kilometry sám za sebe a soutěží s ostatními.'; else infoDiv.innerText = 'Společná výzva: Kilometry všech zúčastněných se sčítají dohromady do jednoho společného cíle.'; } };
+    window.saveCustomNote = async () => { if(!currentUser) return; const noteText = document.getElementById('p-custom-note').value.trim(); try { await updateDoc(doc(db, "users", currentUser.uid), { customStatsNote: noteText }); } catch (e) {} };
 
     const yearSel = document.getElementById('p-year-select');
-    if(yearSel) {
-        const currY = new Date().getFullYear();
-        for(let y = currY + 24; y >= 2026; y--) { let o = document.createElement('option'); o.value = y; o.text = y; if(y === currY) o.selected = true; yearSel.appendChild(o); }
-    }
+    if(yearSel) { const currY = new Date().getFullYear(); for(let y = currY + 24; y >= 2026; y--) { let o = document.createElement('option'); o.value = y; o.text = y; if(y === currY) o.selected = true; yearSel.appendChild(o); } }
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUser = user; publicView.classList.add('hidden'); privateView.classList.remove('hidden');
         isUserAdmin = user.email && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(user.email.toLowerCase());
 
-        if (isUserAdmin) {
-            document.getElementById('btn-create-challenge-admin').style.display = 'block';
-            document.getElementById('admin-author-toggle').style.display = 'block';
-            document.getElementById('edit-admin-author-toggle').style.display = 'block';
-            document.getElementById('admin-visibility-toggle').style.display = 'block';
-            document.getElementById('edit-admin-visibility-toggle').style.display = 'block';
-        } else {
-            document.getElementById('btn-create-challenge-admin').style.display = 'block';
-            document.getElementById('admin-author-toggle').style.display = 'none';
-            document.getElementById('edit-admin-author-toggle').style.display = 'none';
-            document.getElementById('admin-visibility-toggle').style.display = 'none';
-            document.getElementById('edit-admin-visibility-toggle').style.display = 'none';
-        }
+        if (isUserAdmin) { document.getElementById('btn-create-challenge-admin').style.display = 'block'; document.getElementById('admin-author-toggle').style.display = 'block'; document.getElementById('edit-admin-author-toggle').style.display = 'block'; document.getElementById('admin-visibility-toggle').style.display = 'block'; document.getElementById('edit-admin-visibility-toggle').style.display = 'block'; } 
+        else { document.getElementById('btn-create-challenge-admin').style.display = 'block'; document.getElementById('admin-author-toggle').style.display = 'none'; document.getElementById('edit-admin-author-toggle').style.display = 'none'; document.getElementById('admin-visibility-toggle').style.display = 'none'; document.getElementById('edit-admin-visibility-toggle').style.display = 'none'; }
 
         const userRef = doc(db, "users", user.uid);
-        if (!(await getDoc(userRef)).exists()) { 
-            await setDoc(userRef, { personalKm: 0, name: user.displayName || user.email.split('@')[0], avatarUrl: "", followers: [], following: [], followRequests: [], sentRequests: [], isPrivate: false, customStatsNote: "" }); 
-        }
+        if (!(await getDoc(userRef)).exists()) { await setDoc(userRef, { personalKm: 0, name: user.displayName || user.email.split('@')[0], avatarUrl: "", followers: [], following: [], followRequests: [], sentRequests: [], isPrivate: false, customStatsNote: "" }); }
 
-        unsubscribeUsersList = onSnapshot(collection(db, "users"), (snapshot) => {
-            globalUsersMap = {}; let rankArr = [];
-            snapshot.forEach(doc => { let data = doc.data(); globalUsersMap[doc.id] = data; rankArr.push({ id: doc.id, ...data }); });
-            rankArr.sort((a,b) => (b.personalKm || 0) - (a.personalKm || 0));
-            const dashList = document.getElementById('dashboard-leaderboard-list'); dashList.innerHTML = '';
-            for(let i=0; i<Math.min(3, rankArr.length); i++) {
-                let u = rankArr[i]; let avatarHtml = u.avatarUrl ? `<img src="${u.avatarUrl}">` : (u.name || 'N').charAt(0).toUpperCase();
-                dashList.innerHTML += `<div class="leaderboard-item" onclick="openPublicProfile('${u.id}')"><div class="lb-rank">${i+1}</div><div class="lb-avatar">${avatarHtml}</div><div class="lb-name">${u.name || 'Neznámý'}</div><div class="lb-score">${Math.max(0, u.personalKm || 0).toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km</div></div>`;
-            }
-            renderDynamicContent();
-        });
+        unsubscribeUsersList = onSnapshot(collection(db, "users"), (snapshot) => { globalUsersMap = {}; let rankArr = []; snapshot.forEach(doc => { let data = doc.data(); globalUsersMap[doc.id] = data; rankArr.push({ id: doc.id, ...data }); }); rankArr.sort((a,b) => (b.personalKm || 0) - (a.personalKm || 0)); const dashList = document.getElementById('dashboard-leaderboard-list'); dashList.innerHTML = ''; for(let i=0; i<Math.min(3, rankArr.length); i++) { let u = rankArr[i]; let avatarHtml = u.avatarUrl ? `<img src="${u.avatarUrl}">` : (u.name || 'N').charAt(0).toUpperCase(); dashList.innerHTML += `<div class="leaderboard-item" onclick="openPublicProfile('${u.id}')"><div class="lb-rank">${i+1}</div><div class="lb-avatar">${avatarHtml}</div><div class="lb-name">${u.name || 'Neznámý'}</div><div class="lb-score">${Math.max(0, u.personalKm || 0).toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km</div></div>`; } renderDynamicContent(); });
+        
+        unsubscribeUser = onSnapshot(userRef, (docSnap) => { if (!docSnap.exists()) return; const data = docSnap.data(); const myKm = Math.max(0, data.personalKm || 0); let formattedStr = myKm.toLocaleString('cs-CZ', {maximumFractionDigits: 1}); document.getElementById('my-km-text').innerHTML = `${formattedStr}<span> km</span>`; document.getElementById('profile-name').innerText = data.name || 'Neznámý'; document.getElementById('profile-total-km').innerText = formattedStr + ' km'; const pAvatarNode = document.getElementById('profile-avatar'); if (data.avatarUrl) { pAvatarNode.innerHTML = `<img src="${data.avatarUrl}">`; } else { pAvatarNode.innerHTML = (data.name || 'N').charAt(0).toUpperCase(); } if (data.customStatsNote) { document.getElementById('p-custom-note').value = data.customStatsNote; } else { document.getElementById('p-custom-note').value = ""; } let followersCount = data.followers ? data.followers.length : 0; let followingCount = data.following ? data.following.length : 0; let requestsCount = data.followRequests ? data.followRequests.length : 0; document.getElementById('profile-followers').innerText = followersCount; document.getElementById('profile-following').innerText = followingCount; const reqBtn = document.getElementById('profile-requests-btn'); if(requestsCount > 0) { reqBtn.style.display = 'block'; reqBtn.innerText = `Nové žádosti o sledování (${requestsCount})`; } else { reqBtn.style.display = 'none'; } });
 
-        unsubscribeUser = onSnapshot(userRef, (docSnap) => {
-          if (!docSnap.exists()) return; const data = docSnap.data(); const myKm = Math.max(0, data.personalKm || 0); 
-          let formattedStr = myKm.toLocaleString('cs-CZ', {maximumFractionDigits: 1});
-          document.getElementById('my-km-text').innerHTML = `${formattedStr}<span> km</span>`;
-          document.getElementById('profile-name').innerText = data.name || 'Neznámý';
-          document.getElementById('profile-total-km').innerText = formattedStr + ' km';
-          const pAvatarNode = document.getElementById('profile-avatar');
-          if (data.avatarUrl) { pAvatarNode.innerHTML = `<img src="${data.avatarUrl}">`; } else { pAvatarNode.innerHTML = (data.name || 'N').charAt(0).toUpperCase(); }
-
-          if (data.customStatsNote) { document.getElementById('p-custom-note').value = data.customStatsNote; } else { document.getElementById('p-custom-note').value = ""; }
-
-          let followersCount = data.followers ? data.followers.length : 0;
-          let followingCount = data.following ? data.following.length : 0;
-          let requestsCount = data.followRequests ? data.followRequests.length : 0;
-
-          document.getElementById('profile-followers').innerText = followersCount;
-          document.getElementById('profile-following').innerText = followingCount;
-
-          const reqBtn = document.getElementById('profile-requests-btn');
-          if(requestsCount > 0) { reqBtn.style.display = 'block'; reqBtn.innerText = `Nové žádosti o sledování (${requestsCount})`; } 
-          else { reqBtn.style.display = 'none'; }
-        });
-
-        unsubscribeActivities = onSnapshot(query(collection(db, "activities"), where("uid", "==", user.uid), orderBy("timestamp", "desc")), (snapshot) => {
-           const listContainer = document.getElementById('profile-activity-list'); listContainer.innerHTML = '';
-           document.getElementById('profile-total-activities').innerText = snapshot.size;
-           let todayKm = 0; const todayStr = new Date().toLocaleDateString('cs-CZ');
-           if(snapshot.empty) { listContainer.innerHTML = '<div style="text-align: center; color: var(--text-gray); padding: 10px; font-size:0.9em;">Zatím nemáš zapsanou žádnou aktivitu.</div>'; }
-           else {
-               snapshot.forEach(docSnap => {
-                   const data = docSnap.data(); const dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
-                   if (dateObj.toLocaleDateString('cs-CZ') === todayStr) { todayKm += data.km; }
-                   const stravaHtml = data.stravaUrl ? `<a href="${data.stravaUrl}" target="_blank" onclick="event.stopPropagation()" style="display:flex; align-items:center; margin-right: 10px;"><img src="strava.png" style="width:20px; height:20px; border-radius:4px;"></a>` : '';
-                   const item = document.createElement('div'); item.className = 'leaderboard-item';
-                   item.innerHTML = `${icons[data.type] || icons["Chůze"]}<div class="lb-name">${dateObj.toLocaleDateString('cs-CZ')} <span style="font-size: 0.8em; color: var(--text-gray); margin-left: 5px; font-weight:400;">(${data.type})</span></div>${stravaHtml}<div class="lb-score">${data.km.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km</div><button class="btn-inline-edit" onclick="openEditModal('${docSnap.id}', ${data.km}, '${data.type}', '${dateObj.toISOString().split('T')[0]}', '${data.stravaUrl || ''}')"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>`;
-                   listContainer.appendChild(item);
-               });
-           }
-           const badge = document.getElementById('daily-progress-badge');
-           if (todayKm > 0) { badge.className = 'badge-green active'; badge.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg> +${todayKm.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km`; } 
-           else { badge.className = 'badge-green inactive'; badge.innerHTML = `0 km dnes`; }
-        });
-
-        unsubscribeAllActivities = onSnapshot(collection(db, "activities"), (snapshot) => {
-            globalActivities = []; snapshot.forEach(docSnap => { globalActivities.push({ id: docSnap.id, ...docSnap.data() }); }); renderDynamicContent();
-        });
-
-        unsubscribeChallengesList = onSnapshot(query(collection(db, "challenges"), orderBy("createdAt", "desc")), async (snap) => {
-            globalChallenges = []; snap.forEach(docSnap => { globalChallenges.push({ id: docSnap.id, ...docSnap.data() }); }); renderDynamicContent();
-        });
+        unsubscribeActivities = onSnapshot(query(collection(db, "activities"), where("uid", "==", user.uid), orderBy("timestamp", "desc")), (snapshot) => { const listContainer = document.getElementById('profile-activity-list'); listContainer.innerHTML = ''; document.getElementById('profile-total-activities').innerText = snapshot.size; let todayKm = 0; const todayStr = new Date().toLocaleDateString('cs-CZ'); if(snapshot.empty) { listContainer.innerHTML = '<div style="text-align: center; color: var(--text-gray); padding: 10px; font-size:0.9em;">Zatím nemáš zapsanou žádnou aktivitu.</div>'; } else { snapshot.forEach(docSnap => { const data = docSnap.data(); const dateObj = data.timestamp ? data.timestamp.toDate() : new Date(); if (dateObj.toLocaleDateString('cs-CZ') === todayStr) { todayKm += data.km; } const stravaHtml = data.stravaUrl ? `<a href="${data.stravaUrl}" target="_blank" onclick="event.stopPropagation()" style="display:flex; align-items:center; margin-right: 10px;"><img src="strava.png" style="width:20px; height:20px; border-radius:4px;"></a>` : ''; const item = document.createElement('div'); item.className = 'leaderboard-item'; item.innerHTML = `${icons[data.type] || icons["Chůze"]}<div class="lb-name">${dateObj.toLocaleDateString('cs-CZ')} <span style="font-size: 0.8em; color: var(--text-gray); margin-left: 5px; font-weight:400;">(${data.type})</span></div>${stravaHtml}<div class="lb-score">${data.km.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km</div><button class="btn-inline-edit" onclick="openEditModal('${docSnap.id}', ${data.km}, '${data.type}', '${dateObj.toISOString().split('T')[0]}', '${data.stravaUrl || ''}')"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>`; listContainer.appendChild(item); }); } const badge = document.getElementById('daily-progress-badge'); if (todayKm > 0) { badge.className = 'badge-green active'; badge.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg> +${todayKm.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km`; } else { badge.className = 'badge-green inactive'; badge.innerHTML = `0 km dnes`; } });
+        unsubscribeAllActivities = onSnapshot(collection(db, "activities"), (snapshot) => { globalActivities = []; snapshot.forEach(docSnap => { globalActivities.push({ id: docSnap.id, ...docSnap.data() }); }); renderDynamicContent(); });
+        unsubscribeChallengesList = onSnapshot(query(collection(db, "challenges"), orderBy("createdAt", "desc")), async (snap) => { globalChallenges = []; snap.forEach(docSnap => { globalChallenges.push({ id: docSnap.id, ...docSnap.data() }); }); renderDynamicContent(); });
 
       } else {
         currentUser = null; isUserAdmin = false; publicView.classList.remove('hidden'); privateView.classList.add('hidden');
         if(unsubscribeUser) unsubscribeUser(); if(unsubscribeUsersList) unsubscribeUsersList(); if(unsubscribeActivities) unsubscribeActivities(); if(unsubscribeChallengesList) unsubscribeChallengesList(); if(unsubscribeAllActivities) unsubscribeAllActivities();
       }
-
-      if (!hasCheckedSharedLink) {
-          hasCheckedSharedLink = true;
-          const urlParams = new URLSearchParams(window.location.search);
-          const sharedChallengeId = urlParams.get('challenge');
-          if (sharedChallengeId) {
-              window.openChallengeDetail(sharedChallengeId);
-              window.history.replaceState({}, document.title, window.location.pathname);
-          }
-      }
+      if (!hasCheckedSharedLink) { hasCheckedSharedLink = true; const urlParams = new URLSearchParams(window.location.search); const sharedChallengeId = urlParams.get('challenge'); if (sharedChallengeId) { window.openChallengeDetail(sharedChallengeId); window.history.replaceState({}, document.title, window.location.pathname); } }
     });
 
     window.setPersonalFilter = (type) => {
         personalFilterType = type;
         document.querySelectorAll('#personal-filter-chips .chip').forEach(c => c.classList.remove('active'));
         document.querySelector(`#personal-filter-chips .chip[data-val="${type}"]`).classList.add('active');
-
-        if (type === 'custom') {
-            document.getElementById('personal-custom-dates').style.display = 'flex';
-            document.getElementById('personal-year-select-wrapper').style.display = 'none';
-        } else if (type === 'year') {
-            document.getElementById('personal-custom-dates').style.display = 'none';
-            document.getElementById('personal-year-select-wrapper').style.display = 'flex';
-        } else {
-            document.getElementById('personal-custom-dates').style.display = 'none';
-            document.getElementById('personal-year-select-wrapper').style.display = 'none';
-        }
+        if (type === 'custom') { document.getElementById('personal-custom-dates').style.display = 'flex'; document.getElementById('personal-year-select-wrapper').style.display = 'none'; } else if (type === 'year') { document.getElementById('personal-custom-dates').style.display = 'none'; document.getElementById('personal-year-select-wrapper').style.display = 'flex'; } else { document.getElementById('personal-custom-dates').style.display = 'none'; document.getElementById('personal-year-select-wrapper').style.display = 'none'; }
         window.renderPersonalStats();
     };
-
-    window.updatePersonalDates = () => {
-        personalFilterFrom = document.getElementById('p-date-from').value;
-        personalFilterTo = document.getElementById('p-date-to').value;
-        window.renderPersonalStats();
-    };
-
+    window.updatePersonalDates = () => { personalFilterFrom = document.getElementById('p-date-from').value; personalFilterTo = document.getElementById('p-date-to').value; window.renderPersonalStats(); };
     window.renderPersonalStats = () => {
-        if(!currentUser) return;
-        let myActivities = globalActivities.filter(act => act.uid === currentUser.uid);
-
-        if (personalFilterType === 'year') {
-            const selectedYear = parseInt(document.getElementById('p-year-select').value) || new Date().getFullYear();
-            myActivities = myActivities.filter(act => {
-                if(!act.timestamp) return false;
-                return act.timestamp.toDate().getFullYear() === selectedYear;
-            });
-        } else if (personalFilterType === 'custom') {
-            let fromDate = personalFilterFrom ? new Date(personalFilterFrom) : new Date('2000-01-01');
-            let toDate = personalFilterTo ? new Date(personalFilterTo) : new Date('2100-01-01');
-            fromDate.setHours(0,0,0,0); toDate.setHours(23,59,59,999);
-            myActivities = myActivities.filter(act => { if(!act.timestamp) return false; let d = act.timestamp.toDate(); return d >= fromDate && d <= toDate; });
-        }
-
+        if(!currentUser) return; let myActivities = globalActivities.filter(act => act.uid === currentUser.uid);
+        if (personalFilterType === 'year') { const selectedYear = parseInt(document.getElementById('p-year-select').value) || new Date().getFullYear(); myActivities = myActivities.filter(act => { if(!act.timestamp) return false; return act.timestamp.toDate().getFullYear() === selectedYear; }); } else if (personalFilterType === 'custom') { let fromDate = personalFilterFrom ? new Date(personalFilterFrom) : new Date('2000-01-01'); let toDate = personalFilterTo ? new Date(personalFilterTo) : new Date('2100-01-01'); fromDate.setHours(0,0,0,0); toDate.setHours(23,59,59,999); myActivities = myActivities.filter(act => { if(!act.timestamp) return false; let d = act.timestamp.toDate(); return d >= fromDate && d <= toDate; }); }
         let myWeeklyKm = {}; let myPieData = {};
-        myActivities.forEach(act => {
-            if(!act.timestamp) return; let actDate = act.timestamp.toDate(); let actWeek = getCustomWeekString(actDate, 1); 
-            myWeeklyKm[actWeek] = (myWeeklyKm[actWeek] || 0) + act.km; myPieData[act.type] = (myPieData[act.type] || 0) + act.km;
-        });
-
+        myActivities.forEach(act => { if(!act.timestamp) return; let actDate = act.timestamp.toDate(); let actWeek = getCustomWeekString(actDate, 1); myWeeklyKm[actWeek] = (myWeeklyKm[actWeek] || 0) + act.km; myPieData[act.type] = (myPieData[act.type] || 0) + act.km; });
         const renderArea = document.getElementById('personal-charts-render-area');
         if (myActivities.length > 0) {
             let htmlBarPersonal = generateBarChartHtml(myWeeklyKm); let pieObjPersonal = generatePieChartHtml(myPieData, myActivities.length);
-            renderArea.innerHTML = `
-                <h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 5px;">Celkové km v týdnech</h4>
-                <div style="font-size: 0.8em; color:var(--text-gray); margin-bottom:15px;">Vybrané období (týden od pondělí)</div>
-                ${htmlBarPersonal}
-                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-border);">
-                    <h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 15px;">Podíl mých aktivit</h4>
-                    <div style="display:flex; align-items:center; gap:15px;">
-                        <div style="flex:0 0 90px;">${pieObjPersonal.svg}</div>
-                        <div style="flex:1; min-width:0;">${pieObjPersonal.legend}</div>
-                    </div>
-                </div>`;
+            renderArea.innerHTML = `<h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 5px;">Celkové km v týdnech</h4><div style="font-size: 0.8em; color:var(--text-gray); margin-bottom:15px;">Vybrané období (týden od pondělí)</div>${htmlBarPersonal}<div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-border);"><h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 15px;">Podíl mých aktivit</h4><div style="display:flex; align-items:center; gap:15px;"><div style="flex:0 0 90px;">${pieObjPersonal.svg}</div><div style="flex:1; min-width:0;">${pieObjPersonal.legend}</div></div></div>`;
         } else { renderArea.innerHTML = '<div style="text-align:center; color:var(--text-gray); font-size:0.9em; padding:20px 0;">Žádné aktivity ve vybraném období.</div>'; }
         document.getElementById('personal-stats-wrapper').style.display = 'block';
     };
 
     window.openSearchModal = () => { window.pushModalState(); document.getElementById('search-modal').classList.add('active'); document.getElementById('search-input').value = ''; document.getElementById('search-results').innerHTML = ''; };
     window.closeSearchModal = () => window.handleUIClose('search-modal');
-    window.handleSearch = () => {
-        const q = document.getElementById('search-input').value.toLowerCase().trim();
-        const resDiv = document.getElementById('search-results'); resDiv.innerHTML = ''; if(q.length < 2) return;
-        Object.keys(globalUsersMap).forEach(uid => {
-            if (uid === currentUser.uid) return; let u = globalUsersMap[uid];
-            if (u.name && u.name.toLowerCase().includes(q)) {
-                let avatar = u.avatarUrl ? `<img src="${u.avatarUrl}">` : u.name.charAt(0).toUpperCase();
-                resDiv.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.05); cursor:pointer;" onclick="closeSearchModal(); setTimeout(() => openPublicProfile('${uid}'), 100);"><div style="display:flex; align-items:center; gap:12px;"><div class="lb-avatar" style="width:36px;height:36px;margin:0;">${avatar}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${u.name}</span></div></div>`;
-            }
-        });
-    };
+    window.handleSearch = () => { const q = document.getElementById('search-input').value.toLowerCase().trim(); const resDiv = document.getElementById('search-results'); resDiv.innerHTML = ''; if(q.length < 2) return; Object.keys(globalUsersMap).forEach(uid => { if (uid === currentUser.uid) return; let u = globalUsersMap[uid]; if (u.name && u.name.toLowerCase().includes(q)) { let avatar = u.avatarUrl ? `<img src="${u.avatarUrl}">` : u.name.charAt(0).toUpperCase(); resDiv.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.05); cursor:pointer;" onclick="closeSearchModal(); setTimeout(() => openPublicProfile('${uid}'), 100);"><div style="display:flex; align-items:center; gap:12px;"><div class="lb-avatar" style="width:36px;height:36px;margin:0;">${avatar}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${u.name}</span></div></div>`; } }); };
 
     window.openSettingsModal = async () => { window.pushModalState(); document.getElementById('settings-modal').classList.add('active'); let isPriv = false; if(globalUsersMap[currentUser.uid]) { isPriv = globalUsersMap[currentUser.uid].isPrivate === true; } document.getElementById('privacy-select').value = isPriv ? 'private' : 'public'; };
     window.closeSettingsModal = () => window.handleUIClose('settings-modal');
     window.saveSettings = async () => { const isPriv = document.getElementById('privacy-select').value === 'private'; await updateDoc(doc(db, "users", currentUser.uid), { isPrivate: isPriv }); window.closeSettingsModal(); };
 
     window.openConnections = (type) => {
-        window.pushModalState();
-        const myData = globalUsersMap[currentUser.uid] || {}; let list = []; let title = '';
+        window.pushModalState(); const myData = globalUsersMap[currentUser.uid] || {}; let list = []; let title = '';
         if (type === 'followers') { list = myData.followers || []; title = 'Sledující'; }
         if (type === 'following') { list = myData.following || []; title = 'Sleduji'; }
         if (type === 'requests') { list = myData.followRequests || []; title = 'Žádosti o sledování'; }
-
-        document.getElementById('connections-title').innerText = title;
-        const container = document.getElementById('connections-list'); container.innerHTML = '';
+        document.getElementById('connections-title').innerText = title; const container = document.getElementById('connections-list'); container.innerHTML = '';
         if(list.length === 0) { container.innerHTML = '<div style="color:var(--text-gray); font-size:0.9em; padding: 10px; text-align:center;">Zatím prázdné</div>'; } 
         else {
             list.forEach(uid => {
                 let u = globalUsersMap[uid]; if(!u) return; let avatar = u.avatarUrl ? `<img src="${u.avatarUrl}">` : u.name.charAt(0).toUpperCase();
-                if (type === 'requests') {
-                    container.innerHTML += `<div style="padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.05);"><div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="openPublicProfile('${uid}')"><div class="lb-avatar" style="width:36px;height:36px;margin:0;">${avatar}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${u.name}</span></div><div style="display:flex; gap: 10px; margin-top: 10px; padding-left: 48px;"><button class="btn-req-accept" onclick="acceptRequest('${uid}')">Přijmout</button><button class="btn-req-reject" onclick="rejectRequest('${uid}')">Odmítnout</button></div></div>`;
-                } else {
-                    container.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.05);"><div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="openPublicProfile('${uid}')"><div class="lb-avatar" style="width:36px;height:36px;margin:0;">${avatar}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${u.name}</span></div></div>`;
-                }
+                if (type === 'requests') { container.innerHTML += `<div style="padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.05);"><div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="openPublicProfile('${uid}')"><div class="lb-avatar" style="width:36px;height:36px;margin:0;">${avatar}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${u.name}</span></div><div style="display:flex; gap: 10px; margin-top: 10px; padding-left: 48px;"><button class="btn-req-accept" onclick="acceptRequest('${uid}')">Přijmout</button><button class="btn-req-reject" onclick="rejectRequest('${uid}')">Odmítnout</button></div></div>`; } 
+                else { container.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.05);"><div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="openPublicProfile('${uid}')"><div class="lb-avatar" style="width:36px;height:36px;margin:0;">${avatar}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${u.name}</span></div></div>`; }
             });
         }
         document.getElementById('connections-modal').classList.add('active');
     }
     window.closeConnections = () => window.handleUIClose('connections-modal');
-
-    window.requestFollow = async (targetUid) => {
-        const btnContainer = document.getElementById('public-profile-action-btn'); btnContainer.innerHTML = `<button class="btn-follow-requested" disabled>Odesílám...</button>`;
-        try {
-            await updateDoc(doc(db, "users", targetUid), { followRequests: arrayUnion(currentUser.uid) }); await updateDoc(doc(db, "users", currentUser.uid), { sentRequests: arrayUnion(targetUid) });
-            if(globalUsersMap[currentUser.uid]) { if(!globalUsersMap[currentUser.uid].sentRequests) globalUsersMap[currentUser.uid].sentRequests = []; if(!globalUsersMap[currentUser.uid].sentRequests.includes(targetUid)) { globalUsersMap[currentUser.uid].sentRequests.push(targetUid); } }
-            btnContainer.innerHTML = `<button class="btn-follow-requested" onclick="cancelFollowRequest('${targetUid}')">Žádost odeslána (Zrušit)</button>`;
-        } catch(e) { window.openPublicProfile(targetUid); }
-    };
-
-    window.cancelFollowRequest = async (targetUid) => {
-        const btnContainer = document.getElementById('public-profile-action-btn'); btnContainer.innerHTML = `<button class="btn-follow" disabled>Ruším...</button>`;
-        try {
-            await updateDoc(doc(db, "users", targetUid), { followRequests: arrayRemove(currentUser.uid) }); await updateDoc(doc(db, "users", currentUser.uid), { sentRequests: arrayRemove(targetUid) });
-            if(globalUsersMap[currentUser.uid] && globalUsersMap[currentUser.uid].sentRequests) { globalUsersMap[currentUser.uid].sentRequests = globalUsersMap[currentUser.uid].sentRequests.filter(id => id !== targetUid); }
-            btnContainer.innerHTML = `<button class="btn-follow" onclick="requestFollow('${targetUid}')">Sledovat uživatele</button>`;
-        } catch(e) { window.openPublicProfile(targetUid); }
-    };
-
-    window.unfollowUser = async (targetUid) => {
-        if(confirm("Opravdu zrušit sledování tohoto uživatele?")) {
-            const btnContainer = document.getElementById('public-profile-action-btn'); btnContainer.innerHTML = `<button class="btn-follow" disabled>Ruším...</button>`;
-            try {
-                await updateDoc(doc(db, "users", targetUid), { followers: arrayRemove(currentUser.uid) }); await updateDoc(doc(db, "users", currentUser.uid), { following: arrayRemove(targetUid) });
-                if(globalUsersMap[currentUser.uid] && globalUsersMap[currentUser.uid].following) { globalUsersMap[currentUser.uid].following = globalUsersMap[currentUser.uid].following.filter(id => id !== targetUid); }
-                btnContainer.innerHTML = `<button class="btn-follow" onclick="requestFollow('${targetUid}')">Sledovat uživatele</button>`; window.openPublicProfile(targetUid);
-            } catch(e) { window.openPublicProfile(targetUid); }
-        }
-    };
-
+    window.requestFollow = async (targetUid) => { const btnContainer = document.getElementById('public-profile-action-btn'); btnContainer.innerHTML = `<button class="btn-follow-requested" disabled>Odesílám...</button>`; try { await updateDoc(doc(db, "users", targetUid), { followRequests: arrayUnion(currentUser.uid) }); await updateDoc(doc(db, "users", currentUser.uid), { sentRequests: arrayUnion(targetUid) }); if(globalUsersMap[currentUser.uid]) { if(!globalUsersMap[currentUser.uid].sentRequests) globalUsersMap[currentUser.uid].sentRequests = []; if(!globalUsersMap[currentUser.uid].sentRequests.includes(targetUid)) { globalUsersMap[currentUser.uid].sentRequests.push(targetUid); } } btnContainer.innerHTML = `<button class="btn-follow-requested" onclick="cancelFollowRequest('${targetUid}')">Žádost odeslána (Zrušit)</button>`; } catch(e) { window.openPublicProfile(targetUid); } };
+    window.cancelFollowRequest = async (targetUid) => { const btnContainer = document.getElementById('public-profile-action-btn'); btnContainer.innerHTML = `<button class="btn-follow" disabled>Ruším...</button>`; try { await updateDoc(doc(db, "users", targetUid), { followRequests: arrayRemove(currentUser.uid) }); await updateDoc(doc(db, "users", currentUser.uid), { sentRequests: arrayRemove(targetUid) }); if(globalUsersMap[currentUser.uid] && globalUsersMap[currentUser.uid].sentRequests) { globalUsersMap[currentUser.uid].sentRequests = globalUsersMap[currentUser.uid].sentRequests.filter(id => id !== targetUid); } btnContainer.innerHTML = `<button class="btn-follow" onclick="requestFollow('${targetUid}')">Sledovat uživatele</button>`; } catch(e) { window.openPublicProfile(targetUid); } };
+    window.unfollowUser = async (targetUid) => { if(confirm("Opravdu zrušit sledování tohoto uživatele?")) { const btnContainer = document.getElementById('public-profile-action-btn'); btnContainer.innerHTML = `<button class="btn-follow" disabled>Ruším...</button>`; try { await updateDoc(doc(db, "users", targetUid), { followers: arrayRemove(currentUser.uid) }); await updateDoc(doc(db, "users", currentUser.uid), { following: arrayRemove(targetUid) }); if(globalUsersMap[currentUser.uid] && globalUsersMap[currentUser.uid].following) { globalUsersMap[currentUser.uid].following = globalUsersMap[currentUser.uid].following.filter(id => id !== targetUid); } btnContainer.innerHTML = `<button class="btn-follow" onclick="requestFollow('${targetUid}')">Sledovat uživatele</button>`; window.openPublicProfile(targetUid); } catch(e) { window.openPublicProfile(targetUid); } } };
     window.acceptRequest = async (reqUid) => { await updateDoc(doc(db, "users", currentUser.uid), { followRequests: arrayRemove(reqUid), followers: arrayUnion(reqUid) }); await updateDoc(doc(db, "users", reqUid), { sentRequests: arrayRemove(currentUser.uid), following: arrayUnion(currentUser.uid) }); window.openConnections('requests'); };
     window.rejectRequest = async (reqUid) => { await updateDoc(doc(db, "users", currentUser.uid), { followRequests: arrayRemove(reqUid) }); await updateDoc(doc(db, "users", reqUid), { sentRequests: arrayRemove(currentUser.uid) }); window.openConnections('requests'); };
 
@@ -1256,7 +914,6 @@
         const statsOtherList = document.getElementById('stats-other-challenges'); statsOtherList.innerHTML = '';
         const profileMyChal = document.getElementById('profile-my-challenges'); profileMyChal.innerHTML = '';
         const profileFollowersChal = document.getElementById('profile-followers-challenges'); if(profileFollowersChal) profileFollowersChal.innerHTML = '';
-        
         const profileActiveChal = document.getElementById('profile-active-challenges'); profileActiveChal.innerHTML = '';
         const mapListModal = document.getElementById('map-challenge-list'); mapListModal.innerHTML = '';
 
@@ -1273,7 +930,7 @@
             let isFollowingCreator = myData.following && myData.following.includes(c.creatorId);
             let isPublic = c.visibility === 'public' || c.visibility === undefined; 
 
-            if (!isMember) { if (!isPublic && !isCreator && !isFollowingCreator && !isUserAdmin) return; }
+            if (!isMember && !isPublic && !isCreator && !isFollowingCreator && !isUserAdmin) return;
 
             let validActivities = []; let cStart = new Date(c.start); cStart.setHours(0,0,0,0); let cEnd = new Date(c.end); cEnd.setHours(23,59,59,999);
             let allowedLower = (c.allowedActivities || []).map(a => a.trim().toLowerCase()); let startDay = c.startDay !== undefined ? parseInt(c.startDay) : 1; 
@@ -1366,7 +1023,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="chal-progress-bg"><div class="chal-progress-fill" style="width: ${totalPct}%; background: ${c.virtualLineColor || '#4F46E5'};"></div></div>
+                    <div class="chal-progress-bg"><div class="chal-progress-fill" style="width: ${totalPct}%; background: ${c.lineColor || '#4F46E5'};"></div></div>
                 </div>`;
 
                 let memberDataArray = [];
@@ -1390,24 +1047,14 @@
 
                 if (isRace) { statsRaceDiv.appendChild(statsCard); } else { statsCollabDiv.appendChild(statsCard); }
             } else {
-                const oCard = document.createElement('div'); oCard.className = 'card'; oCard.style.cssText = 'text-align:left; cursor:pointer;';
-                oCard.onclick = () => { openChallengeDetail(c.id); }; oCard.innerHTML = previewCardHtml; statsOtherList.appendChild(oCard);
+                const oCard = document.createElement('div'); oCard.className = 'card'; oCard.style.cssText = 'text-align:left; cursor:pointer;'; oCard.onclick = () => { openChallengeDetail(c.id); }; oCard.innerHTML = previewCardHtml; statsOtherList.appendChild(oCard);
             }
 
             if (isCreator) {
-                myAuthoredCount++; 
-                const profCard = document.createElement('div'); 
+                myAuthoredCount++; const profCard = document.createElement('div'); 
                 profCard.style.cssText = "background-color: var(--white); border: 1px solid var(--gray-border); border-radius: 16px; padding: 15px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; cursor: pointer;";
                 profCard.onclick = () => openChallengeDetail(c.id);
-                profCard.innerHTML = `
-                <div style="display:flex; gap:12px; align-items:center;">
-                    <div style="width: 48px; height: 48px; border-radius: 12px; overflow: hidden; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid var(--gray-border); background: var(--white);">${badgeImgHtml}</div>
-                    <div>
-                        <div style="font-weight:700; color:var(--text-dark); margin-bottom:2px; font-size:1.05em;">${c.name}</div>
-                        <div style="font-size: 0.8em; color: var(--text-gray); font-weight:500;">Cíl: ${c.targetKm} km</div>
-                    </div>
-                </div>
-                <button style="background:transparent; border:1px solid var(--text-dark); padding:6px 14px; border-radius:50px; display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.85em; font-weight:600; color:var(--text-dark);" onclick="event.stopPropagation(); openEditChallengeModal('${c.id}')"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Upravit</button>`;
+                profCard.innerHTML = `<div style="display:flex; gap:12px; align-items:center;"><div style="width: 48px; height: 48px; border-radius: 12px; overflow: hidden; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid var(--gray-border); background: var(--white);">${badgeImgHtml}</div><div><div style="font-weight:700; color:var(--text-dark); margin-bottom:2px; font-size:1.05em;">${c.name}</div><div style="font-size: 0.8em; color: var(--text-gray); font-weight:500;">Cíl: ${c.targetKm} km</div></div></div><button style="background:transparent; border:1px solid var(--text-dark); padding:6px 14px; border-radius:50px; display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.85em; font-weight:600; color:var(--text-dark);" onclick="event.stopPropagation(); openEditChallengeModal('${c.id}')"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Upravit</button>`;
                 profileMyChal.appendChild(profCard);
             }
 
@@ -1450,13 +1097,10 @@
 
         currentChallengeIdForShare = c.id; currentChallengeNameForShare = c.name;
 
-        // Tlačítko EDIT (jen pro tvůrce nebo admina)
         const isCreator = currentUser && c.creatorId === currentUser.uid;
         const editBtn = document.getElementById('chal-detail-edit-btn');
-        if (isCreator || isUserAdmin) {
-            editBtn.style.display = 'flex';
-            editBtn.onclick = () => { window.closeChallengeDetail(); setTimeout(() => { window.openEditChallengeModal(cid); }, 100); };
-        } else { editBtn.style.display = 'none'; }
+        if (isCreator || isUserAdmin) { editBtn.style.display = 'flex'; editBtn.onclick = () => { window.closeChallengeDetail(); setTimeout(() => { window.openEditChallengeModal(cid); }, 100); }; } 
+        else { editBtn.style.display = 'none'; }
 
         const bgEl = document.getElementById('chal-detail-bg');
         if (c.bgUrl) { bgEl.style.background = `url('${c.bgUrl}') center/cover no-repeat`; } 
@@ -1485,7 +1129,6 @@
 
         const isMember = currentUser && c.members ? c.members.includes(currentUser.uid) : false;
 
-        // VYKRESLENÍ PROGRESS BARU A ŽEBŘÍČKU PRO ZÚČASTNĚNÉ
         const progressWrapper = document.getElementById('chal-detail-progress-wrapper');
         const leaderboardWrapper = document.getElementById('chal-detail-leaderboard-wrapper');
         const mapBtnWrapper = document.getElementById('chal-detail-map-btn-wrapper');
@@ -1494,7 +1137,6 @@
         if (hasMap) { mapBtnWrapper.style.display = 'block'; } else { mapBtnWrapper.style.display = 'none'; }
 
         if (isMember) {
-            // Spočítáme znovu přesně km pro aktuální výzvu
             let validActivities = []; let cStart = new Date(c.start); cStart.setHours(0,0,0,0); let cEnd = new Date(c.end); cEnd.setHours(23,59,59,999);
             let allowedLower = (c.allowedActivities || []).map(a => a.trim().toLowerCase()); 
             globalActivities.forEach(act => {
@@ -1504,7 +1146,6 @@
             let overallKm = {}; let totalChallengeKm = 0;
             validActivities.forEach(act => { overallKm[act.uid] = (overallKm[act.uid] || 0) + act.km; totalChallengeKm += act.km; });
 
-            // Postup
             progressWrapper.style.display = 'block';
             let myKm = overallKm[currentUser.uid] || 0;
             let displayKm = (c.challengeType === 'race') ? myKm : totalChallengeKm;
@@ -1513,10 +1154,8 @@
             document.getElementById('chal-detail-progress-text').innerText = `${displayKm.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} / ${c.targetKm} km`;
             document.getElementById('chal-detail-progress-pct').innerText = `${Math.floor(pct)} %`;
             const bar = document.getElementById('chal-detail-progress-bar');
-            bar.style.width = `${pct}%`;
-            bar.style.background = c.virtualLineColor || '#4F46E5';
+            bar.style.width = `${pct}%`; bar.style.background = c.lineColor || '#4F46E5';
 
-            // Žebříček
             leaderboardWrapper.style.display = 'block';
             let memberDataArray = [];
             c.members.forEach(mUid => { let mKm = overallKm[mUid] || 0; let userObj = globalUsersMap[mUid] || {name: 'Neznámý', avatarUrl: ''}; memberDataArray.push({ uid: mUid, name: userObj.name, avatar: userObj.avatarUrl, km: mKm }); });
@@ -1529,16 +1168,12 @@
             });
             document.getElementById('chal-detail-leaderboard-list').innerHTML = membersHtmlList;
         } else {
-            progressWrapper.style.display = 'none';
-            leaderboardWrapper.style.display = 'none';
+            progressWrapper.style.display = 'none'; leaderboardWrapper.style.display = 'none';
         }
 
         document.getElementById('chal-detail-dates').innerText = `${new Date(c.start).toLocaleDateString('cs-CZ')} – ${new Date(c.end).toLocaleDateString('cs-CZ')}`;
 
-        const actsHtml = (c.allowedActivities || []).map(a => { 
-            let iconHtml = icons[a] || icons["Chůze"]; 
-            return `<span style="display:inline-flex; align-items:center; gap:4px; background:var(--gray-light); padding:4px 8px; border-radius:8px;">${iconHtml.replace('class="activity-list-icon"', 'style="width: 14px; height: 14px; object-fit: contain; margin:0;"')} ${a}</span>`; 
-        }).join('');
+        const actsHtml = (c.allowedActivities || []).map(a => { let iconHtml = icons[a] || icons["Chůze"]; return `<span style="display:inline-flex; align-items:center; gap:4px; background:var(--gray-light); padding:4px 8px; border-radius:8px;">${iconHtml.replace('class="activity-list-icon"', 'style="width: 14px; height: 14px; object-fit: contain; margin:0;"')} ${a}</span>`; }).join('');
         document.getElementById('chal-detail-activities').innerHTML = actsHtml;
 
         let explanationHtml = "";
@@ -1553,16 +1188,10 @@
         if (c.rules) { document.getElementById('chal-detail-rules').innerHTML = c.rules; rulesWrapper.style.display = 'block'; } else { rulesWrapper.style.display = 'none'; }
 
         const btn = document.getElementById('chal-action-btn');
-        btn.onclick = () => {
-            if (!currentUser) { alert("Nejprve se musíte zaregistrovat nebo přihlásit."); window.closeChallengeDetail(); return; }
-            if (isMember) { leaveChallenge(c.id); } else { joinChallenge(c.id); }
-        };
-        if (isMember) { btn.innerText = "Odpojit se od akce"; btn.className = "chal-btn-main joined"; } 
-        else { btn.innerText = "Připojit se k " + (c.challengeType === 'race' ? 'závodu' : 'výzvě'); btn.className = "chal-btn-main"; }
+        btn.onclick = () => { if (!currentUser) { alert("Nejprve se musíte zaregistrovat nebo přihlásit."); window.closeChallengeDetail(); return; } if (isMember) { leaveChallenge(c.id); } else { joinChallenge(c.id); } };
+        if (isMember) { btn.innerText = "Odpojit se od akce"; btn.className = "chal-btn-main joined"; } else { btn.innerText = "Připojit se k " + (c.challengeType === 'race' ? 'závodu' : 'výzvě'); btn.className = "chal-btn-main"; }
 
-        window.pushModalState();
-        const modal = document.getElementById('chal-detail-fullscreen'); modal.classList.add('active');
-        const scrollArea = document.querySelector('.chal-detail-scroll-area'); if (scrollArea) scrollArea.scrollTop = 0;
+        window.pushModalState(); const modal = document.getElementById('chal-detail-fullscreen'); modal.classList.add('active'); const scrollArea = document.querySelector('.chal-detail-scroll-area'); if (scrollArea) scrollArea.scrollTop = 0;
     };
 
     window.closeChallengeDetail = () => window.handleUIClose('chal-detail-fullscreen');
@@ -1570,17 +1199,13 @@
     window.handleMapSelect = async (challengeId) => {
         currentSelectedChallengeIdForMap = challengeId; const c = globalChallenges.find(x => x.id === challengeId);
         document.getElementById('map-empty-state').style.display = 'none';
-
         if (leafletMap) { leafletMap.off(); leafletMap.remove(); leafletMap = null; }
-        mapLayers = [];
-
-        if(!c) return;
+        mapLayers = []; if(!c) return;
         const isVirtual = c.mapType === 'virtual' && c.virtualMapUrl && c.virtualSvgPath;
         const isCircuit = c.trackType === 'circuit';
 
         if (isVirtual) {
             const w = c.virtualMapWidth || 3200; const h = c.virtualMapHeight || 2400; const bounds = [[0, 0], [-h, w]]; 
-
             leafletMap = L.map('real-map', { crs: L.CRS.Simple, zoomControl: false, minZoom: -5, maxZoom: 4, zoomSnap: 0, maxBounds: bounds, maxBoundsViscosity: 1.0 });
             L.control.zoom({ position: 'bottomright' }).addTo(leafletMap);
             L.imageOverlay(c.virtualMapUrl, bounds).addTo(leafletMap);
@@ -1588,22 +1213,16 @@
             const tempSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             tempSvg.setAttribute('viewBox', `0 0 ${w} ${h}`); tempSvg.style.position = 'absolute'; tempSvg.style.visibility = 'hidden';
             tempSvg.innerHTML = c.virtualSvgPath; document.body.appendChild(tempSvg);
-
-            const pathEl = tempSvg.querySelector('path');
-            if (!pathEl) { document.body.removeChild(tempSvg); return; }
-
+            const pathEl = tempSvg.querySelector('path'); if (!pathEl) { document.body.removeChild(tempSvg); return; }
             const totalSvgLen = pathEl.getTotalLength();
             const stats = window.challengeStatsMap[challengeId];
             const isRace = stats && stats.type === 'race';
+            const startPt = pathEl.getPointAtLength(0); let myCenterPoint = [-startPt.y, startPt.x];
 
-            const startPt = pathEl.getPointAtLength(0);
-            let myCenterPoint = [-startPt.y, startPt.x];
+            const vColor = c.lineColor || '#4F46E5';
+            const vWidth = c.lineWidth || 10;
+            const vStyle = c.lineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 1.5}` : 'none';
 
-            const vColor = c.virtualLineColor || '#4F46E5';
-            const vWidth = c.virtualLineWidth || 10;
-            const vStyle = c.virtualLineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 1.5}` : 'none';
-
-            // ZÁKLADNÍ TRASA - MÍRNĚ PRŮHLEDNÁ ŠEDÁ
             const mapSvgOverlayBase = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             mapSvgOverlayBase.setAttribute('viewBox', `0 0 ${w} ${h}`);
             let cleanPath = c.virtualSvgPath.replace(/style="[^"]*"/g, '').replace(/stroke="[^"]*"/g, '').replace(/stroke-width="[^"]*"/g, '');
@@ -1613,87 +1232,38 @@
             if (isRace) {
                 if (stats.userKms) {
                     Object.keys(stats.userKms).forEach(uid => {
-                        let currentKm = stats.userKms[uid] || 0;
-                        if (currentKm === 0) return;
-
-                        let popupText = "";
-                        let distanceToDrawOnSvg = 0;
+                        let currentKm = stats.userKms[uid] || 0; if (currentKm === 0) return;
+                        let popupText = ""; let distanceToDrawOnSvg = 0;
 
                         if (isCircuit) {
-                            let physicalKm = c.baseKm || (c.targetKm / (c.laps || 1));
-                            let lapsCompleted = Math.floor(currentKm / physicalKm);
-                            let currentLap = lapsCompleted + 1;
-                            let remainderKm = currentKm % physicalKm;
-
-                            if (currentKm >= c.targetKm) {
-                                distanceToDrawOnSvg = totalSvgLen;
-                                popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${globalUsersMap[uid]?.name || 'Neznámý'}</b><br><span style="color:#10B981; font-weight:700;">V CÍLI!</span><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
-                            } else {
-                                let progressPctInLap = physicalKm > 0 ? remainderKm / physicalKm : 0;
-                                distanceToDrawOnSvg = progressPctInLap * totalSvgLen;
-                                popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${globalUsersMap[uid]?.name || 'Neznámý'}</b><br><span style="font-size:0.85em; color:var(--text-gray);">${currentLap}. okruh (${remainderKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km)</span><br><strong style="font-size:1.2em;">Celkem: ${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
-                            }
+                            let physicalKm = c.baseKm || (c.targetKm / (c.laps || 1)); let lapsCompleted = Math.floor(currentKm / physicalKm); let currentLap = lapsCompleted + 1; let remainderKm = currentKm % physicalKm;
+                            if (currentKm >= c.targetKm) { distanceToDrawOnSvg = totalSvgLen; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${globalUsersMap[uid]?.name || 'Neznámý'}</b><br><span style="color:#10B981; font-weight:700;">V CÍLI!</span><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`; } 
+                            else { let progressPctInLap = physicalKm > 0 ? remainderKm / physicalKm : 0; distanceToDrawOnSvg = progressPctInLap * totalSvgLen; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${globalUsersMap[uid]?.name || 'Neznámý'}</b><br><span style="font-size:0.85em; color:var(--text-gray);">${currentLap}. okruh (${remainderKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km)</span><br><strong style="font-size:1.2em;">Celkem: ${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`; }
                         } else {
-                            let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0; if(progressPct > 1) progressPct = 1; 
-                            distanceToDrawOnSvg = progressPct * totalSvgLen;
-                            popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${globalUsersMap[uid]?.name || 'Neznámý'}</b><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
+                            let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0; if(progressPct > 1) progressPct = 1; distanceToDrawOnSvg = progressPct * totalSvgLen; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${globalUsersMap[uid]?.name || 'Neznámý'}</b><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
                         }
 
-                        const pt = pathEl.getPointAtLength(distanceToDrawOnSvg);
-                        if (currentUser && uid === currentUser.uid) { myCenterPoint = [-pt.y, pt.x]; }
-
-                        let userObj = globalUsersMap[uid] || {name: 'Neznámý', avatarUrl: ''};
-                        let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : userObj.name.charAt(0).toUpperCase();
-                        let borderColor = (currentUser && uid === currentUser.uid) ? '#10B981' : '#FC4C02'; 
-
+                        const pt = pathEl.getPointAtLength(distanceToDrawOnSvg); if (currentUser && uid === currentUser.uid) { myCenterPoint = [-pt.y, pt.x]; }
+                        let userObj = globalUsersMap[uid] || {name: 'Neznámý', avatarUrl: ''}; let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : userObj.name.charAt(0).toUpperCase(); let borderColor = (currentUser && uid === currentUser.uid) ? '#10B981' : '#FC4C02'; 
                         const customIcon = L.divIcon({ className: 'custom-map-marker', html: `<div class="race-marker-container" style="border-color: ${borderColor};">${avatarHtml}</div>`, iconSize: [34, 34], iconAnchor: [17, 17] });
                         const m = L.marker([-pt.y, pt.x], {icon: customIcon}).addTo(leafletMap).bindPopup(popupText); mapLayers.push(m);
                     });
                 }
             } else {
-                let currentKm = stats ? stats.total : 0; 
-                let popupText = "";
-                let distanceToDrawOnSvg = 0;
-
+                let currentKm = stats ? stats.total : 0; let popupText = ""; let distanceToDrawOnSvg = 0;
                 if (isCircuit) {
-                    let physicalKm = c.baseKm || (c.targetKm / (c.laps || 1));
-                    let lapsCompleted = Math.floor(currentKm / physicalKm);
-                    let currentLap = lapsCompleted + 1;
-                    let remainderKm = currentKm % physicalKm;
-
-                    if (currentKm >= c.targetKm) {
-                        distanceToDrawOnSvg = totalSvgLen;
-                        popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="color:#10B981; font-weight:700;">JSME V CÍLI!</span><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
-                    } else {
-                        let progressPctInLap = physicalKm > 0 ? remainderKm / physicalKm : 0;
-                        distanceToDrawOnSvg = progressPctInLap * totalSvgLen;
-                        popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="font-size:0.85em; color:var(--text-gray);">Společně v ${currentLap}. okruhu (${remainderKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km)</span><br><strong style="font-size:1.2em;">Celkem: ${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
-                    }
+                    let physicalKm = c.baseKm || (c.targetKm / (c.laps || 1)); let lapsCompleted = Math.floor(currentKm / physicalKm); let currentLap = lapsCompleted + 1; let remainderKm = currentKm % physicalKm;
+                    if (currentKm >= c.targetKm) { distanceToDrawOnSvg = totalSvgLen; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="color:#10B981; font-weight:700;">JSME V CÍLI!</span><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`; } 
+                    else { let progressPctInLap = physicalKm > 0 ? remainderKm / physicalKm : 0; distanceToDrawOnSvg = progressPctInLap * totalSvgLen; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="font-size:0.85em; color:var(--text-gray);">Společně v ${currentLap}. okruhu (${remainderKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km)</span><br><strong style="font-size:1.2em;">Celkem: ${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`; }
                 } else {
-                    let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0; if(progressPct > 1) progressPct = 1; 
-                    distanceToDrawOnSvg = progressPct * totalSvgLen;
-                    popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br>Společně zdoláno:<br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
+                    let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0; if(progressPct > 1) progressPct = 1; distanceToDrawOnSvg = progressPct * totalSvgLen; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br>Společně zdoláno:<br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
                 }
-
-                const pt = pathEl.getPointAtLength(distanceToDrawOnSvg);
-                myCenterPoint = [-pt.y, pt.x]; 
-
-                const highlightSvgOverlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                highlightSvgOverlay.setAttribute('viewBox', `0 0 ${w} ${h}`);
-                highlightSvgOverlay.innerHTML = `<g fill="none" stroke="${vColor}" stroke-width="${vWidth + 2}" stroke-dasharray="${distanceToDrawOnSvg} ${totalSvgLen}" stroke-linecap="round">${cleanPath}</g>`;
-                L.svgOverlay(highlightSvgOverlay, bounds).addTo(leafletMap);
-
-                const customIcon = L.divIcon({ className: 'custom-map-marker', html: `<div style="background:#FC4C02; width:22px; height:22px; border-radius:50%; border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,0.5);"></div>`, iconSize: [28, 28], iconAnchor: [14, 14] });
-                const m = L.marker([-pt.y, pt.x], {icon: customIcon}).addTo(leafletMap).bindPopup(popupText); mapLayers.push(m);
+                const pt = pathEl.getPointAtLength(distanceToDrawOnSvg); myCenterPoint = [-pt.y, pt.x]; 
+                const highlightSvgOverlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); highlightSvgOverlay.setAttribute('viewBox', `0 0 ${w} ${h}`); highlightSvgOverlay.innerHTML = `<g fill="none" stroke="${vColor}" stroke-width="${vWidth + 2}" stroke-dasharray="${distanceToDrawOnSvg} ${totalSvgLen}" stroke-linecap="round">${cleanPath}</g>`; L.svgOverlay(highlightSvgOverlay, bounds).addTo(leafletMap);
+                const customIcon = L.divIcon({ className: 'custom-map-marker', html: `<div style="background:#FC4C02; width:22px; height:22px; border-radius:50%; border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,0.5);"></div>`, iconSize: [28, 28], iconAnchor: [14, 14] }); const m = L.marker([-pt.y, pt.x], {icon: customIcon}).addTo(leafletMap).bindPopup(popupText); mapLayers.push(m);
             }
             document.body.removeChild(tempSvg);
-
-            setTimeout(() => {
-                const mapSize = leafletMap.getSize(); const cw = mapSize.x > 0 ? mapSize.x : window.innerWidth; const ch = mapSize.y > 0 ? mapSize.y : window.innerHeight;
-                let targetScale = Math.max(cw / w, ch / h); let targetZoom = Math.log(targetScale) / Math.LN2;
-                leafletMap.setMinZoom(targetZoom); if (targetZoom > leafletMap.getMaxZoom()) targetZoom = leafletMap.getMaxZoom();
-                leafletMap.setView(myCenterPoint, targetZoom);
-            }, 50);
+            setTimeout(() => { const mapSize = leafletMap.getSize(); const cw = mapSize.x > 0 ? mapSize.x : window.innerWidth; const ch = mapSize.y > 0 ? mapSize.y : window.innerHeight; let targetScale = Math.max(cw / w, ch / h); let targetZoom = Math.log(targetScale) / Math.LN2; leafletMap.setMinZoom(targetZoom); if (targetZoom > leafletMap.getMaxZoom()) targetZoom = leafletMap.getMaxZoom(); leafletMap.setView(myCenterPoint, targetZoom); }, 50);
 
         } else if (c.mapUrl) {
             leafletMap = L.map('real-map', {zoomControl: false}).setView([49.2, 16.6], 13); L.control.zoom({ position: 'bottomright' }).addTo(leafletMap);
@@ -1712,9 +1282,9 @@
                 const stats = window.challengeStatsMap[challengeId];
                 const isRace = stats && stats.type === 'race';
 
-                const vWidth = c.virtualLineWidth || 6;
-                const vStyle = c.virtualLineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 2.5}` : 'none';
-                const vColor = c.virtualLineColor || '#4F46E5';
+                const vWidth = c.lineWidth || 6;
+                const vStyle = c.lineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 2.5}` : 'none';
+                const vColor = c.lineColor || '#4F46E5';
 
                 const baseLine = L.polyline(latlngsFlat, {color: '#9CA3AF', weight: vWidth, dashArray: vStyle, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap);
                 mapLayers.push(baseLine); leafletMap.fitBounds(baseLine.getBounds());
@@ -1722,67 +1292,159 @@
                 if (isRace) {
                     if (stats.userKms) {
                         Object.keys(stats.userKms).forEach(uid => {
-                            let currentKm = stats.userKms[uid] || 0;
-                            if(currentKm === 0) return; 
-                            
-                            let userObj = globalUsersMap[uid] || {name: 'Neznámý', avatarUrl: ''};
-                            let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : userObj.name.charAt(0).toUpperCase();
-                            let borderColor = (currentUser && uid === currentUser.uid) ? '#10B981' : '#FC4C02'; 
-
-                            let popupText = "";
-                            let trackMetersToTravel = 0;
+                            let currentKm = stats.userKms[uid] || 0; if(currentKm === 0) return; 
+                            let userObj = globalUsersMap[uid] || {name: 'Neznámý', avatarUrl: ''}; let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : userObj.name.charAt(0).toUpperCase(); let borderColor = (currentUser && uid === currentUser.uid) ? '#10B981' : '#FC4C02'; 
+                            let popupText = ""; let trackMetersToTravel = 0;
 
                             if (isCircuit) {
-                                let lapsCompleted = Math.floor(currentKm / physicalKm);
-                                let currentLap = lapsCompleted + 1;
-                                let remainderKm = currentKm % physicalKm;
-                                
-                                if (currentKm >= c.targetKm) {
-                                    trackMetersToTravel = physicalMeters; 
-                                    popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${userObj.name}</b><br><span style="color:#10B981; font-weight:700;">V CÍLI!</span><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
-                                } else {
-                                    let progressPctInLap = physicalKm > 0 ? remainderKm / physicalKm : 0;
-                                    trackMetersToTravel = physicalMeters * progressPctInLap;
-                                    popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${userObj.name}</b><br><span style="font-size:0.85em; color:var(--text-gray);">${currentLap}. okruh (${remainderKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km)</span><br><strong style="font-size:1.2em;">Celkem: ${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
-                                }
+                                let lapsCompleted = Math.floor(currentKm / physicalKm); let currentLap = lapsCompleted + 1; let remainderKm = currentKm % physicalKm;
+                                if (currentKm >= c.targetKm) { trackMetersToTravel = physicalMeters; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${userObj.name}</b><br><span style="color:#10B981; font-weight:700;">V CÍLI!</span><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`; } 
+                                else { let progressPctInLap = physicalKm > 0 ? remainderKm / physicalKm : 0; trackMetersToTravel = physicalMeters * progressPctInLap; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${userObj.name}</b><br><span style="font-size:0.85em; color:var(--text-gray);">${currentLap}. okruh (${remainderKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km)</span><br><strong style="font-size:1.2em;">Celkem: ${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`; }
                             } else {
-                                let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0;
-                                if(progressPct > 1) progressPct = 1; 
-                                trackMetersToTravel = physicalMeters * progressPct; 
-                                popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${userObj.name}</b><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
+                                let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0; if(progressPct > 1) progressPct = 1; trackMetersToTravel = physicalMeters * progressPct; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${userObj.name}</b><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
                             }
 
                             let traveled = 0; let lastPos = latlngsFlat[0];
-                            if (trackMetersToTravel > 0) {
-                                for (let i = 1; i < latlngsFlat.length; i++) {
-                                    let p1 = latlngsFlat[i-1]; let p2 = latlngsFlat[i]; let segmentDist = p1.distanceTo(p2);
-                                    if (traveled + segmentDist >= trackMetersToTravel) {
-                                        let ratio = segmentDist > 0 ? (trackMetersToTravel - traveled) / segmentDist : 0;
-                                        let lat = p1.lat + (p2.lat - p1.lat) * ratio; let lng = p1.lng + (p2.lng - p1.lng) * ratio; 
-                                        lastPos = L.latLng(lat, lng); break; 
-                                    }
-                                    traveled += segmentDist; lastPos = p2;
-                                }
-                            }
-
-                            const customIcon = L.divIcon({ className: 'custom-map-marker', html: `<div class="race-marker-container" style="border-color: ${borderColor};">${avatarHtml}</div>`, iconSize: [34, 34], iconAnchor: [17, 17] });
-                            const m = L.marker(lastPos, {icon: customIcon}).addTo(leafletMap).bindPopup(popupText); mapLayers.push(m);
+                            if (trackMetersToTravel > 0) { for (let i = 1; i < latlngsFlat.length; i++) { let p1 = latlngsFlat[i-1]; let p2 = latlngsFlat[i]; let segmentDist = p1.distanceTo(p2); if (traveled + segmentDist >= trackMetersToTravel) { let ratio = segmentDist > 0 ? (trackMetersToTravel - traveled) / segmentDist : 0; let lat = p1.lat + (p2.lat - p1.lat) * ratio; let lng = p1.lng + (p2.lng - p1.lng) * ratio; lastPos = L.latLng(lat, lng); break; } traveled += segmentDist; lastPos = p2; } }
+                            const customIcon = L.divIcon({ className: 'custom-map-marker', html: `<div class="race-marker-container" style="border-color: ${borderColor};">${avatarHtml}</div>`, iconSize: [34, 34], iconAnchor: [17, 17] }); const m = L.marker(lastPos, {icon: customIcon}).addTo(leafletMap).bindPopup(popupText); mapLayers.push(m);
                         });
                     }
                 } else {
-                    let currentKm = stats ? stats.total : 0; 
-                    let popupText = "";
-                    let trackMetersToTravel = 0;
-
+                    let currentKm = stats ? stats.total : 0; let popupText = ""; let trackMetersToTravel = 0;
                     if (isCircuit) {
-                        let lapsCompleted = Math.floor(currentKm / physicalKm);
-                        let currentLap = lapsCompleted + 1;
-                        let remainderKm = currentKm % physicalKm;
-                        
-                        if (currentKm >= c.targetKm) {
-                            trackMetersToTravel = physicalMeters;
-                            popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="color:#10B981; font-weight:700;">JSME V CÍLI!</span><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
-                        } else {
-                            let progressPctInLap = physicalKm > 0 ? remainderKm / physicalKm : 0;
-                            trackMetersToTravel = physicalMeters * progressPctInLap;
-                            popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="font-size:0.85em; color:var(--text-Jsem textová AI a tohle je nad moje možnosti.
+                        let lapsCompleted = Math.floor(currentKm / physicalKm); let currentLap = lapsCompleted + 1; let remainderKm = currentKm % physicalKm;
+                        if (currentKm >= c.targetKm) { trackMetersToTravel = physicalMeters; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="color:#10B981; font-weight:700;">JSME V CÍLI!</span><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`; } 
+                        else { let progressPctInLap = physicalKm > 0 ? remainderKm / physicalKm : 0; trackMetersToTravel = physicalMeters * progressPctInLap; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="font-size:0.85em; color:var(--text-gray);">Společně v ${currentLap}. okruhu (${remainderKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km)</span><br><strong style="font-size:1.2em;">Celkem: ${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`; }
+                    } else {
+                        let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0; if(progressPct > 1) progressPct = 1; trackMetersToTravel = physicalMeters * progressPct; popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br>Společně zdoláno:<br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
+                    }
+
+                    let traveled = 0; let lastPos = latlngsFlat[0];
+                    if (trackMetersToTravel > 0) {
+                        for (let i = 1; i < latlngsFlat.length; i++) {
+                            let p1 = latlngsFlat[i-1]; let p2 = latlngsFlat[i]; let segmentDist = p1.distanceTo(p2);
+                            if (traveled + segmentDist >= trackMetersToTravel) { let ratio = segmentDist > 0 ? (trackMetersToTravel - traveled) / segmentDist : 0; let lat = p1.lat + (p2.lat - p1.lat) * ratio; let lng = p1.lng + (p2.lng - p1.lng) * ratio; lastPos = L.latLng(lat, lng); let segLine = L.polyline([p1, lastPos], {color: vColor, weight: vWidth + 2, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap); mapLayers.push(segLine); break; } 
+                            else { let segLine = L.polyline([p1, p2], {color: vColor, weight: vWidth + 2, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap); mapLayers.push(segLine); }
+                            traveled += segmentDist;
+                        }
+                    }
+                    const customIcon = L.divIcon({ className: 'custom-map-marker', html: `<div style="background:#FC4C02; width:18px; height:18px; border-radius:50%; border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,0.5);"></div>`, iconSize: [24, 24], iconAnchor: [12, 12] }); const m = L.marker(lastPos, {icon: customIcon}).addTo(leafletMap).bindPopup(popupText); mapLayers.push(m);
+                }
+            } catch(e) { console.error("Map load error", e); }
+        }
+    };
+
+    window.saveActivity = async () => {
+      if(isSaving) return; let rawInput = document.getElementById('km-input').value.replace(',', '.'); const km = parseFloat(rawInput); const stravaUrl = extractStravaUrl(document.getElementById('strava-link-input').value);
+      if(km > 0 && currentUser) { isSaving = true; const btn = document.getElementById('btn-save-activity'); btn.innerText = "Ukládám..."; btn.disabled = true; try { await addDoc(collection(db, "activities"), { uid: currentUser.uid, km: km, type: currentActivityType, stravaUrl: stravaUrl, timestamp: new Date() }); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(km) }); window.closeModal(); } catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; } } else { alert("Zadej počet kilometrů."); }
+    };
+
+    window.openEditModal = (id, km, type, isoDate, stravaUrl) => { window.pushModalState(); selectedActivityId = id; selectedActivityOldKm = km; editActivityType = type; selectedActivityDate = isoDate; document.getElementById('edit-km-input').value = km; document.getElementById('edit-date-input').value = isoDate; document.getElementById('edit-strava-link-input').value = stravaUrl && stravaUrl !== 'undefined' ? stravaUrl : ''; document.querySelectorAll('#edit-modal .chip').forEach(c => c.classList.remove('active')); const targetChip = document.querySelector(`#edit-modal .chip[data-type="${type}"]`); if(targetChip) targetChip.classList.add('active'); document.getElementById('edit-modal').classList.add('active'); };
+    window.saveEditActivity = async () => { if(isSaving) return; let rawInput = document.getElementById('edit-km-input').value.replace(',', '.'); const newKm = parseFloat(rawInput); const newDateVal = document.getElementById('edit-date-input').value; const stravaUrl = extractStravaUrl(document.getElementById('edit-strava-link-input').value); if(newKm > 0 && selectedActivityId && currentUser) { isSaving = true; const btn = document.getElementById('btn-edit-activity'); btn.innerText = "Ukládám..."; btn.disabled = true; const diffKm = newKm - selectedActivityOldKm; const newDate = newDateVal ? new Date(newDateVal) : new Date(); try { await updateDoc(doc(db, "activities", selectedActivityId), { km: newKm, type: editActivityType, stravaUrl: stravaUrl, timestamp: newDate }); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(diffKm) }); window.closeEditModal(); } catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Uložit změny"; btn.disabled = false; } } else { alert("Zadej platné hodnoty."); } };
+    window.deleteActivity = async () => { if(isSaving) return; if(selectedActivityId && currentUser && confirm("Opravdu smazat aktivitu?")) { isSaving = true; const btn = document.getElementById('btn-delete-activity'); btn.innerText = "Mažu..."; btn.disabled = true; const minusKm = -selectedActivityOldKm; try { await deleteDoc(doc(db, "activities", selectedActivityId)); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(minusKm) }); window.closeEditModal(); } catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Smazat aktivitu"; btn.disabled = false; } } };
+
+    window.openProfileEditModal = async () => { window.pushModalState(); if(!currentUser) return; const userSnap = await getDoc(doc(db, "users", currentUser.uid)); const deleteBtn = document.getElementById('btn-delete-avatar'); if(userSnap.exists()){ const data = userSnap.data(); document.getElementById('profile-edit-name-input').value = data.name || ""; if(data.avatarUrl) { deleteBtn.style.display = "block"; } else { deleteBtn.style.display = "none"; } } document.getElementById('profile-file-input').value = ""; document.getElementById('cropper-wrapper').style.display = "none"; if(cropper) { cropper.destroy(); cropper = null; } document.getElementById('profile-edit-modal').classList.add('active'); };
+    window.closeProfileEditModal = () => { window.handleUIClose('profile-edit-modal'); if(cropper) { cropper.destroy(); cropper = null; } };
+    window.deleteProfilePhoto = async () => { if(confirm("Smazat fotku?")) { await updateDoc(doc(db, "users", currentUser.uid), { avatarUrl: "" }); window.closeProfileEditModal(); } };
+    window.deleteUserAccount = async () => { if(confirm("⚠️ OPRAVDU smazat celý profil a data?")) { try { await deleteDoc(doc(db, "users", currentUser.uid)); await deleteUser(currentUser); window.closeProfileEditModal(); } catch (e) { alert("Chyba. Možná je nutné se odhlásit a znovu přihlásit."); } } };
+
+    window.handleProfileFileSelect = (input) => { const file = input.files[0]; if(!file) return; document.getElementById('btn-delete-avatar').style.display = "none"; const reader = new FileReader(); reader.onload = function(e) { const imageNode = document.getElementById('cropper-image'); imageNode.src = e.target.result; document.getElementById('cropper-wrapper').style.display = "block"; if(cropper) cropper.destroy(); cropper = new Cropper(imageNode, { aspectRatio: 1, viewMode: 1, autoCropArea: 1, background: false }); }; reader.readAsDataURL(file); };
+    window.saveProfileEdit = async () => { const newName = document.getElementById('profile-edit-name-input').value.trim(); if(!newName) return; let updateData = { name: newName }; if(cropper) { const canvas = cropper.getCroppedCanvas({ width: 150, height: 150 }); updateData.avatarUrl = canvas.toDataURL('image/jpeg', 0.75); } await updateDoc(doc(db, "users", currentUser.uid), updateData); window.closeProfileEditModal(); };
+
+    window.toggleEditMode = () => { document.getElementById('profile-activity-list').classList.toggle('edit-mode-active'); };
+    window.closeEditModal = () => { window.handleUIClose('edit-modal'); selectedActivityId = null; };
+    window.selectEditChip = (element) => { document.querySelectorAll('#edit-modal .chip').forEach(c => c.classList.remove('active')); element.classList.add('active'); editActivityType = element.getAttribute('data-type'); };
+    window.selectColorChip = (element, containerId) => { document.querySelectorAll(`#${containerId} .color-chip`).forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === '#ffffff') { c.style.borderColor = '#ccc'; } else { c.style.borderColor = 'transparent'; } }); element.classList.add('active'); element.style.borderColor = 'var(--text-dark)'; };
+
+    window.joinChallenge = async (chalId) => { try { await updateDoc(doc(db, "challenges", chalId), { members: arrayUnion(currentUser.uid) }); const btn = document.getElementById('chal-action-btn'); btn.innerText = "Odpojit se od akce"; btn.className = "chal-btn-main joined"; } catch(e) { alert("Chyba."); } };
+    window.leaveChallenge = async (chalId) => { if(confirm("Opravdu se chceš odpojit od této akce? Tvé kilometry se do ní přestanou počítat.")) { try { await updateDoc(doc(db, "challenges", chalId), { members: arrayRemove(currentUser.uid) }); const btn = document.getElementById('chal-action-btn'); btn.innerText = "Připojit se k akci"; btn.className = "chal-btn-main"; } catch(e) { alert("Chyba při odpojování."); } } };
+
+    window.openCreateChallengeModal = () => { window.pushModalState(); document.getElementById('create-challenge-modal').classList.add('active'); };
+    window.closeCreateChallengeModal = () => { window.handleUIClose('create-challenge-modal'); if(chalCropper) { chalCropper.destroy(); chalCropper = null; } if(chalBadgeCropper) { chalBadgeCropper.destroy(); chalBadgeCropper = null; } document.getElementById('new-chal-cropper-wrapper').style.display = 'none'; document.getElementById('new-chal-badge-cropper-wrapper').style.display = 'none'; document.getElementById('new-chal-file-input').value = ''; document.getElementById('new-chal-badge-input').value = ''; document.getElementById('new-chal-subtitle').value = ''; document.getElementById('new-chal-gpx-hint').innerText = ''; };
+    window.toggleChallengeChip = (element) => { element.classList.toggle('active'); }; window.toggleMembersList = (cid) => { document.getElementById(`members-dropdown-${cid}`).classList.toggle('hidden'); }; window.selectSingleChip = (element, containerId) => { document.querySelectorAll(`#${containerId} .chip`).forEach(c => c.classList.remove('active')); element.classList.add('active'); };
+
+    window.saveNewChallenge = async () => {
+        if(isSaving) return;
+        const name = document.getElementById('new-chal-name').value.trim(); const targetKm = parseFloat(document.getElementById('new-chal-km').value);
+        const challengeType = document.querySelector('#new-chal-type .chip.active').getAttribute('data-val');
+        const trackType = document.querySelector('#new-chal-track-type .chip.active').getAttribute('data-val');
+        const laps = trackType === 'circuit' ? (parseFloat(document.getElementById('new-chal-laps').value) || 1) : 1;
+        const baseKm = trackType === 'circuit' ? (parseFloat(document.getElementById('new-chal-base-km').value) || 0) : 0;
+        
+        const mapType = document.querySelector('#new-chal-map-type .chip.active').getAttribute('data-val');
+        const mapUrl = document.getElementById('new-chal-map').value.trim(); 
+        const vImg = document.getElementById('new-chal-v-img').value.trim(); const vW = parseFloat(document.getElementById('new-chal-v-w').value) || 3200; const vH = parseFloat(document.getElementById('new-chal-v-h').value) || 2400; const vSvg = document.getElementById('new-chal-v-svg').value.trim();
+        const vLineWidth = parseFloat(document.getElementById('new-chal-v-width').value) || 10; const vLineStyle = document.querySelector('#new-chal-v-style .chip.active').getAttribute('data-val'); const vLineColor = document.querySelector('#new-chal-v-color .color-chip.active').getAttribute('data-val');
+
+        let finalBgUrl = ""; if (chalCropper) { finalBgUrl = chalCropper.getCroppedCanvas({ width: 800, height: 450 }).toDataURL('image/jpeg', 0.7); }
+        let finalBadgeUrl = ""; if (chalBadgeCropper) { finalBadgeUrl = chalBadgeCropper.getCroppedCanvas({ width: 300, height: 300 }).toDataURL('image/jpeg', 0.8); }
+
+        const desc = document.getElementById('new-chal-desc').value.trim(); const rules = document.getElementById('new-chal-rules').value.trim(); const subtitle = document.getElementById('new-chal-subtitle').value.trim(); const authorDisplay = document.getElementById('new-chal-author-type').value; const visibility = isUserAdmin ? document.getElementById('new-chal-visibility').value : 'private';
+        const start = document.getElementById('new-chal-start').value; const end = document.getElementById('new-chal-end').value; const startDay = parseInt(document.querySelector('#new-chal-start-day .chip.active').getAttribute('data-val'));
+        if(!name || !targetKm || !start || !end) { alert("Vyplň všechna pole."); return; } if(mapType === 'virtual' && (!vImg || !vSvg)) { alert("Vyplň obrázek mapy a kód trasy SVG."); return; }
+        const allowedActivities = []; document.querySelectorAll('#new-chal-chips .chip.active').forEach(c => { allowedActivities.push(c.innerText.trim()); }); if(allowedActivities.length === 0) { alert("Vyber aspoň jeden sport."); return; }
+
+        isSaving = true; const btn = document.getElementById('btn-create-chal'); btn.innerText = "Vytvářím..."; btn.disabled = true;
+        try { await addDoc(collection(db, "challenges"), { name, targetKm, subtitle, visibility, challengeType, trackType, laps, baseKm, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, lineColor: vLineColor, lineWidth: vLineWidth, lineStyle: vLineStyle, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities, creatorId: currentUser.uid, members: [currentUser.uid], createdAt: new Date() }); window.closeCreateChallengeModal(); document.getElementById('new-chal-name').value = ''; document.getElementById('new-chal-km').value = ''; document.getElementById('new-chal-map').value = ''; document.getElementById('new-chal-desc').value = ''; document.getElementById('new-chal-rules').value = ''; document.getElementById('new-chal-subtitle').value = ''; document.getElementById('new-chal-v-img').value = ''; document.getElementById('new-chal-v-svg').value = ''; document.getElementById('new-chal-v-file').value = ''; document.getElementById('new-chal-gpx-hint').innerText = ''; } 
+        catch (e) { alert("Chyba."); console.error(e); } finally { isSaving = false; btn.innerText = "Vytvořit"; btn.disabled = false; }
+    };
+
+    window.openEditChallengeModal = async (id) => {
+        window.pushModalState(); selectedChallengeId = id; const snap = await getDoc(doc(db, "challenges", id));
+        if(snap.exists()) {
+            const data = snap.data(); 
+            document.getElementById('edit-chal-name').value = data.name; document.getElementById('edit-chal-km').value = data.targetKm; document.getElementById('edit-chal-map').value = data.mapUrl || ''; document.getElementById('edit-chal-start').value = data.start; document.getElementById('edit-chal-end').value = data.end; document.getElementById('edit-chal-subtitle').value = data.subtitle || '';
+            if (isUserAdmin) { document.getElementById('edit-chal-visibility').value = data.visibility || 'public'; }
+
+            let tType = data.trackType || 'route';
+            document.querySelectorAll('#edit-chal-track-type .chip').forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === tType) c.classList.add('active'); });
+            window.updateTrackTypeUI('edit');
+            document.getElementById('edit-chal-laps').value = data.laps || '';
+            document.getElementById('edit-chal-base-km').value = data.baseKm || '';
+
+            let mType = data.mapType || 'gpx';
+            document.querySelectorAll('#edit-chal-map-type .chip').forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === mType) c.classList.add('active'); });
+            if (mType === 'virtual') { document.getElementById('edit-chal-gpx-fields').style.display='none'; document.getElementById('edit-chal-virtual-fields').style.display='block'; } else { document.getElementById('edit-chal-gpx-fields').style.display='block'; document.getElementById('edit-chal-virtual-fields').style.display='none'; }
+            document.getElementById('edit-chal-v-img').value = data.virtualMapUrl || ''; document.getElementById('edit-chal-v-w').value = data.virtualMapWidth || 3200; document.getElementById('edit-chal-v-h').value = data.virtualMapHeight || 2400; document.getElementById('edit-chal-v-svg').value = data.virtualSvgPath || '';
+
+            document.getElementById('edit-chal-v-width').value = data.lineWidth || 10;
+            let vStyle = data.lineStyle || 'solid'; document.querySelectorAll('#edit-chal-v-style .chip').forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === vStyle) c.classList.add('active'); });
+            let vColor = data.lineColor || '#4F46E5'; document.querySelectorAll('#edit-chal-v-color .color-chip').forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === '#ffffff') c.style.borderColor = '#ccc'; else c.style.borderColor = 'transparent'; if(c.getAttribute('data-val') === vColor) { c.classList.add('active'); c.style.borderColor = 'var(--text-dark)'; } });
+
+            document.getElementById('edit-chal-desc').value = data.description || ''; document.getElementById('edit-chal-rules').value = data.rules || ''; document.getElementById('edit-chal-author-type').value = data.authorDisplay || 'user';
+            currentEditChalBgUrl = data.bgUrl || ""; document.getElementById('edit-chal-file-input').value = ""; document.getElementById('edit-chal-cropper-wrapper').style.display = "none"; if(chalCropper) { chalCropper.destroy(); chalCropper = null; }
+            currentEditChalBadgeUrl = data.badgeUrl || ""; document.getElementById('edit-chal-badge-input').value = ""; document.getElementById('edit-chal-badge-cropper-wrapper').style.display = "none"; if(chalBadgeCropper) { chalBadgeCropper.destroy(); chalBadgeCropper = null; }
+            document.querySelectorAll('#edit-chal-chips .chip').forEach(c => { if(data.allowedActivities && data.allowedActivities.includes(c.getAttribute('data-type'))) { c.classList.add('active'); } else { c.classList.remove('active'); } });
+
+            let storedType = data.challengeType || 'collab'; document.querySelectorAll('#edit-chal-type .chip').forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === storedType) { c.classList.add('active'); window.updateTypeInfo(c, 'edit'); } });
+            let storedDay = data.startDay !== undefined ? data.startDay : 1; document.querySelectorAll('#edit-chal-start-day .chip').forEach(c => { c.classList.remove('active'); if(parseInt(c.getAttribute('data-val')) === storedDay) c.classList.add('active'); });
+            
+            document.getElementById('edit-chal-gpx-hint').innerText = ''; document.getElementById('edit-challenge-modal').classList.add('active');
+        }
+    };
+    window.closeEditChallengeModal = () => { window.handleUIClose('edit-challenge-modal'); selectedChallengeId = null; if(chalCropper) { chalCropper.destroy(); chalCropper = null; } if(chalBadgeCropper) { chalBadgeCropper.destroy(); chalBadgeCropper = null; } document.getElementById('edit-chal-cropper-wrapper').style.display = 'none'; document.getElementById('edit-chal-file-input').value = ''; document.getElementById('edit-chal-badge-cropper-wrapper').style.display = 'none'; document.getElementById('edit-chal-badge-input').value = ''; document.getElementById('edit-chal-subtitle').value = ''; document.getElementById('edit-chal-gpx-hint').innerText = ''; };
+    
+    window.saveEditedChallenge = async () => {
+        if(isSaving) return;
+        const name = document.getElementById('edit-chal-name').value.trim(); const targetKm = parseFloat(document.getElementById('edit-chal-km').value);
+        const challengeType = document.querySelector('#edit-chal-type .chip.active').getAttribute('data-val');
+        const trackType = document.querySelector('#edit-chal-track-type .chip.active').getAttribute('data-val');
+        const laps = trackType === 'circuit' ? (parseFloat(document.getElementById('edit-chal-laps').value) || 1) : 1;
+        const baseKm = trackType === 'circuit' ? (parseFloat(document.getElementById('edit-chal-base-km').value) || 0) : 0;
+        
+        const mapType = document.querySelector('#edit-chal-map-type .chip.active').getAttribute('data-val'); const mapUrl = document.getElementById('edit-chal-map').value.trim(); const vImg = document.getElementById('edit-chal-v-img').value.trim(); const vW = parseFloat(document.getElementById('edit-chal-v-w').value) || 3200; const vH = parseFloat(document.getElementById('edit-chal-v-h').value) || 2400; const vSvg = document.getElementById('edit-chal-v-svg').value.trim();
+        const vLineWidth = parseFloat(document.getElementById('edit-chal-v-width').value) || 10; const vLineStyle = document.querySelector('#edit-chal-v-style .chip.active').getAttribute('data-val'); const vLineColor = document.querySelector('#edit-chal-v-color .color-chip.active').getAttribute('data-val');
+        let finalBgUrl = currentEditChalBgUrl; if(chalCropper) { finalBgUrl = chalCropper.getCroppedCanvas({ width: 800, height: 450 }).toDataURL('image/jpeg', 0.7); }
+        let finalBadgeUrl = currentEditChalBadgeUrl; if(chalBadgeCropper) { finalBadgeUrl = chalBadgeCropper.getCroppedCanvas({ width: 300, height: 300 }).toDataURL('image/jpeg', 0.8); }
+        const desc = document.getElementById('edit-chal-desc').value.trim(); const rules = document.getElementById('edit-chal-rules').value.trim(); const subtitle = document.getElementById('edit-chal-subtitle').value.trim(); const authorDisplay = document.getElementById('edit-chal-author-type').value; const visibility = isUserAdmin ? document.getElementById('edit-chal-visibility').value : 'private';
+        const start = document.getElementById('edit-chal-start').value; const end = document.getElementById('edit-chal-end').value; const startDay = parseInt(document.querySelector('#edit-chal-start-day .chip.active').getAttribute('data-val'));
+        const allowedActivities = []; document.querySelectorAll('#edit-chal-chips .chip.active').forEach(c => { allowedActivities.push(c.getAttribute('data-type')); }); if(!name || !targetKm || !start || !end || allowedActivities.length === 0) return;
+        if(selectedChallengeId) { isSaving = true; const btn = document.getElementById('btn-edit-chal'); btn.innerText = "Ukládám..."; btn.disabled = true; try { await updateDoc(doc(db, "challenges", selectedChallengeId), { name, targetKm, subtitle, visibility, challengeType, trackType, laps, baseKm, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, lineWidth: vLineWidth, lineStyle: vLineStyle, lineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities }); window.closeEditChallengeModal(); } catch (e) { alert("Chyba."); console.error(e); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; } }
+    };
+    window.deleteChallenge = async () => { if(selectedChallengeId && confirm("Smazat akci pro všechny?")) { await deleteDoc(doc(db, "challenges", selectedChallengeId)); window.closeEditChallengeModal(); } };
+
+    window.switchTab = (tabId) => { window.scrollTo({ top: 0, behavior: 'instant' }); document.getElementById('tab-dashboard').classList.add('hidden'); document.getElementById('tab-statistics').classList.add('hidden'); document.getElementById('tab-profile').classList.add('hidden'); document.getElementById('tab-map').classList.add('hidden'); document.getElementById('nav-dashboard').classList.remove('active'); document.getElementById('nav-statistics').classList.remove('active'); document.getElementById('nav-profile').classList.remove('active'); document.getElementById('nav-map').classList.remove('active'); document.getElementById('tab-' + tabId).classList.remove('hidden'); document.getElementById('nav-' + tabId).classList.add('active'); if(tabId === 'map') { setTimeout(() => { if (leafletMap) leafletMap.invalidateSize(); if (currentSelectedChallengeIdForMap) window.handleMapSelect(currentSelectedChallengeIdForMap); }, 100); } };
+
+  </script>
+</body>
+</html>
