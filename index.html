@@ -33,6 +33,7 @@
     .page-title { font-size: 1.5em; font-weight: 700; padding: 25px 20px 15px 20px; color: var(--text-dark); display: flex; justify-content: space-between; align-items: center; }
     .section-title { font-size: 1.05em; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
     .section-title span { font-size: 0.8em; font-weight: 500; color: var(--text-gray); cursor: pointer; }
+    
     .card { background-color: var(--white); border-radius: 20px; padding: 20px; box-shadow: 0 6px 24px rgba(0,0,0,0.06); margin: 0 20px 20px 20px; }
     .card-no-padding { background-color: var(--white); border-radius: 20px; box-shadow: 0 6px 24px rgba(0,0,0,0.06); margin: 0 20px 20px 20px; overflow: hidden; }
 
@@ -40,6 +41,7 @@
     .main-distance-label { font-size: 0.85em; font-weight: 500; opacity: 0.9; margin-bottom: 8px; }
     .main-distance-value { font-size: 2.8em; font-weight: 600; }
     .main-distance-value span { font-size: 0.5em; font-weight: 600; opacity: 0.9; }
+    
     .badge-green { position: absolute; top: 25px; right: 25px; font-size: 0.75em; font-weight: 600; padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 4px; transition: 0.3s; }
     .badge-green.active { background-color: rgba(16, 185, 129, 0.15); color: #10B981; }
     .badge-green.inactive { background-color: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.6); }
@@ -48,6 +50,7 @@
     .btn-add-activity { flex: 1; background-color: var(--white); border-radius: 20px; padding: 15px; display: flex; align-items: center; justify-content: center; gap: 15px; box-shadow: 0 6px 24px rgba(0,0,0,0.06); border: none; cursor: pointer; text-align: left; }
     .btn-add-icon { width: 40px; height: 40px; background-color: var(--primary-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); font-size: 1.5em; font-weight: 400; flex-shrink: 0; }
     .btn-add-text h4 { color: var(--primary-dark); font-size: 1.2em; font-weight: 700; margin: 0; }
+    
     .btn-strava { width: 70px; height: 70px; border: none; cursor: pointer; flex-shrink: 0; background: transparent; padding: 0; display: block; border-radius: 20px; overflow: hidden; }
     .btn-strava img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -106,7 +109,8 @@
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.3s ease, visibility 0.3s ease; padding: 20px; }
     .modal-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
     .modal-content { background-color: var(--white); padding: 25px; border-radius: 24px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; text-align: center; position: relative; }
-    
+    .modal-content h3 { margin-bottom: 20px; color: var(--primary-dark); }
+
     .chal-detail-fullscreen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 3000; background: var(--bg-color); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s ease; transform: translateY(100%); visibility: hidden; pointer-events: none; }
     .chal-detail-fullscreen.active { transform: translateY(0); visibility: visible; pointer-events: auto; }
     .chal-detail-bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 56.25vw; max-height: 338px; background-size: cover; background-position: center; background-color: var(--primary-dark); z-index: 1; }
@@ -143,16 +147,18 @@
     .date-input { width: 100%; padding: 12px; border: 1px solid var(--gray-border); border-radius: 12px; font-family: inherit; font-size: 1em; outline: none; margin-bottom: 10px;}
 
     .modal-buttons-row { display: flex; gap: 10px; width: 100%; margin-top: 20px; }
-    .btn-save { flex: 1; background-color: var(--primary-orange); color: var(--white); border: none; padding: 15px; border-radius: 16px; font-weight: 600; cursor: pointer; }
-    .btn-cancel { flex: 1; background-color: var(--gray-light); color: var(--text-dark); border: none; padding: 15px; border-radius: 16px; font-weight: 600; cursor: pointer; }
+    .btn-save, .btn-cancel { flex: 1; border: none; padding: 15px; border-radius: 16px; font-weight: 600; cursor: pointer; }
+    .btn-save { background-color: var(--primary-orange); color: var(--white); }
+    .btn-cancel { background-color: var(--gray-light); color: var(--text-dark); }
     .btn-delete { background-color: #FEE2E2; color: #EF4444; border: none; padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 15px; font-size: 0.9em; width: 100%; }
 
-    .btn-follow, .btn-follow-requested, .btn-follow-active { border: none; padding: 10px 20px; border-radius: 16px; font-weight: 600; font-size: 0.9em; cursor: pointer; }
+    .btn-follow, .btn-follow-requested, .btn-follow-active { border: none; padding: 10px 20px; border-radius: 16px; font-weight: 600; font-size: 0.9em; cursor: pointer; transition: 0.2s; }
     .btn-follow { background-color: var(--primary-dark); color: var(--white); }
     .btn-follow-requested { background-color: var(--gray-light); color: var(--text-gray); border: 1px solid var(--gray-border); }
     .btn-follow-active { background-color: var(--gray-light); color: var(--text-dark); border: 1px solid var(--gray-border); }
-    .btn-req-accept { background: var(--primary-dark); color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 0.8em; cursor: pointer; margin-right: 5px; }
-    .btn-req-reject { background: var(--gray-light); color: var(--text-dark); border: none; padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 0.8em; cursor: pointer; }
+    .btn-req-accept, .btn-req-reject { border: none; padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 0.8em; cursor: pointer; margin-right: 5px; }
+    .btn-req-accept { background: var(--primary-dark); color: white; }
+    .btn-req-reject { background: var(--gray-light); color: var(--text-dark); }
     .btn-fetch-gpx { background-color: var(--primary-dark); color: var(--white); border: none; padding: 0 15px; border-radius: 12px; font-weight: 600; font-size: 0.85em; cursor: pointer; white-space: nowrap; transition: 0.2s; }
     .map-btn-large { background: var(--gray-light); color: var(--primary-dark); border: 2px solid var(--primary-dark); padding: 14px; border-radius: 16px; font-size: 1.05em; font-weight: 700; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; transition: 0.2s; }
 
@@ -173,11 +179,10 @@
 </head>
 <body>
 
-  <!-- VEŘEJNÁ ČÁST -->
+  <!-- PUBLIC VIEW -->
   <div id="public-view">
     <h1 class="page-title" style="justify-content: center; font-size: 2em; margin-top: 40px;">Kadima</h1>
     <p style="color: var(--text-gray); text-align: center;">Přidej se k naší společné výzvě.</p>
-
     <div class="auth-form">
       <input type="email" id="email-input" class="auth-input" placeholder="Tvůj e-mail">
       <div style="position: relative; margin-bottom: 12px;">
@@ -187,20 +192,15 @@
         </div>
       </div>
       <a href="#" style="display:block; text-align:right; font-size:0.85em; font-weight:600; color:var(--primary-dark); margin-bottom:15px; text-decoration:none;" onclick="resetPassword(event)">Zapomněl(a) jsi heslo?</a>
-
       <button onclick="loginUser()" class="btn-login">Přihlásit se</button>
       <button onclick="registerUser()" class="btn-register">Vytvořit nový účet</button>
-      <div style="display:flex; align-items:center; color:var(--text-gray); font-size:0.85em; margin-bottom:15px;">
-          <div style="flex:1; height:1px; background:var(--gray-border);"></div><span style="padding:0 10px;">nebo</span><div style="flex:1; height:1px; background:var(--gray-border);"></div>
-      </div>
-      <button onclick="loginWithGoogle()" class="btn-google">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" style="width:20px;height:20px;"> Přihlásit se přes Google
-      </button>
+      <div style="display:flex; align-items:center; color:var(--text-gray); font-size:0.85em; margin-bottom:15px;"><div style="flex:1; height:1px; background:var(--gray-border);"></div><span style="padding:0 10px;">nebo</span><div style="flex:1; height:1px; background:var(--gray-border);"></div></div>
+      <button onclick="loginWithGoogle()" class="btn-google"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" style="width:20px;height:20px;"> Přihlásit se přes Google</button>
       <p id="auth-error" style="color:#EF4444; font-size:0.85em; font-weight:600; text-align:center; margin-top:15px; display:none;"></p>
     </div>
   </div>
 
-  <!-- SOUKROMÁ ČÁST -->
+  <!-- PRIVATE VIEW -->
   <div id="private-view" class="hidden">
     <div id="tab-dashboard">
       <div class="page-title">Kadima</div>
@@ -221,9 +221,7 @@
         <div id="dash-joined-challenges"></div>
       </div>
       <div class="section-title" style="margin: 20px 20px 10px 20px;">Top 3 (Celkově)</div>
-      <div class="card" style="padding: 8px 20px;">
-        <div id="dashboard-leaderboard-list" class="leaderboard-list"><div style="text-align: center; color: var(--text-gray); padding: 10px; font-size:0.9em;">Načítám data...</div></div>
-      </div>
+      <div class="card" style="padding: 8px 20px;"><div id="dashboard-leaderboard-list" class="leaderboard-list"><div style="text-align: center; color: var(--text-gray); padding: 10px; font-size:0.9em;">Načítám data...</div></div></div>
     </div> 
 
     <div id="tab-statistics" class="hidden">
@@ -231,10 +229,7 @@
       <div id="stats-challenges-container"></div>
       <div id="personal-stats-wrapper" style="display:none;">
           <div class="card-no-padding" style="margin-top: 20px;">
-              <div style="padding: 20px;">
-                  <h3 style="color: var(--text-dark); font-size: 1.3em; font-weight: 800; margin-bottom: 15px;">Moje osobní statistika</h3>
-                  <div id="personal-charts-render-area"></div>
-              </div>
+              <div style="padding: 20px;"><h3 style="color: var(--text-dark); font-size: 1.3em; font-weight: 800; margin-bottom: 15px;">Moje osobní statistika</h3><div id="personal-charts-render-area"></div></div>
               <div style="padding: 15px 20px; background: var(--gray-light); border-top: 1px solid var(--gray-border);">
                   <div style="display:flex; justify-content:center; gap:10px;" id="personal-filter-chips">
                       <div class="chip active" style="padding: 6px 16px;" data-val="total" onclick="setPersonalFilter('total')">Celkem</div>
@@ -250,10 +245,7 @@
                           <div style="flex:1;"><label style="font-size:0.8em;color:var(--text-gray); font-weight:600; display:block; margin-bottom:4px;">Od:</label><input type="date" id="p-date-from" class="date-input" style="background-color: var(--white); margin-bottom:0; padding:8px;" onchange="updatePersonalDates()"></div>
                           <div style="flex:1;"><label style="font-size:0.8em;color:var(--text-gray); font-weight:600; display:block; margin-bottom:4px;">Do:</label><input type="date" id="p-date-to" class="date-input" style="background-color: var(--white); margin-bottom:0; padding:8px;" onchange="updatePersonalDates()"></div>
                       </div>
-                      <div style="margin-top: 10px;">
-                          <label style="font-size:0.8em;color:var(--text-gray); font-weight:600; display:block; margin-bottom:4px;">Moje poznámka (uloží se automaticky):</label>
-                          <textarea id="p-custom-note" class="date-input" rows="2" style="background-color: var(--white); margin-bottom:0; padding:8px; font-size: 0.85em;" placeholder="Např.: První sníh napadl 15.11..." onchange="saveCustomNote()"></textarea>
-                      </div>
+                      <div style="margin-top: 10px;"><label style="font-size:0.8em;color:var(--text-gray); font-weight:600; display:block; margin-bottom:4px;">Moje poznámka (uloží se automaticky):</label><textarea id="p-custom-note" class="date-input" rows="2" style="background-color: var(--white); margin-bottom:0; padding:8px; font-size: 0.85em;" placeholder="Např.: První sníh napadl 15.11..." onchange="saveCustomNote()"></textarea></div>
                   </div>
               </div>
           </div>
@@ -264,9 +256,7 @@
           <div class="section-title" style="margin: 20px 20px 10px 20px;">Akce mých sledujících</div>
           <div style="padding: 0 20px;"><div id="profile-followers-challenges"></div></div>
       </div>
-      <div style="padding: 0 20px 20px 20px;">
-        <button id="btn-create-challenge-admin" style="display:none; width: 100%; background: var(--white); box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: none; padding: 16px; border-radius: 50px; font-weight: 700; font-size: 1.05em; color: var(--text-dark); cursor:pointer;" onclick="openCreateChallengeModal()">+ Vytvořit novou akci</button>
-      </div>
+      <div style="padding: 0 20px 20px 20px;"><button id="btn-create-challenge-admin" style="display:none; width: 100%; background: var(--white); box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: none; padding: 16px; border-radius: 50px; font-weight: 700; font-size: 1.05em; color: var(--text-dark); cursor:pointer;" onclick="openCreateChallengeModal()">+ Vytvořit novou akci</button></div>
     </div> 
 
     <div id="tab-map" class="hidden">
@@ -310,7 +300,6 @@
       </div>
     </div> 
 
-    <!-- SPODNÍ NAVIGAČNÍ LIŠTA -->
     <div class="bottom-nav">
       <div class="nav-item active" id="nav-dashboard" onclick="switchTab('dashboard')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Přehled</div>
       <div class="nav-item" id="nav-statistics" onclick="switchTab('statistics')"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>Statistika</div>
@@ -319,23 +308,17 @@
     </div>
   </div>
 
-  <!-- STRAVA-STYLE DETAIL VÝZVY S PLYNULÝM SCROLLOVÁNÍM -->
+  <!-- CHALLENGE DETAIL -->
   <div id="chal-detail-fullscreen" class="chal-detail-fullscreen">
       <div id="chal-detail-bg" class="chal-detail-bg-image"></div>
       
       <button class="chal-detail-close-btn" onclick="closeChallengeDetail()"><svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg></button>
-      
-      <!-- TLAČÍTKO EDITACE V DETAILU (zobrazí se jen autorovi) -->
-      <button class="chal-detail-edit-btn" id="chal-detail-edit-btn">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-      </button>
-
+      <button class="chal-detail-edit-btn" id="chal-detail-edit-btn"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>
       <button class="chal-detail-share-btn" onclick="shareChallenge()"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg></button>
 
       <div class="chal-detail-scroll-area">
           <div class="chal-detail-sheet">
               <div class="drag-handle"></div>
-
               <div style="display:flex; gap: 20px; margin-bottom: 20px; align-items: stretch;">
                   <div id="chal-detail-badge" style="width: 80px; height: 80px; border-radius: 16px; overflow: hidden; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: none;"></div>
                   <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
@@ -343,7 +326,6 @@
                       <h2 id="chal-detail-title" style="font-size: 1.8em; font-weight: 800; color: #000000; margin-bottom: 0; line-height: 1.2;">Název výzvy</h2>
                   </div>
               </div>
-
               <div id="chal-detail-subtitle" style="font-size: 1em; color: var(--text-gray); margin-bottom: 30px; line-height: 1.5;"></div>
 
               <h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 10px;">Autor</h4>
@@ -355,7 +337,7 @@
                   </div>
               </div>
 
-              <!-- PROGRESS BAR (viditelný pouze pro členy) -->
+              <!-- PROGRESS BAR A ŽEBŘÍČEK -->
               <div id="chal-detail-progress-wrapper" style="display:none; margin-bottom: 30px;">
                   <h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 10px;">Váš postup</h4>
                   <div style="background: var(--gray-light); padding: 15px; border-radius: 16px;">
@@ -366,8 +348,6 @@
                       <div class="chal-progress-bg" style="margin-top:0; height:10px;"><div id="chal-detail-progress-bar" class="chal-progress-fill" style="width: 0%; background: #4F46E5;"></div></div>
                   </div>
               </div>
-
-              <!-- ŽEBŘÍČEK (viditelný pouze pro členy) -->
               <div id="chal-detail-leaderboard-wrapper" style="display:none; margin-bottom: 30px;">
                   <h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 10px;">Žebříček zúčastněných</h4>
                   <div id="chal-detail-leaderboard-list" style="background: var(--white); border: 1px solid var(--gray-border); border-radius: 16px; padding: 10px 15px;"></div>
@@ -380,39 +360,20 @@
               </div>
               <div style="display:flex; align-items:center; gap:15px; margin-bottom: 20px;">
                   <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--text-gray)"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg>
-                  <div>
-                      <div style="font-size: 0.95em; color: var(--text-dark); font-weight: 500;">Kvalifikační aktivity</div>
-                      <div id="chal-detail-activities" style="font-size: 0.85em; color: var(--text-gray); margin-top: 4px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;"></div>
-                  </div>
+                  <div><div style="font-size: 0.95em; color: var(--text-dark); font-weight: 500;">Kvalifikační aktivity</div><div id="chal-detail-activities" style="font-size: 0.85em; color: var(--text-gray); margin-top: 4px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;"></div></div>
               </div>
 
-              <div id="chal-desc-wrapper" style="margin-top: 30px; display:none;">
-                  <h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 10px;">Přehled a popis</h4>
-                  <div id="chal-detail-desc" style="font-size: 0.95em; color: var(--text-dark); line-height: 1.6; white-space: pre-wrap;"></div>
-              </div>
-
-              <div id="chal-rules-wrapper" style="margin-top: 30px; display:none;">
-                  <h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 10px;">Pravidla</h4>
-                  <div id="chal-detail-rules" style="font-size: 0.95em; color: var(--text-dark); line-height: 1.6; white-space: pre-wrap;"></div>
-              </div>
+              <div id="chal-desc-wrapper" style="margin-top: 30px; display:none;"><h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 10px;">Přehled a popis</h4><div id="chal-detail-desc" style="font-size: 0.95em; color: var(--text-dark); line-height: 1.6; white-space: pre-wrap;"></div></div>
+              <div id="chal-rules-wrapper" style="margin-top: 30px; display:none;"><h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 10px;">Pravidla</h4><div id="chal-detail-rules" style="font-size: 0.95em; color: var(--text-dark); line-height: 1.6; white-space: pre-wrap;"></div></div>
               <div id="chal-detail-explanation" style="background: var(--gray-light); padding: 15px; border-radius: 16px; margin-top: 30px; margin-bottom: 20px; font-size: 0.9em; color: var(--text-dark); line-height: 1.5;"></div>
 
-              <!-- TLAČÍTKO NA MAPU -->
-              <div id="chal-detail-map-btn-wrapper" style="display:none; margin-top:30px;">
-                  <button class="map-btn-large" onclick="gotoMapFromDetail()">
-                      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg> Zobrazit trasu na mapě
-                  </button>
-              </div>
-
+              <div id="chal-detail-map-btn-wrapper" style="display:none; margin-top:30px;"><button class="map-btn-large" onclick="gotoMapFromDetail()"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg> Zobrazit trasu na mapě</button></div>
           </div>
       </div>
-
-      <div class="chal-floating-action">
-          <button id="chal-action-btn" class="chal-btn-main"></button>
-      </div>
+      <div class="chal-floating-action"><button id="chal-action-btn" class="chal-btn-main"></button></div>
   </div>
 
-  <!-- MODALY APLIKACE-->
+  <!-- MODALS -->
   <div id="search-modal" class="modal-overlay" onclick="if(event.target===this) closeSearchModal()">
     <div class="modal-content"><h3 style="margin-bottom:15px;">Hledat uživatele</h3><input type="text" id="search-input" class="auth-input" placeholder="Zadejte jméno..." oninput="handleSearch()"><div id="search-results" style="display:flex; flex-direction:column; max-height: 300px; overflow-y:auto; margin-top:10px; text-align:left;"></div><div class="modal-buttons-row"><button class="btn-cancel" onclick="closeSearchModal()">Zavřít</button></div></div>
   </div>
@@ -432,13 +393,7 @@
   <div id="activity-modal" class="modal-overlay" onclick="if(event.target===this) closeModal()">
     <div class="modal-content">
       <h3>Nová aktivita</h3>
-      <div class="activity-chips">
-        <div class="chip active" data-type="Chůze" onclick="selectChip(this)">Chůze</div>
-        <div class="chip" data-type="Běh" onclick="selectChip(this)">Běh</div>
-        <div class="chip" data-type="Kolo" onclick="selectChip(this)">Kolo</div>
-        <div class="chip" data-type="Běh/chůze" onclick="selectChip(this)">Běh/chůze</div>
-        <div class="chip" data-type="Běžky" onclick="selectChip(this)">Běžky</div>
-      </div>
+      <div class="activity-chips"><div class="chip active" data-type="Chůze" onclick="selectChip(this)">Chůze</div><div class="chip" data-type="Běh" onclick="selectChip(this)">Běh</div><div class="chip" data-type="Kolo" onclick="selectChip(this)">Kolo</div><div class="chip" data-type="Běh/chůze" onclick="selectChip(this)">Běh/chůze</div><div class="chip" data-type="Běžky" onclick="selectChip(this)">Běžky</div></div>
       <div class="km-input-wrapper"><input type="number" id="km-input" class="km-input" placeholder="0" step="0.1" min="0"><span style="font-size: 1.2em; font-weight: 600;"> km</span></div>
       <div class="date-input-wrapper"><label>Odkaz na Stravu (volitelné):</label><input type="text" id="strava-link-input" class="date-input" placeholder="https://strava.app.link/... nebo celý text ze Stravy"></div>
       <div style="margin: 15px 0 25px 0; border-top: 1px solid var(--gray-border); padding-top: 15px; text-align: left;">
@@ -492,7 +447,6 @@
           <div id="new-chal-type-info" style="font-size: 0.85em; color: var(--text-gray); margin-top: 10px; text-align: left; padding: 10px; background: var(--gray-light); border-radius: 12px;">Společná výzva: Kilometry všech zúčastněných se sčítají dohromady do jednoho společného cíle.</div>
       </div>
 
-      <!-- TRASA VS OKRUH -->
       <div class="date-input-wrapper" style="margin-top: 20px;">
         <label style="text-align:center;">Režim trasy na mapě:</label>
         <div class="activity-chips" style="margin-bottom:0; display:flex; flex-wrap:nowrap; gap:10px;" id="new-chal-track-type">
@@ -503,14 +457,8 @@
 
       <div id="new-chal-circuit-fields" style="display:none; background: var(--gray-light); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
           <div style="display:flex; gap:10px;">
-              <div style="flex:1;">
-                  <label>Délka 1 okruhu (km):</label>
-                  <input type="number" step="0.1" id="new-chal-base-km" class="date-input" style="background:var(--white);" oninput="calcTargetFromLaps('new')">
-              </div>
-              <div style="flex:1;">
-                  <label>Počet okruhů:</label>
-                  <input type="number" id="new-chal-laps" class="date-input" style="background:var(--white);" oninput="calcTargetFromLaps('new')">
-              </div>
+              <div style="flex:1;"><label>Délka 1 okruhu (km):</label><input type="number" step="0.1" id="new-chal-base-km" class="date-input" style="background:var(--white);" oninput="calcTargetFromLaps('new')"></div>
+              <div style="flex:1;"><label>Počet okruhů:</label><input type="number" id="new-chal-laps" class="date-input" style="background:var(--white);" oninput="calcTargetFromLaps('new')"></div>
           </div>
       </div>
 
@@ -522,7 +470,6 @@
           </div>
       </div>
 
-      <!-- VZHLED VYZNAČENÉ TRASY (Platí pro GPX i Virtual) -->
       <div class="date-input-wrapper" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 15px; margin-bottom: 15px;">
           <label style="text-align:center; font-weight:700;">Vzhled čáry na mapě</label>
           <div style="display:flex; gap:10px; margin-bottom:10px;">
@@ -545,10 +492,7 @@
           </div>
       </div>
 
-      <div class="date-input-wrapper">
-          <label style="font-weight:700;">Celková cílová vzdálenost (km):</label>
-          <input type="number" step="0.1" id="new-chal-km" class="date-input" placeholder="Např. 300">
-      </div>
+      <div class="date-input-wrapper"><label style="font-weight:700;">Celková cílová vzdálenost (km):</label><input type="number" step="0.1" id="new-chal-km" class="date-input" placeholder="Např. 300"></div>
 
       <div id="new-chal-gpx-fields">
           <div class="date-input-wrapper">
@@ -564,10 +508,7 @@
       <div id="new-chal-virtual-fields" style="display:none; background: var(--gray-light); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
           <div class="date-input-wrapper"><label>URL odkaz na obrázek mapy:</label><input type="text" id="new-chal-v-img" class="date-input" style="background:var(--white);" placeholder="https://...obrazek.jpg" oninput="handleVirtualImgUrlInput(this.value)"></div>
           <div class="date-input-wrapper"><label>Nebo nahrát obrázek mapy ze souboru:</label><input type="file" id="new-chal-v-file" class="date-input" accept="image/*" style="background:var(--white);" onchange="handleVirtualFileSelect(this)"></div>
-          <div class="date-input-wrapper" style="display:flex; gap:10px;">
-              <div style="flex:1;"><label>Šířka (px):</label><input type="number" id="new-chal-v-w" class="date-input" style="background:var(--white);" value="3200"></div>
-              <div style="flex:1;"><label>Výška (px):</label><input type="number" id="new-chal-v-h" class="date-input" style="background:var(--white);" value="2400"></div>
-          </div>
+          <div class="date-input-wrapper" style="display:flex; gap:10px;"><div style="flex:1;"><label>Šířka (px):</label><input type="number" id="new-chal-v-w" class="date-input" style="background:var(--white);" value="3200"></div><div style="flex:1;"><label>Výška (px):</label><input type="number" id="new-chal-v-h" class="date-input" style="background:var(--white);" value="2400"></div></div>
           <div class="date-input-wrapper" style="margin-bottom:0;"><label>Kód trasy (&lt;path d="..."&gt;):</label><textarea id="new-chal-v-svg" class="date-input" rows="4" style="background:var(--white); font-family:monospace; font-size:0.8em;" placeholder='Vložte SVG kód trasy (např. <path d="M 100 200 L 300 400" />)'></textarea></div>
       </div>
 
@@ -580,7 +521,6 @@
           <input type="file" id="new-chal-badge-input" class="date-input" accept="image/*" style="background:var(--white);" onchange="handleChalBadgeFileSelect(this, 'new')">
           <div class="cropper-container-wrapper" id="new-chal-badge-cropper-wrapper"><img id="new-chal-badge-cropper-image" src=""></div>
       </div>
-
       <div class="date-input-wrapper" style="margin-top: 15px;">
           <label>Obrázek na pozadí detailu (širokoúhlý):</label>
           <input type="file" id="new-chal-file-input" class="date-input" accept="image/*" onchange="handleChalFileSelect(this, 'new')">
@@ -590,32 +530,18 @@
       <div class="date-input-wrapper">
         <label style="text-align:center;">Začátek týdne (pro grafy):</label>
         <div class="activity-chips" style="margin-bottom:0;" id="new-chal-start-day">
-          <div class="chip chip-small active" data-val="1" onclick="selectSingleChip(this, 'new-chal-start-day')">Po</div>
-          <div class="chip chip-small" data-val="2" onclick="selectSingleChip(this, 'new-chal-start-day')">Út</div>
-          <div class="chip chip-small" data-val="3" onclick="selectSingleChip(this, 'new-chal-start-day')">St</div>
-          <div class="chip chip-small" data-val="4" onclick="selectSingleChip(this, 'new-chal-start-day')">Čt</div>
-          <div class="chip chip-small" data-val="5" onclick="selectSingleChip(this, 'new-chal-start-day')">Pá</div>
-          <div class="chip chip-small" data-val="6" onclick="selectSingleChip(this, 'new-chal-start-day')">So</div>
-          <div class="chip chip-small" data-val="0" onclick="selectSingleChip(this, 'new-chal-start-day')">Ne</div>
+          <div class="chip chip-small active" data-val="1" onclick="selectSingleChip(this, 'new-chal-start-day')">Po</div><div class="chip chip-small" data-val="2" onclick="selectSingleChip(this, 'new-chal-start-day')">Út</div><div class="chip chip-small" data-val="3" onclick="selectSingleChip(this, 'new-chal-start-day')">St</div><div class="chip chip-small" data-val="4" onclick="selectSingleChip(this, 'new-chal-start-day')">Čt</div><div class="chip chip-small" data-val="5" onclick="selectSingleChip(this, 'new-chal-start-day')">Pá</div><div class="chip chip-small" data-val="6" onclick="selectSingleChip(this, 'new-chal-start-day')">So</div><div class="chip chip-small" data-val="0" onclick="selectSingleChip(this, 'new-chal-start-day')">Ne</div>
         </div>
       </div>
 
-      <div class="date-input-wrapper" style="display:flex; gap:10px;">
-        <div style="flex:1;"><label>Od:</label><input type="date" id="new-chal-start" class="date-input"></div>
-        <div style="flex:1;"><label>Do:</label><input type="date" id="new-chal-end" class="date-input"></div>
-      </div>
+      <div class="date-input-wrapper" style="display:flex; gap:10px;"><div style="flex:1;"><label>Od:</label><input type="date" id="new-chal-start" class="date-input"></div><div style="flex:1;"><label>Do:</label><input type="date" id="new-chal-end" class="date-input"></div></div>
       <div class="date-input-wrapper">
         <label style="text-align:center; margin-top:10px;">Povolené aktivity:</label>
         <div class="activity-chips" style="margin-bottom:0;" id="new-chal-chips">
-          <div class="chip active" onclick="toggleChallengeChip(this)">Chůze</div><div class="chip active" onclick="toggleChallengeChip(this)">Běh</div>
-          <div class="chip active" onclick="toggleChallengeChip(this)">Kolo</div><div class="chip" onclick="toggleChallengeChip(this)">Běh/chůze</div>
-          <div class="chip" onclick="toggleChallengeChip(this)">Běžky</div>
+          <div class="chip active" onclick="toggleChallengeChip(this)">Chůze</div><div class="chip active" onclick="toggleChallengeChip(this)">Běh</div><div class="chip active" onclick="toggleChallengeChip(this)">Kolo</div><div class="chip" onclick="toggleChallengeChip(this)">Běh/chůze</div><div class="chip" onclick="toggleChallengeChip(this)">Běžky</div>
         </div>
       </div>
-      <div class="modal-buttons-row">
-        <button class="btn-cancel" onclick="closeCreateChallengeModal()">Zrušit</button>
-        <button class="btn-save" id="btn-create-chal" onclick="saveNewChallenge()">Vytvořit</button>
-      </div>
+      <div class="modal-buttons-row"><button class="btn-cancel" onclick="closeCreateChallengeModal()">Zrušit</button><button class="btn-save" id="btn-create-chal" onclick="saveNewChallenge()">Vytvořit</button></div>
     </div>
   </div>
 
@@ -636,7 +562,6 @@
           <div id="edit-chal-type-info" style="font-size: 0.85em; color: var(--text-gray); margin-top: 10px; text-align: left; padding: 10px; background: var(--gray-light); border-radius: 12px;">Společná výzva: Kilometry všech zúčastněných se sčítají dohromady do jednoho společného cíle.</div>
       </div>
 
-      <!-- TRASA VS OKRUH -->
       <div class="date-input-wrapper" style="margin-top: 20px;">
         <label style="text-align:center;">Režim trasy na mapě:</label>
         <div class="activity-chips" style="margin-bottom:0; display:flex; flex-wrap:nowrap; gap:10px;" id="edit-chal-track-type">
@@ -660,7 +585,6 @@
           </div>
       </div>
 
-      <!-- VZHLED VYZNAČENÉ TRASY -->
       <div class="date-input-wrapper" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 15px; margin-bottom: 15px;">
           <label style="text-align:center; font-weight:700;">Vzhled čáry na mapě</label>
           <div style="display:flex; gap:10px; margin-bottom:10px;">
@@ -688,10 +612,7 @@
       <div id="edit-chal-gpx-fields">
           <div class="date-input-wrapper">
               <label>URL odkaz na GPX mapu (volitelné):</label>
-              <div style="display:flex; gap:10px;">
-                  <input type="text" id="edit-chal-map" class="date-input" placeholder="https://..." style="flex:1;">
-                  <button type="button" class="btn-fetch-gpx" onclick="calculateGpxDistance('edit-chal-map', 'edit-chal-gpx-hint', 'edit')">Spočítat</button>
-              </div>
+              <div style="display:flex; gap:10px;"><input type="text" id="edit-chal-map" class="date-input" placeholder="https://..." style="flex:1;"><button type="button" class="btn-fetch-gpx" onclick="calculateGpxDistance('edit-chal-map', 'edit-chal-gpx-hint', 'edit')">Spočítat</button></div>
               <div id="edit-chal-gpx-hint" style="font-size: 0.85em; color: var(--primary-orange); font-weight: 600; margin-top: 5px;"></div>
           </div>
       </div>
@@ -699,10 +620,7 @@
       <div id="edit-chal-virtual-fields" style="display:none; background: var(--gray-light); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
           <div class="date-input-wrapper"><label>URL odkaz na obrázek mapy:</label><input type="text" id="edit-chal-v-img" class="date-input" style="background:var(--white);" oninput="handleVirtualImgUrlInputEdit(this.value)"></div>
           <div class="date-input-wrapper"><label>Nebo nahrát obrázek mapy ze souboru:</label><input type="file" id="edit-chal-v-file" class="date-input" accept="image/*" style="background:var(--white);" onchange="handleVirtualFileSelectEdit(this)"></div>
-          <div class="date-input-wrapper" style="display:flex; gap:10px;">
-              <div style="flex:1;"><label>Šířka (px):</label><input type="number" id="edit-chal-v-w" class="date-input" style="background:var(--white);"></div>
-              <div style="flex:1;"><label>Výška (px):</label><input type="number" id="edit-chal-v-h" class="date-input" style="background:var(--white);"></div>
-          </div>
+          <div class="date-input-wrapper" style="display:flex; gap:10px;"><div style="flex:1;"><label>Šířka (px):</label><input type="number" id="edit-chal-v-w" class="date-input" style="background:var(--white);"></div><div style="flex:1;"><label>Výška (px):</label><input type="number" id="edit-chal-v-h" class="date-input" style="background:var(--white);"></div></div>
           <div class="date-input-wrapper" style="margin-bottom:0;"><label>Kód trasy (&lt;path d="..."&gt;):</label><textarea id="edit-chal-v-svg" class="date-input" rows="4" style="background:var(--white); font-family:monospace; font-size:0.8em;"></textarea></div>
       </div>
       
@@ -715,7 +633,6 @@
           <input type="file" id="edit-chal-badge-input" class="date-input" accept="image/*" style="background:var(--white);" onchange="handleChalBadgeFileSelect(this, 'edit')">
           <div class="cropper-container-wrapper" id="edit-chal-badge-cropper-wrapper"><img id="edit-chal-badge-cropper-image" src=""></div>
       </div>
-
       <div class="date-input-wrapper" style="margin-top: 15px;">
           <label>Obrázek na pozadí detailu (širokoúhlý):</label>
           <input type="file" id="edit-chal-file-input" class="date-input" accept="image/*" onchange="handleChalFileSelect(this, 'edit')">
@@ -725,26 +642,15 @@
       <div class="date-input-wrapper">
         <label style="text-align:center;">Začátek týdne:</label>
         <div class="activity-chips" style="margin-bottom:0;" id="edit-chal-start-day">
-          <div class="chip chip-small" data-val="1" onclick="selectSingleChip(this, 'edit-chal-start-day')">Po</div>
-          <div class="chip chip-small" data-val="2" onclick="selectSingleChip(this, 'edit-chal-start-day')">Út</div>
-          <div class="chip chip-small" data-val="3" onclick="selectSingleChip(this, 'edit-chal-start-day')">St</div>
-          <div class="chip chip-small" data-val="4" onclick="selectSingleChip(this, 'edit-chal-start-day')">Čt</div>
-          <div class="chip chip-small" data-val="5" onclick="selectSingleChip(this, 'edit-chal-start-day')">Pá</div>
-          <div class="chip chip-small" data-val="6" onclick="selectSingleChip(this, 'edit-chal-start-day')">So</div>
-          <div class="chip chip-small" data-val="0" onclick="selectSingleChip(this, 'edit-chal-start-day')">Ne</div>
+          <div class="chip chip-small" data-val="1" onclick="selectSingleChip(this, 'edit-chal-start-day')">Po</div><div class="chip chip-small" data-val="2" onclick="selectSingleChip(this, 'edit-chal-start-day')">Út</div><div class="chip chip-small" data-val="3" onclick="selectSingleChip(this, 'edit-chal-start-day')">St</div><div class="chip chip-small" data-val="4" onclick="selectSingleChip(this, 'edit-chal-start-day')">Čt</div><div class="chip chip-small" data-val="5" onclick="selectSingleChip(this, 'edit-chal-start-day')">Pá</div><div class="chip chip-small" data-val="6" onclick="selectSingleChip(this, 'edit-chal-start-day')">So</div><div class="chip chip-small" data-val="0" onclick="selectSingleChip(this, 'edit-chal-start-day')">Ne</div>
         </div>
       </div>
 
-      <div class="date-input-wrapper" style="display:flex; gap:10px;">
-        <div style="flex:1;"><label>Od:</label><input type="date" id="edit-chal-start" class="date-input"></div>
-        <div style="flex:1;"><label>Do:</label><input type="date" id="edit-chal-end" class="date-input"></div>
-      </div>
+      <div class="date-input-wrapper" style="display:flex; gap:10px;"><div style="flex:1;"><label>Od:</label><input type="date" id="edit-chal-start" class="date-input"></div><div style="flex:1;"><label>Do:</label><input type="date" id="edit-chal-end" class="date-input"></div></div>
       <div class="date-input-wrapper">
         <label style="text-align:center; margin-top:10px;">Povolené aktivity:</label>
         <div class="activity-chips" style="margin-bottom:0;" id="edit-chal-chips">
-          <div class="chip" data-type="Chůze" onclick="toggleChallengeChip(this)">Chůze</div><div class="chip" data-type="Běh" onclick="toggleChallengeChip(this)">Běh</div>
-          <div class="chip" data-type="Kolo" onclick="toggleChallengeChip(this)">Kolo</div><div class="chip" data-type="Běh/chůze" onclick="toggleChallengeChip(this)">Běh/chůze</div>
-          <div class="chip" data-type="Běžky" onclick="toggleChallengeChip(this)">Běžky</div>
+          <div class="chip" data-type="Chůze" onclick="toggleChallengeChip(this)">Chůze</div><div class="chip" data-type="Běh" onclick="toggleChallengeChip(this)">Běh</div><div class="chip" data-type="Kolo" onclick="toggleChallengeChip(this)">Kolo</div><div class="chip" data-type="Běh/chůze" onclick="toggleChallengeChip(this)">Běh/chůze</div><div class="chip" data-type="Běžky" onclick="toggleChallengeChip(this)">Běžky</div>
         </div>
       </div>
       <div class="modal-buttons-row"><button class="btn-cancel" onclick="closeEditChallengeModal()">Zrušit</button><button class="btn-save" id="btn-edit-chal" onclick="saveEditedChallenge()">Uložit</button></div>
@@ -754,18 +660,13 @@
   
   <div id="public-profile-modal" class="modal-overlay" onclick="if(event.target===this) closePublicProfile()">
     <div class="modal-content" style="padding:0; overflow:hidden;">
-      <div class="page-title" style="padding:15px; border-bottom:1px solid var(--gray-border);">
-        <span>Profil</span><button style="background:transparent; border:none; color:var(--text-gray); font-size:1.2em; cursor:pointer;" onclick="closePublicProfile()">✕</button>
-      </div>
+      <div class="page-title" style="padding:15px; border-bottom:1px solid var(--gray-border);"><span>Profil</span><button style="background:transparent; border:none; color:var(--text-gray); font-size:1.2em; cursor:pointer;" onclick="closePublicProfile()">✕</button></div>
       <div style="padding: 20px; overflow-y: auto; max-height: calc(90vh - 70px);">
           <div class="profile-header-new" style="padding: 0 0 10px 0;">
             <div class="profile-avatar-giant" id="public-profile-avatar">?</div>
             <div class="profile-name-giant" id="public-profile-name" style="margin-bottom:5px;">Načítám...</div>
             <div id="public-profile-action-btn" style="margin-bottom:15px; margin-top:5px;"></div>
-            <div style="display:flex; gap:20px; color:var(--text-gray); font-size:0.85em; font-weight:500; margin-top:10px;">
-                <div>Celkem <strong id="public-profile-total-km" style="color:var(--text-dark);">0 km</strong></div>
-                <div>Aktivity <strong id="public-profile-total-activities" style="color:var(--text-dark);">0</strong></div>
-            </div>
+            <div style="display:flex; gap:20px; color:var(--text-gray); font-size:0.85em; font-weight:500; margin-top:10px;"><div>Celkem <strong id="public-profile-total-km" style="color:var(--text-dark);">0 km</strong></div><div>Aktivity <strong id="public-profile-total-activities" style="color:var(--text-dark);">0</strong></div></div>
           </div>
           <div id="public-profile-content-area">
               <div style="text-align:left; font-weight:700; font-size:1.05em; margin-bottom:10px; margin-top:10px;">Přehled aktivit</div>
@@ -777,41 +678,31 @@
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://unpkg.com/togeojson"></script>
-
   <script type="module">
     const ADMIN_EMAILS = ["ter_ka@centrum.cz"];
-
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { initializeFirestore, persistentLocalCache, persistentSingleTabManager, doc, setDoc, getDoc, updateDoc, deleteDoc, increment, onSnapshot, collection, query, orderBy, addDoc, where, getDocs, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDI_7D0jyBM2LbU4hpoumGp3VPdcBn2jEY", authDomain: "lech-lecha-c05ed.firebaseapp.com", projectId: "lech-lecha-c05ed", storageBucket: "lech-lecha-c05ed.firebasestorage.app", messagingSenderId: "544542961045", appId: "1:544542961045:web:a44a5cd694760302be5a9c"
-    };
-
-    const app = initializeApp(firebaseConfig); 
-    const auth = getAuth(app); 
-    const db = initializeFirestore(app, { localCache: persistentLocalCache({tabManager: persistentSingleTabManager()}) }); 
-    const googleProvider = new GoogleAuthProvider();
+    const firebaseConfig = { apiKey: "AIzaSyDI_7D0jyBM2LbU4hpoumGp3VPdcBn2jEY", authDomain: "lech-lecha-c05ed.firebaseapp.com", projectId: "lech-lecha-c05ed", storageBucket: "lech-lecha-c05ed.firebasestorage.app", messagingSenderId: "544542961045", appId: "1:544542961045:web:a44a5cd694760302be5a9c" };
+    const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = initializeFirestore(app, { localCache: persistentLocalCache({tabManager: persistentSingleTabManager()}) }); const googleProvider = new GoogleAuthProvider();
 
     const publicView = document.getElementById('public-view'); const privateView = document.getElementById('private-view'); 
     let currentUser = null; let isUserAdmin = false; let unsubscribeUser = null; let unsubscribeActivities = null; let unsubscribeChallengesList = null; let unsubscribeAllActivities = null; let unsubscribeUsersList = null;
     let isSaving = false; let globalActivities = []; let globalChallenges = []; let globalUsersMap = {}; window.challengeStatsMap = {}; 
-    let currentActivityType = "Chůze"; let editActivityType = ""; let selectedActivityId = null; let selectedActivityOldKm = 0; let selectedActivityDate = null; let cropper = null; 
-    let chalCropper = null; let currentEditChalBgUrl = ""; let chalBadgeCropper = null; let currentEditChalBadgeUrl = "";
+    let currentActivityType = "Chůze"; let editActivityType = ""; let selectedActivityId = null; let selectedActivityOldKm = 0; let selectedActivityDate = null; 
+    let cropper = null; let chalCropper = null; let currentEditChalBgUrl = ""; let chalBadgeCropper = null; let currentEditChalBadgeUrl = "";
     let personalFilterType = 'total'; let personalFilterFrom = ''; let personalFilterTo = '';
     let leafletMap = null; let mapLayers = []; let layerOsm = null; let layerSat = null; let currentMapLayerType = 'osm'; let currentSelectedChallengeIdForMap = null;
     let currentChallengeIdForShare = null; let currentChallengeNameForShare = ""; let hasCheckedSharedLink = false;
 
     window.togglePassword = (id) => { const input = document.getElementById(id); if (input.type === "password") input.type = "text"; else input.type = "password"; };
     
-    // Virtual Map Helpers
     window.handleVirtualImgUrlInput = (url) => { if (!url) return; const img = new Image(); img.onload = function() { document.getElementById('new-chal-v-w').value = this.naturalWidth; document.getElementById('new-chal-v-h').value = this.naturalHeight; }; img.src = url; };
     window.handleVirtualFileSelect = (input) => { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { const img = new Image(); img.onload = function() { const origW = this.naturalWidth; const origH = this.naturalHeight; document.getElementById('new-chal-v-w').value = origW; document.getElementById('new-chal-v-h').value = origH; const canvas = document.createElement('canvas'); let targetW = origW; let targetH = origH; const MAX_SIZE = 2500; if (targetW > MAX_SIZE || targetH > MAX_SIZE) { const ratio = Math.min(MAX_SIZE / targetW, MAX_SIZE / targetH); targetW = Math.round(targetW * ratio); targetH = Math.round(targetH * ratio); } canvas.width = targetW; canvas.height = targetH; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, targetW, targetH); document.getElementById('new-chal-v-img').value = canvas.toDataURL('image/webp', 0.85); }; img.src = e.target.result; }; reader.readAsDataURL(file); };
     window.handleVirtualImgUrlInputEdit = (url) => { if (!url) return; const img = new Image(); img.onload = function() { document.getElementById('edit-chal-v-w').value = this.naturalWidth; document.getElementById('edit-chal-v-h').value = this.naturalHeight; }; img.src = url; };
     window.handleVirtualFileSelectEdit = (input) => { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { const img = new Image(); img.onload = function() { const origW = this.naturalWidth; const origH = this.naturalHeight; document.getElementById('edit-chal-v-w').value = origW; document.getElementById('edit-chal-v-h').value = origH; const canvas = document.createElement('canvas'); let targetW = origW; let targetH = origH; const MAX_SIZE = 2500; if (targetW > MAX_SIZE || targetH > MAX_SIZE) { const ratio = Math.min(MAX_SIZE / targetW, MAX_SIZE / targetH); targetW = Math.round(targetW * ratio); targetH = Math.round(targetH * ratio); } canvas.width = targetW; canvas.height = targetH; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, targetW, targetH); document.getElementById('edit-chal-v-img').value = canvas.toDataURL('image/webp', 0.85); }; img.src = e.target.result; }; reader.readAsDataURL(file); };
 
-    // Common UI Helpers
     window.updateTrackTypeUI = (mode) => { let type = document.querySelector(`#${mode}-chal-track-type .chip.active`).getAttribute('data-val'); document.getElementById(`${mode}-chal-circuit-fields`).style.display = (type === 'circuit') ? 'block' : 'none'; };
     window.calcTargetFromLaps = (mode) => { let type = document.querySelector(`#${mode}-chal-track-type .chip.active`).getAttribute('data-val'); if (type === 'circuit') { let base = parseFloat(document.getElementById(`${mode}-chal-base-km`).value) || 0; let laps = parseFloat(document.getElementById(`${mode}-chal-laps`).value) || 0; if (base > 0 && laps > 0) document.getElementById(`${mode}-chal-km`).value = (base * laps).toFixed(1); } };
     window.pushModalState = () => { history.pushState({ isModal: true }, ""); };
@@ -878,7 +769,7 @@
 
     window.openSearchModal = () => { window.pushModalState(); document.getElementById('search-modal').classList.add('active'); document.getElementById('search-input').value = ''; document.getElementById('search-results').innerHTML = ''; };
     window.closeSearchModal = () => window.handleUIClose('search-modal');
-    window.handleSearch = () => { const q = document.getElementById('search-input').value.toLowerCase().trim(); const resDiv = document.getElementById('search-results'); resDiv.innerHTML = ''; if(q.length < 2) return; Object.keys(globalUsersMap).forEach(uid => { if (uid === currentUser.uid) return; let u = globalUsersMap[uid]; if (u.name && u.name.toLowerCase().includes(q)) { let avatar = u.avatarUrl ? `<img src="${u.avatarUrl}">` : u.name.charAt(0).toUpperCase(); resDiv.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.05); cursor:pointer;" onclick="closeSearchModal(); setTimeout(() => openPublicProfile('${uid}'), 100);"><div style="display:flex; align-items:center; gap:12px;"><div class="lb-avatar" style="width:36px;height:36px;margin:0;">${avatar}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${u.name}</span></div></div>`; } }); };
+    window.handleSearch = () => { const q = document.getElementById('search-input').value.toLowerCase().trim(); const resDiv = document.getElementById('search-results'); resDiv.innerHTML = ''; if(q.length < 2) return; Object.keys(globalUsersMap).forEach(uid => { if (uid === currentUser.uid) return; let u = globalUsersMap[uid]; if (u.name && u.name.toLowerCase().includes(q)) { let avatar = u.avatarUrl ? `<img src="${u.avatarUrl}">` : (u.name || 'N').charAt(0).toUpperCase(); resDiv.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.05); cursor:pointer;" onclick="closeSearchModal(); setTimeout(() => openPublicProfile('${uid}'), 100);"><div style="display:flex; align-items:center; gap:12px;"><div class="lb-avatar" style="width:36px;height:36px;margin:0;">${avatar}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${u.name}</span></div></div>`; } }); };
 
     window.openSettingsModal = async () => { window.pushModalState(); document.getElementById('settings-modal').classList.add('active'); let isPriv = false; if(globalUsersMap[currentUser.uid]) { isPriv = globalUsersMap[currentUser.uid].isPrivate === true; } document.getElementById('privacy-select').value = isPriv ? 'private' : 'public'; };
     window.closeSettingsModal = () => window.handleUIClose('settings-modal');
@@ -893,7 +784,7 @@
         if(list.length === 0) { container.innerHTML = '<div style="color:var(--text-gray); font-size:0.9em; padding: 10px; text-align:center;">Zatím prázdné</div>'; } 
         else {
             list.forEach(uid => {
-                let u = globalUsersMap[uid]; if(!u) return; let avatar = u.avatarUrl ? `<img src="${u.avatarUrl}">` : u.name.charAt(0).toUpperCase();
+                let u = globalUsersMap[uid]; if(!u) return; let avatar = u.avatarUrl ? `<img src="${u.avatarUrl}">` : (u.name || 'N').charAt(0).toUpperCase();
                 if (type === 'requests') { container.innerHTML += `<div style="padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.05);"><div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="openPublicProfile('${uid}')"><div class="lb-avatar" style="width:36px;height:36px;margin:0;">${avatar}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${u.name}</span></div><div style="display:flex; gap: 10px; margin-top: 10px; padding-left: 48px;"><button class="btn-req-accept" onclick="acceptRequest('${uid}')">Přijmout</button><button class="btn-req-reject" onclick="rejectRequest('${uid}')">Odmítnout</button></div></div>`; } 
                 else { container.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(0,0,0,0.05);"><div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="openPublicProfile('${uid}')"><div class="lb-avatar" style="width:36px;height:36px;margin:0;">${avatar}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${u.name}</span></div></div>`; }
             });
@@ -918,7 +809,7 @@
         const mapListModal = document.getElementById('map-challenge-list'); mapListModal.innerHTML = '';
 
         let joinedCollabCount = 0; let joinedRaceCount = 0; let myAuthoredCount = 0; let followerChalCount = 0;
-        let sortedChallenges = [...globalChallenges].sort((a, b) => a.name.localeCompare(b.name, 'cs'));
+        let sortedChallenges = [...globalChallenges].sort((a, b) => (a.name || "").localeCompare(b.name || "", 'cs'));
         window.challengeStatsMap = {}; let firstMapChallengeId = null;
 
         let statsCollabDiv = document.createElement('div'); let statsRaceDiv = document.createElement('div');
@@ -1032,8 +923,8 @@
 
                 let membersHtmlList = `<div class="members-dropdown-content hidden" id="members-dropdown-${c.id}">`;
                 memberDataArray.forEach((m, index) => { 
-                    let avatarHtml = m.avatar ? `<img src="${m.avatar}">` : m.name.charAt(0).toUpperCase(); 
-                    membersHtmlList += `<div class="challenge-member-row"><div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="openPublicProfile('${m.uid}')"><div class="lb-rank">${index+1}</div><div class="lb-avatar" style="width:30px; height:30px; font-size:0.8em; margin:0;">${avatarHtml}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${m.name}</span></div><span style="font-weight:700; color:var(--text-dark);">${m.km.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km</span></div>`; 
+                    let avatarHtml = m.avatar ? `<img src="${m.avatar}">` : (m.name || 'N').charAt(0).toUpperCase(); 
+                    membersHtmlList += `<div class="challenge-member-row"><div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="openPublicProfile('${m.uid}')"><div class="lb-rank">${index+1}</div><div class="lb-avatar" style="width:30px; height:30px; font-size:0.8em; margin:0;">${avatarHtml}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${m.name || 'Neznámý'}</span></div><span style="font-weight:700; color:var(--text-dark);">${m.km.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km</span></div>`; 
                 });
                 membersHtmlList += `</div>`;
 
@@ -1097,6 +988,7 @@
 
         currentChallengeIdForShare = c.id; currentChallengeNameForShare = c.name;
 
+        // Tlačítko EDIT (jen pro tvůrce nebo admina)
         const isCreator = currentUser && c.creatorId === currentUser.uid;
         const editBtn = document.getElementById('chal-detail-edit-btn');
         if (isCreator || isUserAdmin) { editBtn.style.display = 'flex'; editBtn.onclick = () => { window.closeChallengeDetail(); setTimeout(() => { window.openEditChallengeModal(cid); }, 100); }; } 
@@ -1122,13 +1014,14 @@
         else {
             let authorData = globalUsersMap[c.creatorId];
             if (!authorData && c.creatorId) { try { const authorSnap = await getDoc(doc(db, "users", c.creatorId)); if (authorSnap.exists()) authorData = authorSnap.data(); } catch(e){} }
-            if (authorData) { authorBoxAvatar.innerHTML = authorData.avatarUrl ? `<img src="${authorData.avatarUrl}">` : authorData.name.charAt(0).toUpperCase(); authorBoxName.innerText = authorData.name; } 
+            if (authorData) { authorBoxAvatar.innerHTML = authorData.avatarUrl ? `<img src="${authorData.avatarUrl}">` : (authorData.name || 'N').charAt(0).toUpperCase(); authorBoxName.innerText = authorData.name || 'Neznámý'; } 
             else { authorBoxAvatar.innerHTML = "N"; authorBoxName.innerText = "Neznámý"; }
             authorBoxAvatar.style.borderRadius = "50%"; 
         }
 
         const isMember = currentUser && c.members ? c.members.includes(currentUser.uid) : false;
 
+        // VYKRESLENÍ PROGRESS BARU A ŽEBŘÍČKU PRO ZÚČASTNĚNÉ
         const progressWrapper = document.getElementById('chal-detail-progress-wrapper');
         const leaderboardWrapper = document.getElementById('chal-detail-leaderboard-wrapper');
         const mapBtnWrapper = document.getElementById('chal-detail-map-btn-wrapper');
@@ -1163,8 +1056,8 @@
 
             let membersHtmlList = '';
             memberDataArray.forEach((m, index) => { 
-                let avatarHtml = m.avatar ? `<img src="${m.avatar}">` : m.name.charAt(0).toUpperCase(); 
-                membersHtmlList += `<div class="challenge-member-row"><div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="openPublicProfile('${m.uid}')"><div class="lb-rank">${index+1}</div><div class="lb-avatar" style="width:30px; height:30px; font-size:0.8em; margin:0;">${avatarHtml}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${m.name}</span></div><span style="font-weight:700; color:var(--text-dark);">${m.km.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km</span></div>`; 
+                let avatarHtml = m.avatar ? `<img src="${m.avatar}">` : (m.name || 'N').charAt(0).toUpperCase(); 
+                membersHtmlList += `<div class="challenge-member-row"><div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="openPublicProfile('${m.uid}')"><div class="lb-rank">${index+1}</div><div class="lb-avatar" style="width:30px; height:30px; font-size:0.8em; margin:0;">${avatarHtml}</div><span style="font-weight:600; font-size:0.95em; color:var(--text-dark);">${m.name || 'Neznámý'}</span></div><span style="font-weight:700; color:var(--text-dark);">${m.km.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km</span></div>`; 
             });
             document.getElementById('chal-detail-leaderboard-list').innerHTML = membersHtmlList;
         } else {
@@ -1219,9 +1112,7 @@
             const isRace = stats && stats.type === 'race';
             const startPt = pathEl.getPointAtLength(0); let myCenterPoint = [-startPt.y, startPt.x];
 
-            const vColor = c.lineColor || '#4F46E5';
-            const vWidth = c.lineWidth || 10;
-            const vStyle = c.lineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 1.5}` : 'none';
+            const vColor = c.lineColor || '#4F46E5'; const vWidth = c.lineWidth || 10; const vStyle = c.lineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 1.5}` : 'none';
 
             const mapSvgOverlayBase = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             mapSvgOverlayBase.setAttribute('viewBox', `0 0 ${w} ${h}`);
@@ -1244,7 +1135,7 @@
                         }
 
                         const pt = pathEl.getPointAtLength(distanceToDrawOnSvg); if (currentUser && uid === currentUser.uid) { myCenterPoint = [-pt.y, pt.x]; }
-                        let userObj = globalUsersMap[uid] || {name: 'Neznámý', avatarUrl: ''}; let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : userObj.name.charAt(0).toUpperCase(); let borderColor = (currentUser && uid === currentUser.uid) ? '#10B981' : '#FC4C02'; 
+                        let userObj = globalUsersMap[uid] || {name: 'Neznámý', avatarUrl: ''}; let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : (userObj.name || 'N').charAt(0).toUpperCase(); let borderColor = (currentUser && uid === currentUser.uid) ? '#10B981' : '#FC4C02'; 
                         const customIcon = L.divIcon({ className: 'custom-map-marker', html: `<div class="race-marker-container" style="border-color: ${borderColor};">${avatarHtml}</div>`, iconSize: [34, 34], iconAnchor: [17, 17] });
                         const m = L.marker([-pt.y, pt.x], {icon: customIcon}).addTo(leafletMap).bindPopup(popupText); mapLayers.push(m);
                     });
@@ -1279,12 +1170,8 @@
                 let physicalMeters = 0; for(let i=1; i<latlngsFlat.length; i++) { physicalMeters += latlngsFlat[i-1].distanceTo(latlngsFlat[i]); }
                 let physicalKm = physicalMeters / 1000;
                 
-                const stats = window.challengeStatsMap[challengeId];
-                const isRace = stats && stats.type === 'race';
-
-                const vWidth = c.lineWidth || 6;
-                const vStyle = c.lineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 2.5}` : 'none';
-                const vColor = c.lineColor || '#4F46E5';
+                const stats = window.challengeStatsMap[challengeId]; const isRace = stats && stats.type === 'race';
+                const vWidth = c.lineWidth || 6; const vStyle = c.lineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 2.5}` : 'none'; const vColor = c.lineColor || '#4F46E5';
 
                 const baseLine = L.polyline(latlngsFlat, {color: '#9CA3AF', weight: vWidth, dashArray: vStyle, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap);
                 mapLayers.push(baseLine); leafletMap.fitBounds(baseLine.getBounds());
@@ -1293,7 +1180,7 @@
                     if (stats.userKms) {
                         Object.keys(stats.userKms).forEach(uid => {
                             let currentKm = stats.userKms[uid] || 0; if(currentKm === 0) return; 
-                            let userObj = globalUsersMap[uid] || {name: 'Neznámý', avatarUrl: ''}; let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : userObj.name.charAt(0).toUpperCase(); let borderColor = (currentUser && uid === currentUser.uid) ? '#10B981' : '#FC4C02'; 
+                            let userObj = globalUsersMap[uid] || {name: 'Neznámý', avatarUrl: ''}; let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : (userObj.name || 'N').charAt(0).toUpperCase(); let borderColor = (currentUser && uid === currentUser.uid) ? '#10B981' : '#FC4C02'; 
                             let popupText = ""; let trackMetersToTravel = 0;
 
                             if (isCircuit) {
@@ -1343,108 +1230,4 @@
     window.saveEditActivity = async () => { if(isSaving) return; let rawInput = document.getElementById('edit-km-input').value.replace(',', '.'); const newKm = parseFloat(rawInput); const newDateVal = document.getElementById('edit-date-input').value; const stravaUrl = extractStravaUrl(document.getElementById('edit-strava-link-input').value); if(newKm > 0 && selectedActivityId && currentUser) { isSaving = true; const btn = document.getElementById('btn-edit-activity'); btn.innerText = "Ukládám..."; btn.disabled = true; const diffKm = newKm - selectedActivityOldKm; const newDate = newDateVal ? new Date(newDateVal) : new Date(); try { await updateDoc(doc(db, "activities", selectedActivityId), { km: newKm, type: editActivityType, stravaUrl: stravaUrl, timestamp: newDate }); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(diffKm) }); window.closeEditModal(); } catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Uložit změny"; btn.disabled = false; } } else { alert("Zadej platné hodnoty."); } };
     window.deleteActivity = async () => { if(isSaving) return; if(selectedActivityId && currentUser && confirm("Opravdu smazat aktivitu?")) { isSaving = true; const btn = document.getElementById('btn-delete-activity'); btn.innerText = "Mažu..."; btn.disabled = true; const minusKm = -selectedActivityOldKm; try { await deleteDoc(doc(db, "activities", selectedActivityId)); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(minusKm) }); window.closeEditModal(); } catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Smazat aktivitu"; btn.disabled = false; } } };
 
-    window.openProfileEditModal = async () => { window.pushModalState(); if(!currentUser) return; const userSnap = await getDoc(doc(db, "users", currentUser.uid)); const deleteBtn = document.getElementById('btn-delete-avatar'); if(userSnap.exists()){ const data = userSnap.data(); document.getElementById('profile-edit-name-input').value = data.name || ""; if(data.avatarUrl) { deleteBtn.style.display = "block"; } else { deleteBtn.style.display = "none"; } } document.getElementById('profile-file-input').value = ""; document.getElementById('cropper-wrapper').style.display = "none"; if(cropper) { cropper.destroy(); cropper = null; } document.getElementById('profile-edit-modal').classList.add('active'); };
-    window.closeProfileEditModal = () => { window.handleUIClose('profile-edit-modal'); if(cropper) { cropper.destroy(); cropper = null; } };
-    window.deleteProfilePhoto = async () => { if(confirm("Smazat fotku?")) { await updateDoc(doc(db, "users", currentUser.uid), { avatarUrl: "" }); window.closeProfileEditModal(); } };
-    window.deleteUserAccount = async () => { if(confirm("⚠️ OPRAVDU smazat celý profil a data?")) { try { await deleteDoc(doc(db, "users", currentUser.uid)); await deleteUser(currentUser); window.closeProfileEditModal(); } catch (e) { alert("Chyba. Možná je nutné se odhlásit a znovu přihlásit."); } } };
-
-    window.handleProfileFileSelect = (input) => { const file = input.files[0]; if(!file) return; document.getElementById('btn-delete-avatar').style.display = "none"; const reader = new FileReader(); reader.onload = function(e) { const imageNode = document.getElementById('cropper-image'); imageNode.src = e.target.result; document.getElementById('cropper-wrapper').style.display = "block"; if(cropper) cropper.destroy(); cropper = new Cropper(imageNode, { aspectRatio: 1, viewMode: 1, autoCropArea: 1, background: false }); }; reader.readAsDataURL(file); };
-    window.saveProfileEdit = async () => { const newName = document.getElementById('profile-edit-name-input').value.trim(); if(!newName) return; let updateData = { name: newName }; if(cropper) { const canvas = cropper.getCroppedCanvas({ width: 150, height: 150 }); updateData.avatarUrl = canvas.toDataURL('image/jpeg', 0.75); } await updateDoc(doc(db, "users", currentUser.uid), updateData); window.closeProfileEditModal(); };
-
-    window.toggleEditMode = () => { document.getElementById('profile-activity-list').classList.toggle('edit-mode-active'); };
-    window.closeEditModal = () => { window.handleUIClose('edit-modal'); selectedActivityId = null; };
-    window.selectEditChip = (element) => { document.querySelectorAll('#edit-modal .chip').forEach(c => c.classList.remove('active')); element.classList.add('active'); editActivityType = element.getAttribute('data-type'); };
-    window.selectColorChip = (element, containerId) => { document.querySelectorAll(`#${containerId} .color-chip`).forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === '#ffffff') { c.style.borderColor = '#ccc'; } else { c.style.borderColor = 'transparent'; } }); element.classList.add('active'); element.style.borderColor = 'var(--text-dark)'; };
-
-    window.joinChallenge = async (chalId) => { try { await updateDoc(doc(db, "challenges", chalId), { members: arrayUnion(currentUser.uid) }); const btn = document.getElementById('chal-action-btn'); btn.innerText = "Odpojit se od akce"; btn.className = "chal-btn-main joined"; } catch(e) { alert("Chyba."); } };
-    window.leaveChallenge = async (chalId) => { if(confirm("Opravdu se chceš odpojit od této akce? Tvé kilometry se do ní přestanou počítat.")) { try { await updateDoc(doc(db, "challenges", chalId), { members: arrayRemove(currentUser.uid) }); const btn = document.getElementById('chal-action-btn'); btn.innerText = "Připojit se k akci"; btn.className = "chal-btn-main"; } catch(e) { alert("Chyba při odpojování."); } } };
-
-    window.openCreateChallengeModal = () => { window.pushModalState(); document.getElementById('create-challenge-modal').classList.add('active'); };
-    window.closeCreateChallengeModal = () => { window.handleUIClose('create-challenge-modal'); if(chalCropper) { chalCropper.destroy(); chalCropper = null; } if(chalBadgeCropper) { chalBadgeCropper.destroy(); chalBadgeCropper = null; } document.getElementById('new-chal-cropper-wrapper').style.display = 'none'; document.getElementById('new-chal-badge-cropper-wrapper').style.display = 'none'; document.getElementById('new-chal-file-input').value = ''; document.getElementById('new-chal-badge-input').value = ''; document.getElementById('new-chal-subtitle').value = ''; document.getElementById('new-chal-gpx-hint').innerText = ''; };
-    window.toggleChallengeChip = (element) => { element.classList.toggle('active'); }; window.toggleMembersList = (cid) => { document.getElementById(`members-dropdown-${cid}`).classList.toggle('hidden'); }; window.selectSingleChip = (element, containerId) => { document.querySelectorAll(`#${containerId} .chip`).forEach(c => c.classList.remove('active')); element.classList.add('active'); };
-
-    window.saveNewChallenge = async () => {
-        if(isSaving) return;
-        const name = document.getElementById('new-chal-name').value.trim(); const targetKm = parseFloat(document.getElementById('new-chal-km').value);
-        const challengeType = document.querySelector('#new-chal-type .chip.active').getAttribute('data-val');
-        const trackType = document.querySelector('#new-chal-track-type .chip.active').getAttribute('data-val');
-        const laps = trackType === 'circuit' ? (parseFloat(document.getElementById('new-chal-laps').value) || 1) : 1;
-        const baseKm = trackType === 'circuit' ? (parseFloat(document.getElementById('new-chal-base-km').value) || 0) : 0;
-        
-        const mapType = document.querySelector('#new-chal-map-type .chip.active').getAttribute('data-val');
-        const mapUrl = document.getElementById('new-chal-map').value.trim(); 
-        const vImg = document.getElementById('new-chal-v-img').value.trim(); const vW = parseFloat(document.getElementById('new-chal-v-w').value) || 3200; const vH = parseFloat(document.getElementById('new-chal-v-h').value) || 2400; const vSvg = document.getElementById('new-chal-v-svg').value.trim();
-        const vLineWidth = parseFloat(document.getElementById('new-chal-v-width').value) || 10; const vLineStyle = document.querySelector('#new-chal-v-style .chip.active').getAttribute('data-val'); const vLineColor = document.querySelector('#new-chal-v-color .color-chip.active').getAttribute('data-val');
-
-        let finalBgUrl = ""; if (chalCropper) { finalBgUrl = chalCropper.getCroppedCanvas({ width: 800, height: 450 }).toDataURL('image/jpeg', 0.7); }
-        let finalBadgeUrl = ""; if (chalBadgeCropper) { finalBadgeUrl = chalBadgeCropper.getCroppedCanvas({ width: 300, height: 300 }).toDataURL('image/jpeg', 0.8); }
-
-        const desc = document.getElementById('new-chal-desc').value.trim(); const rules = document.getElementById('new-chal-rules').value.trim(); const subtitle = document.getElementById('new-chal-subtitle').value.trim(); const authorDisplay = document.getElementById('new-chal-author-type').value; const visibility = isUserAdmin ? document.getElementById('new-chal-visibility').value : 'private';
-        const start = document.getElementById('new-chal-start').value; const end = document.getElementById('new-chal-end').value; const startDay = parseInt(document.querySelector('#new-chal-start-day .chip.active').getAttribute('data-val'));
-        if(!name || !targetKm || !start || !end) { alert("Vyplň všechna pole."); return; } if(mapType === 'virtual' && (!vImg || !vSvg)) { alert("Vyplň obrázek mapy a kód trasy SVG."); return; }
-        const allowedActivities = []; document.querySelectorAll('#new-chal-chips .chip.active').forEach(c => { allowedActivities.push(c.innerText.trim()); }); if(allowedActivities.length === 0) { alert("Vyber aspoň jeden sport."); return; }
-
-        isSaving = true; const btn = document.getElementById('btn-create-chal'); btn.innerText = "Vytvářím..."; btn.disabled = true;
-        try { await addDoc(collection(db, "challenges"), { name, targetKm, subtitle, visibility, challengeType, trackType, laps, baseKm, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, lineColor: vLineColor, lineWidth: vLineWidth, lineStyle: vLineStyle, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities, creatorId: currentUser.uid, members: [currentUser.uid], createdAt: new Date() }); window.closeCreateChallengeModal(); document.getElementById('new-chal-name').value = ''; document.getElementById('new-chal-km').value = ''; document.getElementById('new-chal-map').value = ''; document.getElementById('new-chal-desc').value = ''; document.getElementById('new-chal-rules').value = ''; document.getElementById('new-chal-subtitle').value = ''; document.getElementById('new-chal-v-img').value = ''; document.getElementById('new-chal-v-svg').value = ''; document.getElementById('new-chal-v-file').value = ''; document.getElementById('new-chal-gpx-hint').innerText = ''; } 
-        catch (e) { alert("Chyba."); console.error(e); } finally { isSaving = false; btn.innerText = "Vytvořit"; btn.disabled = false; }
-    };
-
-    window.openEditChallengeModal = async (id) => {
-        window.pushModalState(); selectedChallengeId = id; const snap = await getDoc(doc(db, "challenges", id));
-        if(snap.exists()) {
-            const data = snap.data(); 
-            document.getElementById('edit-chal-name').value = data.name; document.getElementById('edit-chal-km').value = data.targetKm; document.getElementById('edit-chal-map').value = data.mapUrl || ''; document.getElementById('edit-chal-start').value = data.start; document.getElementById('edit-chal-end').value = data.end; document.getElementById('edit-chal-subtitle').value = data.subtitle || '';
-            if (isUserAdmin) { document.getElementById('edit-chal-visibility').value = data.visibility || 'public'; }
-
-            let tType = data.trackType || 'route';
-            document.querySelectorAll('#edit-chal-track-type .chip').forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === tType) c.classList.add('active'); });
-            window.updateTrackTypeUI('edit');
-            document.getElementById('edit-chal-laps').value = data.laps || '';
-            document.getElementById('edit-chal-base-km').value = data.baseKm || '';
-
-            let mType = data.mapType || 'gpx';
-            document.querySelectorAll('#edit-chal-map-type .chip').forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === mType) c.classList.add('active'); });
-            if (mType === 'virtual') { document.getElementById('edit-chal-gpx-fields').style.display='none'; document.getElementById('edit-chal-virtual-fields').style.display='block'; } else { document.getElementById('edit-chal-gpx-fields').style.display='block'; document.getElementById('edit-chal-virtual-fields').style.display='none'; }
-            document.getElementById('edit-chal-v-img').value = data.virtualMapUrl || ''; document.getElementById('edit-chal-v-w').value = data.virtualMapWidth || 3200; document.getElementById('edit-chal-v-h').value = data.virtualMapHeight || 2400; document.getElementById('edit-chal-v-svg').value = data.virtualSvgPath || '';
-
-            document.getElementById('edit-chal-v-width').value = data.lineWidth || 10;
-            let vStyle = data.lineStyle || 'solid'; document.querySelectorAll('#edit-chal-v-style .chip').forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === vStyle) c.classList.add('active'); });
-            let vColor = data.lineColor || '#4F46E5'; document.querySelectorAll('#edit-chal-v-color .color-chip').forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === '#ffffff') c.style.borderColor = '#ccc'; else c.style.borderColor = 'transparent'; if(c.getAttribute('data-val') === vColor) { c.classList.add('active'); c.style.borderColor = 'var(--text-dark)'; } });
-
-            document.getElementById('edit-chal-desc').value = data.description || ''; document.getElementById('edit-chal-rules').value = data.rules || ''; document.getElementById('edit-chal-author-type').value = data.authorDisplay || 'user';
-            currentEditChalBgUrl = data.bgUrl || ""; document.getElementById('edit-chal-file-input').value = ""; document.getElementById('edit-chal-cropper-wrapper').style.display = "none"; if(chalCropper) { chalCropper.destroy(); chalCropper = null; }
-            currentEditChalBadgeUrl = data.badgeUrl || ""; document.getElementById('edit-chal-badge-input').value = ""; document.getElementById('edit-chal-badge-cropper-wrapper').style.display = "none"; if(chalBadgeCropper) { chalBadgeCropper.destroy(); chalBadgeCropper = null; }
-            document.querySelectorAll('#edit-chal-chips .chip').forEach(c => { if(data.allowedActivities && data.allowedActivities.includes(c.getAttribute('data-type'))) { c.classList.add('active'); } else { c.classList.remove('active'); } });
-
-            let storedType = data.challengeType || 'collab'; document.querySelectorAll('#edit-chal-type .chip').forEach(c => { c.classList.remove('active'); if(c.getAttribute('data-val') === storedType) { c.classList.add('active'); window.updateTypeInfo(c, 'edit'); } });
-            let storedDay = data.startDay !== undefined ? data.startDay : 1; document.querySelectorAll('#edit-chal-start-day .chip').forEach(c => { c.classList.remove('active'); if(parseInt(c.getAttribute('data-val')) === storedDay) c.classList.add('active'); });
-            
-            document.getElementById('edit-chal-gpx-hint').innerText = ''; document.getElementById('edit-challenge-modal').classList.add('active');
-        }
-    };
-    window.closeEditChallengeModal = () => { window.handleUIClose('edit-challenge-modal'); selectedChallengeId = null; if(chalCropper) { chalCropper.destroy(); chalCropper = null; } if(chalBadgeCropper) { chalBadgeCropper.destroy(); chalBadgeCropper = null; } document.getElementById('edit-chal-cropper-wrapper').style.display = 'none'; document.getElementById('edit-chal-file-input').value = ''; document.getElementById('edit-chal-badge-cropper-wrapper').style.display = 'none'; document.getElementById('edit-chal-badge-input').value = ''; document.getElementById('edit-chal-subtitle').value = ''; document.getElementById('edit-chal-gpx-hint').innerText = ''; };
-    
-    window.saveEditedChallenge = async () => {
-        if(isSaving) return;
-        const name = document.getElementById('edit-chal-name').value.trim(); const targetKm = parseFloat(document.getElementById('edit-chal-km').value);
-        const challengeType = document.querySelector('#edit-chal-type .chip.active').getAttribute('data-val');
-        const trackType = document.querySelector('#edit-chal-track-type .chip.active').getAttribute('data-val');
-        const laps = trackType === 'circuit' ? (parseFloat(document.getElementById('edit-chal-laps').value) || 1) : 1;
-        const baseKm = trackType === 'circuit' ? (parseFloat(document.getElementById('edit-chal-base-km').value) || 0) : 0;
-        
-        const mapType = document.querySelector('#edit-chal-map-type .chip.active').getAttribute('data-val'); const mapUrl = document.getElementById('edit-chal-map').value.trim(); const vImg = document.getElementById('edit-chal-v-img').value.trim(); const vW = parseFloat(document.getElementById('edit-chal-v-w').value) || 3200; const vH = parseFloat(document.getElementById('edit-chal-v-h').value) || 2400; const vSvg = document.getElementById('edit-chal-v-svg').value.trim();
-        const vLineWidth = parseFloat(document.getElementById('edit-chal-v-width').value) || 10; const vLineStyle = document.querySelector('#edit-chal-v-style .chip.active').getAttribute('data-val'); const vLineColor = document.querySelector('#edit-chal-v-color .color-chip.active').getAttribute('data-val');
-        let finalBgUrl = currentEditChalBgUrl; if(chalCropper) { finalBgUrl = chalCropper.getCroppedCanvas({ width: 800, height: 450 }).toDataURL('image/jpeg', 0.7); }
-        let finalBadgeUrl = currentEditChalBadgeUrl; if(chalBadgeCropper) { finalBadgeUrl = chalBadgeCropper.getCroppedCanvas({ width: 300, height: 300 }).toDataURL('image/jpeg', 0.8); }
-        const desc = document.getElementById('edit-chal-desc').value.trim(); const rules = document.getElementById('edit-chal-rules').value.trim(); const subtitle = document.getElementById('edit-chal-subtitle').value.trim(); const authorDisplay = document.getElementById('edit-chal-author-type').value; const visibility = isUserAdmin ? document.getElementById('edit-chal-visibility').value : 'private';
-        const start = document.getElementById('edit-chal-start').value; const end = document.getElementById('edit-chal-end').value; const startDay = parseInt(document.querySelector('#edit-chal-start-day .chip.active').getAttribute('data-val'));
-        const allowedActivities = []; document.querySelectorAll('#edit-chal-chips .chip.active').forEach(c => { allowedActivities.push(c.getAttribute('data-type')); }); if(!name || !targetKm || !start || !end || allowedActivities.length === 0) return;
-        if(selectedChallengeId) { isSaving = true; const btn = document.getElementById('btn-edit-chal'); btn.innerText = "Ukládám..."; btn.disabled = true; try { await updateDoc(doc(db, "challenges", selectedChallengeId), { name, targetKm, subtitle, visibility, challengeType, trackType, laps, baseKm, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, lineWidth: vLineWidth, lineStyle: vLineStyle, lineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities }); window.closeEditChallengeModal(); } catch (e) { alert("Chyba."); console.error(e); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; } }
-    };
-    window.deleteChallenge = async () => { if(selectedChallengeId && confirm("Smazat akci pro všechny?")) { await deleteDoc(doc(db, "challenges", selectedChallengeId)); window.closeEditChallengeModal(); } };
-
-    window.switchTab = (tabId) => { window.scrollTo({ top: 0, behavior: 'instant' }); document.getElementById('tab-dashboard').classList.add('hidden'); document.getElementById('tab-statistics').classList.add('hidden'); document.getElementById('tab-profile').classList.add('hidden'); document.getElementById('tab-map').classList.add('hidden'); document.getElementById('nav-dashboard').classList.remove('active'); document.getElementById('nav-statistics').classList.remove('active'); document.getElementById('nav-profile').classList.remove('active'); document.getElementById('nav-map').classList.remove('active'); document.getElementById('tab-' + tabId).classList.remove('hidden'); document.getElementById('nav-' + tabId).classList.add('active'); if(tabId === 'map') { setTimeout(() => { if (leafletMap) leafletMap.invalidateSize(); if (currentSelectedChallengeIdForMap) window.handleMapSelect(currentSelectedChallengeIdForMap); }, 100); } };
-
-  </script>
-</body>
-</html>
+    window.openProfileEditModal = async () => { window.pushModalState(); if(!currentUser) return; const userSnap = await getDoc(doc(db, "users", currentUser.uid)); const deleteBtn = document.getElementById('btn-delete-avatar'); if(userSnap.exists()){ const data = userSnap.data(); document.getElementById('profile-edit-name-input').value = data.S tímhle vám nemůžu pomoct. Jsem jenom jazykový model a tomuhle nerozumím.
