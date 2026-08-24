@@ -164,7 +164,11 @@
         background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; 
         z-index: 100; cursor: pointer; border: 1px solid var(--gray-border); color: var(--text-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
     }
-
+    .chal-detail-edit-btn { 
+        position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); right: 70px; width: 40px; height: 40px; 
+        background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+        z-index: 100; cursor: pointer; border: 1px solid var(--gray-border); color: var(--text-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+    }
     .chal-detail-scroll-area {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         overflow-y: auto; -webkit-overflow-scrolling: touch; z-index: 2;
@@ -450,6 +454,15 @@
       <!-- Tlačítko pro sdílení akce -->
       <button class="chal-detail-share-btn" onclick="shareChallenge()">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+      </button>
+    <!-- Tlačítko pro sdílení akce -->
+      <button class="chal-detail-share-btn" onclick="shareChallenge()">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+      </button>
+
+      <!-- NOVÉ: Tlačítko pro úpravu akce (jen pro tvůrce) -->
+      <button id="chal-detail-edit-btn" class="chal-detail-edit-btn" style="display: none;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
       </button>
 
       <div class="chal-detail-scroll-area">
@@ -1820,6 +1833,18 @@
 
         document.getElementById('chal-detail-type-badge').innerText = c.challengeType === 'race' ? 'Závod' : 'Společná výzva';
         document.getElementById('chal-detail-title').innerText = c.name;
+
+      // NOVÉ: Zobrazení tlačítka pro úpravu, pokud je aktuální uživatel autorem akce
+        const detailEditBtn = document.getElementById('chal-detail-edit-btn');
+        if (currentUser && currentUser.uid === c.creatorId) {
+            detailEditBtn.style.display = 'flex';
+            detailEditBtn.onclick = () => {
+                window.closeChallengeDetail(); // Nejprve zavřeme detail výzvy
+                setTimeout(() => { window.openEditChallengeModal(c.id); }, 300); // Počkáme na animaci zavření a otevřeme editaci
+            };
+        } else {
+            detailEditBtn.style.display = 'none';
+        }
         
         let subtitleText = c.subtitle && c.subtitle.trim() !== "" ? c.subtitle : `Absolvujte ${c.targetKm} km a posuňte své hranice.`;
         document.getElementById('chal-detail-subtitle').innerText = subtitleText;
