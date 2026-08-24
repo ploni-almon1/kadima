@@ -770,7 +770,7 @@
           <textarea id="new-chal-rules" class="date-input" rows="3" placeholder="Jaké aktivity se počítají, omezení..."></textarea>
       </div>
 
-      <!-- ODZNAK VÝZVY -->
+     <!-- ODZNAK VÝZVY -->
       <div class="date-input-wrapper" style="background: var(--gray-light); padding: 15px; border-radius: 16px;">
           <label style="font-weight: 700; color: var(--text-dark);">Odznak / Ikona výzvy (čtverec)</label>
           <span style="font-size: 0.8em; color: var(--text-gray); display:block; margin-bottom: 10px;">Bude zobrazen u názvu na kartách.</span>
@@ -1731,4 +1731,492 @@
                 oCard.onclick = () => { openChallengeDetail(c.id); };
                 oCard.innerHTML = previewCardHtml;
                 statsOtherList.appendChild(oCard);
-      Jsem textová AI a tohle je nad moje možnosti.
+            }
+       }
+        document.getElementById('connections-modal').classList.add('active');
+    }
+    window.closeConnections = () => window.handleUIClose('connections-modal');
+
+    window.requestFollow = async (targetUid) => {
+        const btnContainer = document.getElementById('public-profile-action-btn');
+        btnContainer.innerHTML = `<button class="btn-follow-requested" disabled>Odesílám...</button>`;
+        try {
+            await updateDoc(doc(db, "users", targetUid), { followRequests: arrayUnion(currentUser.uid) });
+            await updateDoc(doc(db, "users", currentUser.uid), { sentRequests: arrayUnion(targetUid) });
+
+            if(globalUsersMap[currentUser.uid]) {
+                if(!globalUsersMap[currentUser.uid].sentRequests) globalUsersMap[currentUser.uid].sentRequests = [];
+                if(!globalUsersMap[currentUser.uid].sentRequests.includes(targetUid)) { globalUsersMap[currentUser.uid].sentRequests.push(targetUid); }
+            }
+            btnContainer.innerHTML = `<button class="btn-follow-requested" onclick="cancelFollowRequest('${targetUid}')">Žádost odeslána (Zrušit)</button>`;
+        } catch(e) { window.openPublicProfile(targetUid); }
+    };
+
+    window.cancelFollowRequest = async (targetUid) => {
+        const btnContainer = document.getElementById('public-profile-action-btn');
+        btnContainer.innerHTML = `<button class="btn-follow" disabled>Ruším...</button>`;
+        try {
+            await updateDoc(doc(db, "users", targetUid), { followRequests: arrayRemove(currentUser.uid) });
+            await updateDoc(doc(db, "users", currentUser.uid), { sentRequests: arrayRemove(targetUid) });
+
+            if(globalUsersMap[currentUser.uid] && globalUsersMap[currentUser.uid].sentRequests) {
+                globalUsersMap[currentUser.uid].sentRequests = globalUsersMap[currentUser.uid].sentRequests.filter(id => id !== targetUid);
+            }
+            btnContainer.innerHTML = `<button class="btn-follow" onclick="requestFollow('${targetUid}')">Sledovat uživatele</button>`;
+        } catch(e) { window.openPublicProfile(targetUid); }
+    };
+
+    window.unfollowUser = async (targetUid) => {
+        if(confirm("Opravdu zrušit sledování tohoto uživatele?")) {
+            const btnContainer = document.getElementById('public-profile-action-btn');
+            btnContainer.innerHTML = `<button class="btn-follow" disabled>Ruším...</button>`;
+            try {
+                await updateDoc(doc(db, "users", targetUid), { followers: arrayRemove(currentUser.uid) });
+                await updateDoc(doc(db, "users", currentUser.uid), { following: arrayRemove(targetUid) });
+
+                if(globalUsersMap[currentUser.uid] && globalUsersMap[currentUser.uid].following) {
+                    globalUsersMap[currentUser.uid].following = globalUsersMap[currentUser.uid].following.filter(id => id !== targetUid);
+                }
+                btnContainer.innerHTML = `<button class="btn-follow" onclick="requestFollow('${targetUid}')">Sledovat uživatele</button>`;
+                window.openPublicProfile(targetUid);
+            } catch(e) { window.openPublicProfile(targetUid); }
+        }
+    };
+
+    window.acceptRequest = async (reqUid) => {
+        await updateDoc(doc(db, "users", currentUser.uid), { followRequests: arrayRemove(reqUid), followers: arrayUnion(reqUid) });
+        await updateDoc(doc(db, "users", reqUid), { sentRequests: arrayRemove(currentUser.uid), following: arrayUnion(currentUser.uid) });
+        window.openConnections('requests'); 
+    };
+    window.rejectRequest = async (reqUid) => {
+        await updateDoc(doc(db, "users", currentUser.uid), { followRequests: arrayRemove(reqUid) });
+        await updateDoc(doc(db, "users", reqUid), { sentRequests: arrayRemove(currentUser.uid) });
+        window.openConnections('requests');
+    };
+
+    window.calculateTotalFromLaps = (mode) => {
+        const laps = parseFloat(document.getElementById(`${mode}-chal-laps`).value) || 0;
+        const dist = window.currentGpxDistances[mode] || 0;
+        if (laps > 0 && dist > 0) {
+            document.getElementById(`${mode}-chal-km`).value = (laps * dist).toFixed(2);
+        }
+    };
+
+    window.calculateGpxDistance = async (urlInputId, hintId, mode) => {
+        const url = document.getElementById(urlInputId).value.trim(); 
+        if(!url) { alert("Zadejte nejdříve platný odkaz na GPX mapu."); return; }
+        const btn = event.target; const originalText = btn.innerText; btn.innerText = "Počítám..."; btn.disabled = true;
+        
+        try {
+            const res = await fetch(url); const gpxText = await res.text(); const gpxXml = new DOMParser().parseFromString(gpxText, "application/xml"); const geojson = toGeoJSON.gpx(gpxXml);
+            let latlngsFlat = []; const tempLayer = L.geoJSON(geojson);
+            tempLayer.eachLayer(layer => { if (layer.getLatLngs) { const coords = layer.getLatLngs(); if (Array.isArray(coords[0])) { coords.forEach(seg => latlngsFlat.push(...seg)); } else { latlngsFlat.push(...coords); } } });
+            
+            if(latlngsFlat.length > 1) {
+                let totalMeters = 0; for(let i=1; i<latlngsFlat.length; i++) { totalMeters += latlngsFlat[i-1].distanceTo(latlngsFlat[i]); }
+                let totalKm = totalMeters / 1000; 
+                
+                window.currentGpxDistances[mode] = totalKm;
+                
+                const hintEl = document.getElementById(hintId);
+                if(hintEl) {
+                    hintEl.innerText = `Délka jednoho okruhu z GPX: ${totalKm.toFixed(2)} km`;
+                }
+
+                window.calculateTotalFromLaps(mode);
+
+            } else { alert("Z této mapy se nepodařilo přečíst body trasy."); }
+        } catch(e) { 
+            alert("Chyba při načítání GPX. Zkontrolujte, zda je odkaz veřejný a platný."); console.error(e); 
+        } finally { 
+            btn.innerText = originalText; btn.disabled = false; 
+        }
+    };
+
+    window.openMapListModal = () => { window.pushModalState(); document.getElementById('map-list-modal').classList.add('active'); };
+    window.closeMapListModal = () => window.handleUIClose('map-list-modal');
+
+    window.toggleMapLayer = () => {
+        if (!leafletMap) return;
+        if (currentMapLayerType === 'osm') { leafletMap.removeLayer(layerOsm); layerSat.addTo(leafletMap); currentMapLayerType = 'sat'; } 
+        else { leafletMap.removeLayer(layerSat); layerOsm.addTo(leafletMap); currentMapLayerType = 'osm'; }
+    };
+
+    window.handleMapSelect = async (challengeId) => {
+        currentSelectedChallengeIdForMap = challengeId; const c = globalChallenges.find(x => x.id === challengeId);
+        document.getElementById('map-empty-state').style.display = 'none';
+
+        if (leafletMap) { leafletMap.off(); leafletMap.remove(); leafletMap = null; }
+        mapLayers = [];
+
+        if(!c) return;
+        const isVirtual = c.mapType === 'virtual' && c.virtualMapUrl && c.virtualSvgPath;
+
+        // Přečteme si společná nastavení čáry bez ohledu na to, zda je to GPX nebo virtuální mapa
+        const vColor = c.lineColor || c.virtualLineColor || '#4F46E5';
+        const vWidth = c.lineWidth || c.virtualLineWidth || 10;
+        const vStyle = (c.lineStyle || c.virtualLineStyle) === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 1.5}` : 'none';
+
+        if (isVirtual) {
+            const w = c.virtualMapWidth || 3200;
+            const h = c.virtualMapHeight || 2400;
+            const bounds = [[0, 0], [-h, w]]; 
+
+            leafletMap = L.map('real-map', { 
+                crs: L.CRS.Simple, 
+                zoomControl: false, 
+                minZoom: -5, 
+                maxZoom: 4, 
+                zoomSnap: 0,
+                maxBounds: bounds,
+                maxBoundsViscosity: 1.0 
+            });
+            L.control.zoom({ position: 'bottomright' }).addTo(leafletMap);
+
+            L.imageOverlay(c.virtualMapUrl, bounds).addTo(leafletMap);
+
+            const tempSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            tempSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+            tempSvg.style.position = 'absolute'; tempSvg.style.visibility = 'hidden';
+            tempSvg.innerHTML = c.virtualSvgPath; 
+            document.body.appendChild(tempSvg);
+
+            const pathEl = tempSvg.querySelector('path');
+            if (!pathEl) { document.body.removeChild(tempSvg); return; }
+
+            const totalSvgLen = pathEl.getTotalLength();
+            const stats = window.challengeStatsMap[challengeId];
+            const isRace = stats && stats.type === 'race';
+
+            const startPt = pathEl.getPointAtLength(0);
+            let myCenterPoint = [-startPt.y, startPt.x];
+
+            const mapSvgOverlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            mapSvgOverlay.setAttribute('viewBox', `0 0 ${w} ${h}`);
+            let cleanPath = c.virtualSvgPath.replace(/style="[^"]*"/g, '').replace(/stroke="[^"]*"/g, '').replace(/stroke-width="[^"]*"/g, '');
+            mapSvgOverlay.innerHTML = `<g fill="none" stroke="${vColor}" stroke-width="${vWidth}" stroke-dasharray="${vStyle}" stroke-linecap="round">${cleanPath}</g>`;
+            L.svgOverlay(mapSvgOverlay, bounds).addTo(leafletMap);
+
+            if (isRace) {
+                if (stats.userKms) {
+                    Object.keys(stats.userKms).forEach(uid => {
+                        let currentKm = stats.userKms[uid] || 0;
+                        let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0;
+                        if(progressPct > 1) progressPct = 1; 
+
+                        const pt = pathEl.getPointAtLength(progressPct * totalSvgLen);
+
+                        if (currentUser && uid === currentUser.uid) {
+                            myCenterPoint = [-pt.y, pt.x];
+                        }
+
+                        let userObj = globalUsersMap[uid] || {name: 'Neznámý', avatarUrl: ''};
+                        let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : userObj.name.charAt(0).toUpperCase();
+                        let borderColor = (currentUser && uid === currentUser.uid) ? '#10B981' : '#FC4C02'; 
+
+                        const customIcon = L.divIcon({ 
+                            className: 'custom-map-marker', html: `<div class="race-marker-container" style="border-color: ${borderColor};">${avatarHtml}</div>`, 
+                            iconSize: [34, 34], iconAnchor: [17, 17] 
+                        });
+                        const m = L.marker([-pt.y, pt.x], {icon: customIcon}).addTo(leafletMap).bindPopup(`<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${userObj.name}</b><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`);
+                        mapLayers.push(m);
+                    });
+                }
+            } else {
+                let currentKm = stats ? stats.total : 0; 
+                let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0; if(progressPct > 1) progressPct = 1; 
+
+                const pt = pathEl.getPointAtLength(progressPct * totalSvgLen);
+                myCenterPoint = [-pt.y, pt.x]; 
+
+                const customIcon = L.divIcon({ className: 'custom-map-marker', html: `<div style="background:#FC4C02; width:22px; height:22px; border-radius:50%; border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,0.5);"></div>`, iconSize: [28, 28], iconAnchor: [14, 14] });
+                const m = L.marker([-pt.y, pt.x], {icon: customIcon}).addTo(leafletMap).bindPopup(`<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br>Společně zdoláno:<br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`);
+                mapLayers.push(m);
+            }
+            document.body.removeChild(tempSvg);
+
+            setTimeout(() => {
+                const mapSize = leafletMap.getSize();
+                const cw = mapSize.x > 0 ? mapSize.x : window.innerWidth;
+                const ch = mapSize.y > 0 ? mapSize.y : window.innerHeight;
+                
+                let targetScale = Math.max(cw / w, ch / h); 
+                let targetZoom = Math.log(targetScale) / Math.LN2;
+                
+                leafletMap.setMinZoom(targetZoom);
+                
+                if (targetZoom > leafletMap.getMaxZoom()) targetZoom = leafletMap.getMaxZoom();
+
+                leafletMap.setView(myCenterPoint, targetZoom);
+            }, 50);
+
+        } else if (c.mapUrl) {
+            leafletMap = L.map('real-map', {zoomControl: false}).setView([49.2, 16.6], 13); L.control.zoom({ position: 'bottomright' }).addTo(leafletMap);
+            layerOsm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }); layerSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
+            if(currentMapLayerType === 'osm') layerOsm.addTo(leafletMap); else layerSat.addTo(leafletMap);
+
+            try {
+                const res = await fetch(c.mapUrl); const gpxText = await res.text(); const gpxXml = new DOMParser().parseFromString(gpxText, "application/xml"); const geojson = toGeoJSON.gpx(gpxXml);
+                let latlngsFlat = []; const tempLayer = L.geoJSON(geojson);
+                tempLayer.eachLayer(layer => { if (layer.getLatLngs) { const coords = layer.getLatLngs(); if (Array.isArray(coords[0])) { coords.forEach(seg => latlngsFlat.push(...seg)); } else { latlngsFlat.push(...coords); } } });
+                if(latlngsFlat.length === 0) return;
+
+                let physicalMeters = 0; for(let i=1; i<latlngsFlat.length; i++) { physicalMeters += latlngsFlat[i-1].distanceTo(latlngsFlat[i]); }
+                let physicalKm = physicalMeters / 1000;
+                
+                const stats = window.challengeStatsMap[challengeId];
+                const isRace = stats && stats.type === 'race';
+
+                // DETEKCE OKRUHU (Pokud je cíl aspoň 1.5x větší než délka GPX)
+                let isCircuit = false;
+                if (c.targetKm > (physicalKm * 1.5)) {
+                    isCircuit = true;
+                }
+
+                // VYKRESLENÍ ZÁKLADNÍ TRASY PODLE NASTAVENÍ VÝZVY
+                const baseLine = L.polyline(latlngsFlat, {color: vColor, weight: vWidth, dashArray: vStyle, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap);
+                mapLayers.push(baseLine); leafletMap.fitBounds(baseLine.getBounds());
+
+                if (isRace) {
+                    if (stats.userKms) {
+                        Object.keys(stats.userKms).forEach(uid => {
+                            let currentKm = stats.userKms[uid] || 0;
+                            if(currentKm === 0) return; 
+                            
+                            let userObj = globalUsersMap[uid] || {name: 'Neznámý', avatarUrl: ''};
+                            let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : userObj.name.charAt(0).toUpperCase();
+                            let borderColor = (currentUser && uid === currentUser.uid) ? '#10B981' : '#FC4C02'; 
+
+                            let popupText = "";
+                            let trackMetersToTravel = 0;
+
+                            if (isCircuit) {
+                                // VÝPOČET KROUŽENÍ
+                                let lapsCompleted = Math.floor(currentKm / physicalKm);
+                                let currentLap = lapsCompleted + 1;
+                                let remainderKm = currentKm % physicalKm;
+                                
+                                if (currentKm >= c.targetKm) {
+                                    trackMetersToTravel = physicalMeters; // Dojel do cíle (stojí na konci mapy)
+                                    popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${userObj.name}</b><br><span style="color:#10B981; font-weight:700;">V CÍLI!</span><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
+                                } else {
+                                    let progressPctInLap = remainderKm / physicalKm;
+                                    trackMetersToTravel = physicalMeters * progressPctInLap;
+                                    popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${userObj.name}</b><br><span style="font-size:0.85em; color:var(--text-gray);">${currentLap}. kolo (${remainderKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km)</span><br><strong style="font-size:1.2em;">Celkem: ${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
+                                }
+                            } else {
+                                // KLASICKÁ TRASA
+                                let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0;
+                                if(progressPct > 1) progressPct = 1; 
+                                trackMetersToTravel = physicalMeters * progressPct; 
+                                popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${userObj.name}</b><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
+                            }
+
+                            let traveled = 0; let lastPos = latlngsFlat[0];
+
+                            if (trackMetersToTravel > 0) {
+                                for (let i = 1; i < latlngsFlat.length; i++) {
+                                    let p1 = latlngsFlat[i-1]; let p2 = latlngsFlat[i]; let segmentDist = p1.distanceTo(p2);
+                                    if (traveled + segmentDist >= trackMetersToTravel) {
+                                        let ratio = segmentDist > 0 ? (trackMetersToTravel - traveled) / segmentDist : 0;
+                                        let lat = p1.lat + (p2.lat - p1.lat) * ratio; let lng = p1.lng + (p2.lng - p1.lng) * ratio; 
+                                        lastPos = L.latLng(lat, lng);
+                                        break; 
+                                    }
+                                    traveled += segmentDist;
+                                    lastPos = p2;
+                                }
+                            }
+
+                            const customIcon = L.divIcon({ 
+                                className: 'custom-map-marker', html: `<div class="race-marker-container" style="border-color: ${borderColor};">${avatarHtml}</div>`, 
+                                iconSize: [34, 34], iconAnchor: [17, 17] 
+                            });
+                            const m = L.marker(lastPos, {icon: customIcon}).addTo(leafletMap).bindPopup(popupText);
+                            mapLayers.push(m);
+                        });
+                    }
+                } else {
+                    let currentKm = stats ? stats.total : 0; 
+                    let popupText = "";
+                    let trackMetersToTravel = 0;
+
+                    if (isCircuit) {
+                        let lapsCompleted = Math.floor(currentKm / physicalKm);
+                        let currentLap = lapsCompleted + 1;
+                        let remainderKm = currentKm % physicalKm;
+                        
+                        if (currentKm >= c.targetKm) {
+                            trackMetersToTravel = physicalMeters;
+                            popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="color:#10B981; font-weight:700;">JSME V CÍLI!</span><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
+                        } else {
+                            let progressPctInLap = remainderKm / physicalKm;
+                            trackMetersToTravel = physicalMeters * progressPctInLap;
+                            popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="font-size:0.85em; color:var(--text-gray);">Společně ve ${currentLap}. kole (${remainderKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km)</span><br><strong style="font-size:1.2em;">Celkem: ${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
+                        }
+                    } else {
+                        let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0; if(progressPct > 1) progressPct = 1; 
+                        trackMetersToTravel = physicalMeters * progressPct; 
+                        popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br>Společně zdoláno:<br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
+                    }
+
+                    let traveled = 0; let lastPos = latlngsFlat[0];
+                    // BARVA ŠLAHOUNU ZÁLEŽÍ NA TYPU:
+                    // Pro závod by se měnil barevný gradient, ale jelikož chceme
+                    // respektovat pevnou barvu trasy (vColor) pro všechny, překreslíme 
+                    // tuto část pomocí zvolené barvy výzvy, pokud se překrývá s GPX
+                    
+                    // Nastavíme jednoduchý zvýrazněný šlahoun, ať je to vidět na jakémkoli podkladu
+                    let activeLineColor = vColor;
+                    if (vColor === '#000000' || vColor === '#ffffff') activeLineColor = '#FC4C02'; 
+
+                    if (trackMetersToTravel > 0) {
+                        for (let i = 1; i < latlngsFlat.length; i++) {
+                            let p1 = latlngsFlat[i-1]; let p2 = latlngsFlat[i]; let segmentDist = p1.distanceTo(p2);
+                            if (traveled + segmentDist >= trackMetersToTravel) {
+                                let ratio = segmentDist > 0 ? (trackMetersToTravel - traveled) / segmentDist : 0;
+                                let lat = p1.lat + (p2.lat - p1.lat) * ratio; let lng = p1.lng + (p2.lng - p1.lng) * ratio; lastPos = L.latLng(lat, lng);
+                                let segLine = L.polyline([p1, lastPos], {color: activeLineColor, weight: vWidth + 2, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap); mapLayers.push(segLine); break; 
+                            } else {
+                                let segLine = L.polyline([p1, p2], {color: activeLineColor, weight: vWidth + 2, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap); mapLayers.push(segLine);
+                            }
+                            traveled += segmentDist;
+                        }
+                    }
+                    const customIcon = L.divIcon({ className: 'custom-map-marker', html: `<div style="background:#FC4C02; width:18px; height:18px; border-radius:50%; border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,0.5);"></div>`, iconSize: [24, 24], iconAnchor: [12, 12] });
+                    const m = L.marker(lastPos, {icon: customIcon}).addTo(leafletMap).bindPopup(popupText);
+                    mapLayers.push(m);
+                }
+            } catch(e) { console.error("Map load error", e); }
+        }
+    };
+
+    window.saveActivity = async () => {
+      if(isSaving) return; let rawInput = document.getElementById('km-input').value.replace(',', '.'); const km = parseFloat(rawInput);
+      const stravaUrl = extractStravaUrl(document.getElementById('strava-link-input').value);
+
+      if(km > 0 && currentUser) {
+        isSaving = true; const btn = document.getElementById('btn-save-activity'); btn.innerText = "Ukládám..."; btn.disabled = true;
+        try { await addDoc(collection(db, "activities"), { uid: currentUser.uid, km: km, type: currentActivityType, stravaUrl: stravaUrl, timestamp: new Date() }); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(km) }); window.closeModal(); } 
+        catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; }
+      } else { alert("Zadej počet kilometrů."); }
+    };
+
+    window.openEditModal = (id, km, type, isoDate, stravaUrl) => {
+        window.pushModalState();
+        selectedActivityId = id; selectedActivityOldKm = km; editActivityType = type; selectedActivityDate = isoDate;
+        document.getElementById('edit-km-input').value = km; document.getElementById('edit-date-input').value = isoDate;
+        document.getElementById('edit-strava-link-input').value = stravaUrl && stravaUrl !== 'undefined' ? stravaUrl : '';
+        document.querySelectorAll('#edit-modal .chip').forEach(c => c.classList.remove('active')); const targetChip = document.querySelector(`#edit-modal .chip[data-type="${type}"]`); if(targetChip) targetChip.classList.add('active');
+        document.getElementById('edit-modal').classList.add('active');
+    };
+
+    window.saveEditActivity = async () => {
+        if(isSaving) return; let rawInput = document.getElementById('edit-km-input').value.replace(',', '.'); const newKm = parseFloat(rawInput); const newDateVal = document.getElementById('edit-date-input').value;
+        const stravaUrl = extractStravaUrl(document.getElementById('edit-strava-link-input').value);
+
+        if(newKm > 0 && selectedActivityId && currentUser) {
+            isSaving = true; const btn = document.getElementById('btn-edit-activity'); btn.innerText = "Ukládám..."; btn.disabled = true;
+            const diffKm = newKm - selectedActivityOldKm; const newDate = newDateVal ? new Date(newDateVal) : new Date();
+            try { await updateDoc(doc(db, "activities", selectedActivityId), { km: newKm, type: editActivityType, stravaUrl: stravaUrl, timestamp: newDate }); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(diffKm) }); window.closeEditModal(); } 
+            catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Uložit změny"; btn.disabled = false; }
+        } else { alert("Zadej platné hodnoty."); }
+    };
+
+    window.deleteActivity = async () => {
+        if(isSaving) return;
+        if(selectedActivityId && currentUser && confirm("Opravdu smazat aktivitu?")) {
+            isSaving = true; const btn = document.getElementById('btn-delete-activity'); btn.innerText = "Mažu..."; btn.disabled = true; const minusKm = -selectedActivityOldKm;
+            try { await deleteDoc(doc(db, "activities", selectedActivityId)); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(minusKm) }); window.closeEditModal(); } 
+            catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Smazat aktivitu"; btn.disabled = false; }
+        }
+    };
+
+    window.openProfileEditModal = async () => {
+        window.pushModalState();
+        if(!currentUser) return; const userSnap = await getDoc(doc(db, "users", currentUser.uid)); const deleteBtn = document.getElementById('btn-delete-avatar');
+        if(userSnap.exists()){ const data = userSnap.data(); document.getElementById('profile-edit-name-input').value = data.name || ""; if(data.avatarUrl) { deleteBtn.style.display = "block"; } else { deleteBtn.style.display = "none"; } }
+        document.getElementById('profile-file-input').value = ""; document.getElementById('cropper-wrapper').style.display = "none";
+        if(cropper) { cropper.destroy(); cropper = null; } document.getElementById('profile-edit-modal').classList.add('active');
+    };
+
+    window.closeProfileEditModal = () => { 
+        window.handleUIClose('profile-edit-modal'); 
+        if(cropper) { cropper.destroy(); cropper = null; } 
+    };
+
+    window.deleteProfilePhoto = async () => { if(confirm("Smazat fotku?")) { await updateDoc(doc(db, "users", currentUser.uid), { avatarUrl: "" }); window.closeProfileEditModal(); } };
+    window.deleteUserAccount = async () => { if(confirm("⚠️ OPRAVDU smazat celý profil a data?")) { try { await deleteDoc(doc(db, "users", currentUser.uid)); await deleteUser(currentUser); window.closeProfileEditModal(); } catch (e) { alert("Chyba. Možná je nutné se odhlásit a znovu přihlásit."); } } };
+
+    window.handleProfileFileSelect = (input) => {
+        const file = input.files[0]; if(!file) return; document.getElementById('btn-delete-avatar').style.display = "none";
+        const reader = new FileReader(); reader.onload = function(e) {
+            const imageNode = document.getElementById('cropper-image'); imageNode.src = e.target.result;
+            document.getElementById('cropper-wrapper').style.display = "block"; if(cropper) cropper.destroy();
+            cropper = new Cropper(imageNode, { aspectRatio: 1, viewMode: 1, autoCropArea: 1, background: false });
+        }; reader.readAsDataURL(file);
+    };
+    window.saveProfileEdit = async () => {
+        const newName = document.getElementById('profile-edit-name-input').value.trim(); if(!newName) return; let updateData = { name: newName };
+        if(cropper) { const canvas = cropper.getCroppedCanvas({ width: 150, height: 150 }); updateData.avatarUrl = canvas.toDataURL('image/jpeg', 0.75); }
+        await updateDoc(doc(db, "users", currentUser.uid), updateData); window.closeProfileEditModal();
+    };
+
+    window.toggleEditMode = () => { document.getElementById('profile-activity-list').classList.toggle('edit-mode-active'); };
+
+    window.closeEditModal = () => { 
+        window.handleUIClose('edit-modal'); 
+        selectedActivityId = null; 
+    };
+
+    window.selectEditChip = (element) => { document.querySelectorAll('#edit-modal .chip').forEach(c => c.classList.remove('active')); element.classList.add('active'); editActivityType = element.getAttribute('data-type'); };
+
+    window.selectColorChip = (element, containerId) => {
+        document.querySelectorAll(`#${containerId} .color-chip`).forEach(c => {
+            c.classList.remove('active');
+            if(c.getAttribute('data-val') === '#ffffff') {
+                c.style.borderColor = '#ccc';
+            } else {
+                c.style.borderColor = 'transparent';
+            }
+        });
+        element.classList.add('active');
+        element.style.borderColor = 'var(--text-dark)';
+    };
+
+    window.joinChallenge = async (chalId) => { 
+        try { 
+            await updateDoc(doc(db, "challenges", chalId), { members: arrayUnion(currentUser.uid) }); 
+            const btn = document.getElementById('chal-action-btn');
+            btn.innerText = "Odpojit se od akce"; btn.className = "chal-btn-main joined";
+        } catch(e) { alert("Chyba."); } 
+    };
+    window.leaveChallenge = async (chalId) => { 
+        if(confirm("Opravdu se chceš odpojit od této akce? Tvé kilometry se do ní přestanou počítat.")) { 
+            try { 
+                await updateDoc(doc(db, "challenges", chalId), { members: arrayRemove(currentUser.uid) }); 
+                const btn = document.getElementById('chal-action-btn');
+                btn.innerText = "Připojit se k akci"; btn.className = "chal-btn-main";
+            } catch(e) { alert("Chyba při odpojování."); } 
+        } 
+    };
+
+    window.openCreateChallengeModal = () => { window.pushModalState(); document.getElementById('create-challenge-modal').classList.add('active'); };
+
+    window.closeCreateChallengeModal = () => { 
+        window.handleUIClose('create-challenge-modal'); 
+        if(chalCropper) { chalCropper.destroy(); chalCropper = null; }
+        if(chalBadgeCropper) { chalBadgeCropper.destroy(); chalBadgeCropper = null; }
+        document.getElementById('new-chal-cropper-wrapper').style.display = 'none';
+        document.getElementById('new-chal-badge-cropper-wrapper').style.display = 'none';
+        document.getElementById('new-chal-file-input').value = '';
+        document.getElementById('new-chal-badge-input').value = '';
+        document.getElementById('new-chal-subtitle').value = '';
+        document.getElementById('new-chal-gpx-hint').innerText = '';
+        document.getElementById('new-chal-laps').value = '';
+    };
+
+    window.toggleChallengeChip = (element) => { element.classList.toggle('active'); };
+    window.toggleMembersList = (cid) => { document.getElementById(`members-dropdown-${cid}`).classList.toggle('hidden'); };
+    window.selectSingleChip = (element, containerId) => { document.querySelectorAll(`#${containerId} .chip`).forEach(c => c.classList.remove('active')); element.classList.add('active'); };
+    
