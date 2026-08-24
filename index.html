@@ -120,19 +120,20 @@
     .race-marker-container { width: 34px; height: 34px; border-radius: 50%; border: 3px solid #FC4C02; background-color: var(--primary-dark); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.5); font-size: 0.9em; }
     .race-marker-container img { width: 100%; height: 100%; object-fit: cover; }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; padding: 20px; }
-    .modal-overlay.active { opacity: 1; pointer-events: all; }
+    /* Absolutní skrytí pomocí visibility: hidden zamezuje blokování dotyků */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.3s ease, visibility 0.3s ease; padding: 20px; }
+    .modal-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
+    
     .modal-content { background-color: var(--white); padding: 25px; border-radius: 24px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; text-align: center; position: relative; }
     .modal-content h3 { margin-bottom: 20px; color: var(--primary-dark); }
 
-    .chal-detail-fullscreen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 3000; background: var(--bg-color); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); transform: translateY(100%); }
-    .chal-detail-fullscreen.active { transform: translateY(0); }
+    .chal-detail-fullscreen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 3000; background: var(--bg-color); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s ease; transform: translateY(100%); visibility: hidden; pointer-events: none; }
+    .chal-detail-fullscreen.active { transform: translateY(0); visibility: visible; pointer-events: auto; }
     .chal-detail-bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 56.25vw; max-height: 338px; background-size: cover; background-position: center; background-color: var(--primary-dark); z-index: 1; }
     
     .chal-detail-close-btn { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); left: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 100; cursor: pointer; border: 1px solid var(--gray-border); color: var(--text-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
     .chal-detail-share-btn { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); right: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 100; cursor: pointer; border: 1px solid var(--gray-border); color: var(--text-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
     
-    /* NOVÉ TLAČÍTKO EDIT */
     .chal-detail-edit-btn { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); right: 70px; width: 40px; height: 40px; background: rgba(255,255,255,0.95); border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 100; cursor: pointer; border: 1px solid var(--gray-border); color: var(--text-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
     .chal-detail-scroll-area { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; z-index: 2; }
@@ -583,7 +584,7 @@
               <label>URL odkaz na GPX mapu (volitelné):</label>
               <div style="display:flex; gap:10px;">
                   <input type="text" id="new-chal-map" class="date-input" placeholder="https://..." style="flex:1;">
-                  <button type="button" class="btn-fetch-gpx" onclick="calculateGpxDistance('new-chal-map', 'new-chal-gpx-hint')">Spočítat km</button>
+                  <button type="button" class="btn-fetch-gpx" onclick="calculateGpxDistance('new-chal-map', 'new-chal-gpx-hint', 'new')">Spočítat</button>
               </div>
               <div id="new-chal-gpx-hint" style="font-size: 0.85em; color: var(--primary-orange); font-weight: 600; margin-top: 5px;"></div>
           </div>
@@ -716,7 +717,7 @@
               <label>URL odkaz na GPX mapu (volitelné):</label>
               <div style="display:flex; gap:10px;">
                   <input type="text" id="edit-chal-map" class="date-input" placeholder="https://..." style="flex:1;">
-                  <button type="button" class="btn-fetch-gpx" onclick="calculateGpxDistance('edit-chal-map', 'edit-chal-gpx-hint')">Spočítat km</button>
+                  <button type="button" class="btn-fetch-gpx" onclick="calculateGpxDistance('edit-chal-map', 'edit-chal-gpx-hint', 'edit')">Spočítat</button>
               </div>
               <div id="edit-chal-gpx-hint" style="font-size: 0.85em; color: var(--primary-orange); font-weight: 600; margin-top: 5px;"></div>
           </div>
@@ -1255,6 +1256,7 @@
         const statsOtherList = document.getElementById('stats-other-challenges'); statsOtherList.innerHTML = '';
         const profileMyChal = document.getElementById('profile-my-challenges'); profileMyChal.innerHTML = '';
         const profileFollowersChal = document.getElementById('profile-followers-challenges'); if(profileFollowersChal) profileFollowersChal.innerHTML = '';
+        
         const profileActiveChal = document.getElementById('profile-active-challenges'); profileActiveChal.innerHTML = '';
         const mapListModal = document.getElementById('map-challenge-list'); mapListModal.innerHTML = '';
 
@@ -1364,7 +1366,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="chal-progress-bg"><div class="chal-progress-fill" style="width: ${totalPct}%; background: ${c.trackLineColor || '#4F46E5'};"></div></div>
+                    <div class="chal-progress-bg"><div class="chal-progress-fill" style="width: ${totalPct}%; background: ${c.virtualLineColor || '#4F46E5'};"></div></div>
                 </div>`;
 
                 let memberDataArray = [];
@@ -1512,7 +1514,7 @@
             document.getElementById('chal-detail-progress-pct').innerText = `${Math.floor(pct)} %`;
             const bar = document.getElementById('chal-detail-progress-bar');
             bar.style.width = `${pct}%`;
-            bar.style.background = c.trackLineColor || '#4F46E5';
+            bar.style.background = c.virtualLineColor || '#4F46E5';
 
             // Žebříček
             leaderboardWrapper.style.display = 'block';
@@ -1597,11 +1599,11 @@
             const startPt = pathEl.getPointAtLength(0);
             let myCenterPoint = [-startPt.y, startPt.x];
 
-            const vColor = c.trackLineColor || '#4F46E5';
-            const vWidth = c.trackLineWidth || 10;
-            const vStyle = c.trackLineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 1.5}` : 'none';
+            const vColor = c.virtualLineColor || '#4F46E5';
+            const vWidth = c.virtualLineWidth || 10;
+            const vStyle = c.virtualLineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 1.5}` : 'none';
 
-            // ZÁKLADNÍ TRASA - MÍRNĚ PRŮHLEDNÁ ŠEDÁ (aby byla vidět)
+            // ZÁKLADNÍ TRASA - MÍRNĚ PRŮHLEDNÁ ŠEDÁ
             const mapSvgOverlayBase = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             mapSvgOverlayBase.setAttribute('viewBox', `0 0 ${w} ${h}`);
             let cleanPath = c.virtualSvgPath.replace(/style="[^"]*"/g, '').replace(/stroke="[^"]*"/g, '').replace(/stroke-width="[^"]*"/g, '');
@@ -1649,7 +1651,6 @@
                     });
                 }
             } else {
-                // SPOLEČNÁ VÝZVA - VIRTUAL
                 let currentKm = stats ? stats.total : 0; 
                 let popupText = "";
                 let distanceToDrawOnSvg = 0;
@@ -1677,7 +1678,6 @@
                 const pt = pathEl.getPointAtLength(distanceToDrawOnSvg);
                 myCenterPoint = [-pt.y, pt.x]; 
 
-                // Zvýraznění společného postupu na křivce
                 const highlightSvgOverlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
                 highlightSvgOverlay.setAttribute('viewBox', `0 0 ${w} ${h}`);
                 highlightSvgOverlay.innerHTML = `<g fill="none" stroke="${vColor}" stroke-width="${vWidth + 2}" stroke-dasharray="${distanceToDrawOnSvg} ${totalSvgLen}" stroke-linecap="round">${cleanPath}</g>`;
@@ -1712,10 +1712,9 @@
                 const stats = window.challengeStatsMap[challengeId];
                 const isRace = stats && stats.type === 'race';
 
-                // GPX ZÁKLADNÍ ČÁRA (ŠEDÁ)
-                const vWidth = c.trackLineWidth || 4;
-                const vStyle = c.trackLineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 2.5}` : 'none';
-                const vColor = c.trackLineColor || '#4F46E5';
+                const vWidth = c.virtualLineWidth || 6;
+                const vStyle = c.virtualLineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 2.5}` : 'none';
+                const vColor = c.virtualLineColor || '#4F46E5';
 
                 const baseLine = L.polyline(latlngsFlat, {color: '#9CA3AF', weight: vWidth, dashArray: vStyle, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap);
                 mapLayers.push(baseLine); leafletMap.fitBounds(baseLine.getBounds());
@@ -1771,7 +1770,6 @@
                         });
                     }
                 } else {
-                    // SPOLEČNÁ VÝZVA GPX
                     let currentKm = stats ? stats.total : 0; 
                     let popupText = "";
                     let trackMetersToTravel = 0;
@@ -1787,35 +1785,4 @@
                         } else {
                             let progressPctInLap = physicalKm > 0 ? remainderKm / physicalKm : 0;
                             trackMetersToTravel = physicalMeters * progressPctInLap;
-                            popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="font-size:0.85em; color:var(--text-gray);">Společně v ${currentLap}. okruhu (${remainderKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km)</span><br><strong style="font-size:1.2em;">Celkem: ${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
-                        }
-                    } else {
-                        let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0; if(progressPct > 1) progressPct = 1; 
-                        trackMetersToTravel = physicalMeters * progressPct; 
-                        popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br>Společně zdoláno:<br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
-                    }
-
-                    let traveled = 0; let lastPos = latlngsFlat[0];
-                    if (trackMetersToTravel > 0) {
-                        for (let i = 1; i < latlngsFlat.length; i++) {
-                            let p1 = latlngsFlat[i-1]; let p2 = latlngsFlat[i]; let segmentDist = p1.distanceTo(p2);
-                            if (traveled + segmentDist >= trackMetersToTravel) {
-                                let ratio = segmentDist > 0 ? (trackMetersToTravel - traveled) / segmentDist : 0;
-                                let lat = p1.lat + (p2.lat - p1.lat) * ratio; let lng = p1.lng + (p2.lng - p1.lng) * ratio; lastPos = L.latLng(lat, lng);
-                                let segLine = L.polyline([p1, lastPos], {color: vColor, weight: vWidth + 2, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap); mapLayers.push(segLine); break; 
-                            } else {
-                                let segLine = L.polyline([p1, p2], {color: vColor, weight: vWidth + 2, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap); mapLayers.push(segLine);
-                            }
-                            traveled += segmentDist;
-                        }
-                    }
-                    const customIcon = L.divIcon({ className: 'custom-map-marker', html: `<div style="background:#FC4C02; width:18px; height:18px; border-radius:50%; border:3px solid white; box-shadow:0 2px 8px rgba(0,0,0,0.5);"></div>`, iconSize: [24, 24], iconAnchor: [12, 12] });
-                    const m = L.marker(lastPos, {icon: customIcon}).addTo(leafletMap).bindPopup(popupText); mapLayers.push(m);
-                }
-            } catch(e) { console.error("Map load error", e); }
-        }
-    };
-
-  </script>
-</body>
-</html>
+                            popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${c.name}</b><br><span style="font-size:0.85em; color:var(--text-Jsem textová AI a tohle je nad moje možnosti.
