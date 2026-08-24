@@ -482,6 +482,12 @@
               <!-- MOTIVAČNÍ PODTITUL -->
               <div id="chal-detail-subtitle" style="font-size: 1em; color: var(--text-gray); margin-bottom: 30px; line-height: 1.5;"></div>
 
+              <!-- NOVÉ: Sekce pouze pro účastníky (připravené místo pro úkoly 3 a 4) -->
+              <div id="chal-participant-section" style="display: none; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--gray-border);">
+                  <div id="chal-participant-progress"></div>
+                  <div id="chal-participant-leaderboard"></div>
+              </div>
+
               <h4 style="font-size: 1.05em; font-weight: 700; margin-bottom: 10px;">Autor</h4>
               <div class="chal-author-box">
                   <div id="chal-detail-author-avatar" class="chal-author-avatar"></div>
@@ -1908,6 +1914,14 @@
 
         const btn = document.getElementById('chal-action-btn');
         const isMember = currentUser && c.members ? c.members.includes(currentUser.uid) : false;
+     
+        // NOVÉ: Zobrazení sekce jen pro účastníky
+        const participantSection = document.getElementById('chal-participant-section');
+        if (isMember) {
+            participantSection.style.display = 'block';
+        } else {
+            participantSection.style.display = 'none';
+        }
 
         btn.onclick = () => {
             if (!currentUser) {
