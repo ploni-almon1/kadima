@@ -747,29 +747,31 @@
               <label>Kód trasy (&lt;path d="..."&gt;):</label>
               <textarea id="new-chal-v-svg" class="date-input" rows="4" style="background:var(--white); font-family:monospace; font-size:0.8em;" placeholder='Vložte SVG kód trasy (např. <path d="M 100 200 L 300 400" />)'></textarea>
           </div>
-          <div class="date-input-wrapper" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 15px; margin-bottom:0;">
-              <label style="text-align:center; font-weight:700;">Vzhled vyznačené trasy</label>
-              <div style="display:flex; gap:10px; margin-bottom:10px;">
-                  <div style="flex:1;">
-                      <label>Šířka čáry (px):</label>
-                      <input type="number" id="new-chal-v-width" class="date-input" style="background:var(--white); margin-bottom:0;" value="10">
-                  </div>
-                  <div style="flex:1;">
-                      <label>Typ čáry:</label>
-                      <div class="activity-chips" id="new-chal-v-style" style="margin-bottom:0; justify-content:flex-start;">
-                          <div class="chip active" data-val="solid" onclick="selectSingleChip(this, 'new-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Plná</div>
-                          <div class="chip" data-val="dashed" onclick="selectSingleChip(this, 'new-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Čárkovaná</div>
-                      </div>
+      </div>
+
+      <!-- PŘESUNUTO: Společný vzhled čáry pro všechny mapy -->
+      <div class="date-input-wrapper" style="background: var(--white); border: 1px solid var(--gray-border); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
+          <label style="text-align:center; font-weight:700;">Vzhled vyznačené trasy (GPX i Fiktivní)</label>
+          <div style="display:flex; gap:10px; margin-bottom:10px; margin-top: 10px;">
+              <div style="flex:1;">
+                  <label>Šířka čáry (px):</label>
+                  <input type="number" id="new-chal-v-width" class="date-input" style="background:var(--gray-light); margin-bottom:0;" value="10">
+              </div>
+              <div style="flex:1;">
+                  <label>Typ čáry:</label>
+                  <div class="activity-chips" id="new-chal-v-style" style="margin-bottom:0; justify-content:flex-start;">
+                      <div class="chip active" data-val="solid" onclick="selectSingleChip(this, 'new-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Plná</div>
+                      <div class="chip" data-val="dashed" onclick="selectSingleChip(this, 'new-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Čárkovaná</div>
                   </div>
               </div>
-              <label>Barva čáry:</label>
-              <div class="activity-chips" id="new-chal-v-color" style="justify-content:flex-start; margin-bottom:0;">
-                  <div class="color-chip active" data-val="#4F46E5" onclick="selectColorChip(this, 'new-chal-v-color')" style="background:#4F46E5; border-color:var(--text-dark);"></div>
-                  <div class="color-chip" data-val="#FC4C02" onclick="selectColorChip(this, 'new-chal-v-color')" style="background:#FC4C02;"></div>
-                  <div class="color-chip" data-val="#10B981" onclick="selectColorChip(this, 'new-chal-v-color')" style="background:#10B981;"></div>
-                  <div class="color-chip" data-val="#000000" onclick="selectColorChip(this, 'new-chal-v-color')" style="background:#000000;"></div>
-                  <div class="color-chip" data-val="#ffffff" onclick="selectColorChip(this, 'new-chal-v-color')" style="background:#ffffff; border-color:#ccc;"></div>
-              </div>
+          </div>
+          <label>Barva čáry:</label>
+          <div class="activity-chips" id="new-chal-v-color" style="justify-content:flex-start; margin-bottom:0;">
+              <div class="color-chip active" data-val="#4F46E5" onclick="selectColorChip(this, 'new-chal-v-color')" style="background:#4F46E5; border-color:var(--text-dark);"></div>
+              <div class="color-chip" data-val="#FC4C02" onclick="selectColorChip(this, 'new-chal-v-color')" style="background:#FC4C02;"></div>
+              <div class="color-chip" data-val="#10B981" onclick="selectColorChip(this, 'new-chal-v-color')" style="background:#10B981;"></div>
+              <div class="color-chip" data-val="#000000" onclick="selectColorChip(this, 'new-chal-v-color')" style="background:#000000;"></div>
+              <div class="color-chip" data-val="#ffffff" onclick="selectColorChip(this, 'new-chal-v-color')" style="background:#ffffff; border-color:#ccc;"></div>
           </div>
       </div>
 
@@ -885,7 +887,7 @@
           </div>
       </div>
 
-      <div id="edit-chal-virtual-fields" style="display:none; background: var(--gray-light); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
+     <div id="edit-chal-virtual-fields" style="display:none; background: var(--gray-light); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
           <div class="date-input-wrapper">
               <label>URL odkaz na obrázek mapy:</label>
               <input type="text" id="edit-chal-v-img" class="date-input" style="background:var(--white);" oninput="handleVirtualImgUrlInputEdit(this.value)">
@@ -902,29 +904,31 @@
               <label>Kód trasy (&lt;path d="..."&gt;):</label>
               <textarea id="edit-chal-v-svg" class="date-input" rows="4" style="background:var(--white); font-family:monospace; font-size:0.8em;"></textarea>
           </div>
-          <div class="date-input-wrapper" style="margin-top: 15px; border-top: 1px solid #ccc; padding-top: 15px; margin-bottom:0;">
-              <label style="text-align:center; font-weight:700;">Vzhled vyznačené trasy</label>
-              <div style="display:flex; gap:10px; margin-bottom:10px;">
-                  <div style="flex:1;">
-                      <label>Šířka čáry (px):</label>
-                      <input type="number" id="edit-chal-v-width" class="date-input" style="background:var(--white); margin-bottom:0;" value="10">
-                  </div>
-                  <div style="flex:1;">
-                      <label>Typ čáry:</label>
-                      <div class="activity-chips" id="edit-chal-v-style" style="margin-bottom:0; justify-content:flex-start;">
-                          <div class="chip active" data-val="solid" onclick="selectSingleChip(this, 'edit-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Plná</div>
-                          <div class="chip" data-val="dashed" onclick="selectSingleChip(this, 'edit-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Čárkovaná</div>
-                      </div>
+      </div>
+      
+      <!-- PŘESUNUTO: Společný vzhled čáry pro všechny mapy -->
+      <div class="date-input-wrapper" style="background: var(--white); border: 1px solid var(--gray-border); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
+          <label style="text-align:center; font-weight:700;">Vzhled vyznačené trasy (GPX i Fiktivní)</label>
+          <div style="display:flex; gap:10px; margin-bottom:10px; margin-top: 10px;">
+              <div style="flex:1;">
+                  <label>Šířka čáry (px):</label>
+                  <input type="number" id="edit-chal-v-width" class="date-input" style="background:var(--gray-light); margin-bottom:0;" value="10">
+              </div>
+              <div style="flex:1;">
+                  <label>Typ čáry:</label>
+                  <div class="activity-chips" id="edit-chal-v-style" style="margin-bottom:0; justify-content:flex-start;">
+                      <div class="chip active" data-val="solid" onclick="selectSingleChip(this, 'edit-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Plná</div>
+                      <div class="chip" data-val="dashed" onclick="selectSingleChip(this, 'edit-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Čárkovaná</div>
                   </div>
               </div>
-              <label>Barva čáry:</label>
-              <div class="activity-chips" id="edit-chal-v-color" style="justify-content:flex-start; margin-bottom:0;">
-                  <div class="color-chip active" data-val="#4F46E5" onclick="selectColorChip(this, 'edit-chal-v-color')" style="background:#4F46E5; border-color:var(--text-dark);"></div>
-                  <div class="color-chip" data-val="#FC4C02" onclick="selectColorChip(this, 'edit-chal-v-color')" style="background:#FC4C02;"></div>
-                  <div class="color-chip" data-val="#10B981" onclick="selectColorChip(this, 'edit-chal-v-color')" style="background:#10B981;"></div>
-                  <div class="color-chip" data-val="#000000" onclick="selectColorChip(this, 'edit-chal-v-color')" style="background:#000000;"></div>
-                  <div class="color-chip" data-val="#ffffff" onclick="selectColorChip(this, 'edit-chal-v-color')" style="background:#ffffff; border-color:#ccc;"></div>
-              </div>
+          </div>
+          <label>Barva čáry:</label>
+          <div class="activity-chips" id="edit-chal-v-color" style="justify-content:flex-start; margin-bottom:0;">
+              <div class="color-chip active" data-val="#4F46E5" onclick="selectColorChip(this, 'edit-chal-v-color')" style="background:#4F46E5; border-color:var(--text-dark);"></div>
+              <div class="color-chip" data-val="#FC4C02" onclick="selectColorChip(this, 'edit-chal-v-color')" style="background:#FC4C02;"></div>
+              <div class="color-chip" data-val="#10B981" onclick="selectColorChip(this, 'edit-chal-v-color')" style="background:#10B981;"></div>
+              <div class="color-chip" data-val="#000000" onclick="selectColorChip(this, 'edit-chal-v-color')" style="background:#000000;"></div>
+              <div class="color-chip" data-val="#ffffff" onclick="selectColorChip(this, 'edit-chal-v-color')" style="background:#ffffff; border-color:#ccc;"></div>
           </div>
       </div>
       
