@@ -2284,11 +2284,10 @@ Otevřít mapu akce </button>
             L.svgOverlay(mapSvgOverlay, bounds).addTo(leafletMap);
 
             if (isRace) {
-                if (stats.userKms) {
-                    Object.keys(stats.userKms).forEach(uid => {
-                        let currentKm = stats.userKms[uid] || 0;
-                        let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0;
-                        if(progressPct > 1) progressPct = 1; 
+                if (c.members) { // NOVÉ: Procházíme opět všechny přihlášené členy
+                    c.members.forEach(uid => {
+                        let currentKm = (stats && stats.userKms && stats.userKms[uid]) ? stats.userKms[uid] : 0;
+                        let progressPct = c.targetKm > 0 ? (currentKm / c.targetKm) : 0; 
 
                         const pt = pathEl.getPointAtLength(progressPct * totalSvgLen);
 
@@ -2373,10 +2372,10 @@ Otevřít mapu akce </button>
                 mapLayers.push(baseLine); leafletMap.fitBounds(baseLine.getBounds());
 
                 if (isRace) {
-                    if (stats.userKms) {
-                        Object.keys(stats.userKms).forEach(uid => {
-                            let currentKm = stats.userKms[uid] || 0;
-                            if(currentKm === 0) return; 
+                    if (c.members) { // NOVÉ: Procházíme všechny členy závodu, ne jen ty s kilometry
+                        c.members.forEach(uid => {
+                            let currentKm = (stats && stats.userKms && stats.userKms[uid]) ? stats.userKms[uid] : 0;
+                            // Záměrně smazáno: if(currentKm === 0) return;
                             
                             let userObj = globalUsersMap[uid] || {name: 'Neznámý', avatarUrl: ''};
                             let avatarHtml = userObj.avatarUrl ? `<img src="${userObj.avatarUrl}">` : userObj.name.charAt(0).toUpperCase();
