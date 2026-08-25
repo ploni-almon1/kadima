@@ -727,6 +727,11 @@
           </div>
       </div>
 
+      <div class="date-input-wrapper" style="margin-top: 10px;">
+          <label>Vlastní SVG kód závodníka (nepovinné):</label>
+          <textarea id="new-chal-custom-svg" class="date-input" rows="4" style="background:var(--white); font-family:monospace; font-size:0.8em;" placeholder="Sem vložte SVG kód z Inkscape. Pro zabarvení použijte slovo BARVA_UZIVATELE."></textarea>
+      </div>
+
       <div class="date-input-wrapper">
           <label>Cílová vzdálenost pro splnění výzvy (km):</label>
           <input type="number" id="new-chal-km" class="date-input" placeholder="Např. 300">
@@ -1108,48 +1113,7 @@ function getBearing(latlng1, latlng2) {
     const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1);
     return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
 }
-
-// 2. Šablona pro vykreslení Formule s Avatarem
-const getFormulaHtml = (userColor, avatarUrl) => `
-<div style="position: relative; width: 40px; height: 60px;">
-    <!-- Spodní vrstva: Vektorová formule -->
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-        <svg viewBox="0 0 201.22 314.97" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%; display: block;">
-          <g transform="translate(325.49,-12.32)">
-            <path fill="${userColor}" d="m -208.14877,44.427001 0.83104,11.251144 3.90777,40.212137 -1.26057,17.647958 31.76632,43.11144 1.00846,41.59876 -29.87548,19.91699 -1.00845,26.97616 v 32.27055 l 20.04304,7.18524 21.05149,0.12607 3.15142,33.02688 -33.40506,0.75634 -98.32434,-1.26056 -2.39508,-22.69024 11.093,-11.093 32.64872,0.63029 0.8824,-26.21983 -3.40353,-35.29591 -32.52267,-23.69869 1.63874,-39.58185 32.27055,-47.14526 0.25211,-45.632586 4.28594,-19.538812 -43.74173,-3.025362 -6.93313,0.504227 -0.25211,-22.690234 6.4289,-2.899307 79.54187,-0.504226 h 52.94388 l 0.8824,26.219822 -18.27825,2.269025 -30.12758,-3.65565 z" />
-            <path fill="#000000" d="m -231.72236,140.31859 -5.70469,5.43727 -5.08073,34.76291 4.27851,6.68517 29.86045,-1.06963 0.89136,-36.09994 -6.15037,-9.80492 z" />
-            <path fill="#000000" d="m -296.91807,326.68826 c -1.6789,-0.77261 -2.43086,-1.55946 -3.16155,-3.30824 -0.45516,-1.08936 -0.54262,-3.40434 -0.54262,-14.36278 v -13.06411 l -6.61458,-0.006 c -7.24911,-0.006 -9.61619,-0.36731 -12.15495,-1.85512 -2.02334,-1.18576 -4.37947,-3.76233 -5.33899,-5.83851 -0.76138,-1.64746 -0.76231,-1.68436 -0.76231,-30.22447 v -28.575 l 0.86635,-1.76389 c 1.28419,-2.61463 4.35439,-5.53342 6.89736,-6.55721 l 2.11407,-0.85113 h 18.16805 18.16806 l 2.11666,0.85108 c 2.91815,1.17333 6.12941,4.39051 7.17463,7.18785 0.69487,1.8597 0.76287,2.71668 0.76287,9.6132 v 7.57149 h 6.35 6.35 l -0.0163,-11.02431 -0.0163,-11.02431 -13.98052,-8.29027 c -7.68929,-4.55966 -14.53184,-8.76405 -15.20568,-9.3431 -2.2524,-1.93557 -2.17839,-1.03172 -2.17839,-26.60594 0,-14.09541 0.13421,-23.62471 0.34037,-24.16696 0.26562,-0.69861 16.75227,-24.04897 29.34849,-41.5668 1.58998,-2.21122 1.70836,-2.52289 1.70836,-4.49792 v -2.12206 h -6.35 -6.35 v 4.39648 c 0,3.57107 -0.13603,4.76005 -0.72452,6.33294 -1.22922,3.2854 -4.82828,6.65887 -8.15339,7.64235 -1.55608,0.46025 -30.76837,0.4576 -32.33862,-0.003 -3.06995,-0.8998 -6.52232,-3.95157 -7.93922,-7.01742 -0.75905,-1.64243 -0.76231,-1.75878 -0.76231,-27.225865 V 65.412846 l 0.95357,-1.807669 c 1.87004,-3.544983 5.13618,-6.018128 9.05877,-6.859374 1.07029,-0.229536 7.02218,-0.326243 15.9557,-0.259252 l 14.24863,0.10685 2.34901,1.112909 c 2.81633,1.334312 5.01545,3.483997 6.25976,6.119036 0.80391,1.702438 0.93785,2.524066 1.09261,6.702777 l 0.17639,4.7625 6.54552,0.09573 6.54553,0.09572 0.63655,-5.387392 c 0.3501,-2.963065 1.17493,-8.546388 1.83295,-12.407385 0.65802,-3.860997 1.1964,-7.155059 1.1964,-7.320139 0,-0.16508 -9.76823,-0.300145 -21.70717,-0.300145 -17.43352,0 -21.93174,-0.09383 -22.84787,-0.476618 -1.51355,-0.632404 -3.33647,-2.754716 -3.59904,-4.190145 -0.11611,-0.634738 -0.16363,-7.357163 -0.1056,-14.938722 l 0.10551,-13.784651 0.94686,-1.430249 c 0.57007,-0.861099 1.56198,-1.728023 2.49263,-2.178543 l 1.54577,-0.748294 70.35598,0.0078 c 67.72887,0.0075 70.40867,0.03214 71.76709,0.661071 1.85779,0.860129 3.1961,2.353213 3.66933,4.093682 0.59993,2.206434 0.49327,27.133581 -0.12349,28.862935 -0.60132,1.686045 -1.42026,2.601155 -3.09081,3.45377 -1.24239,0.634088 -2.41151,0.668016 -23.01875,0.668016 -20.45025,0 -21.70989,0.03586 -21.70989,0.61806 0,0.339933 0.30749,2.231762 0.68331,4.204065 0.69949,3.670968 2.26827,14.415448 2.68371,18.380668 l 0.23181,2.212514 6.57906,-0.09585 6.57906,-0.09585 0.10601,-4.586111 c 0.0918,-3.969785 0.22138,-4.839084 0.96449,-6.468496 1.78361,-3.910892 4.5492,-6.271854 8.54623,-7.295848 1.85737,-0.475835 4.34139,-0.543788 16.56882,-0.45326 l 14.38389,0.106493 2.19511,1.013942 c 2.5784,1.190983 5.40112,3.982041 6.55586,6.482317 l 0.77403,1.675963 v 25.4 25.399999 l -0.96948,1.83906 c -1.21865,2.31171 -2.8376,4.16796 -4.61215,5.28819 -3.00893,1.89945 -3.15306,1.91378 -19.1698,1.90544 -8.18051,-0.004 -15.32426,-0.1162 -15.875,-0.24875 -3.98692,-0.95957 -8.27945,-5.28426 -9.06875,-9.13672 -0.11926,-0.58208 -0.25143,-2.92364 -0.29372,-5.20347 l -0.0769,-4.14514 h -6.27614 -6.27614 v 2.17576 c 0,2.16467 0.015,2.19661 2.93852,6.26181 13.43487,18.68139 27.53166,38.70993 27.94984,39.71077 0.42595,1.01944 0.5076,4.97041 0.50112,24.24797 -0.007,21.58066 -0.0485,23.11981 -0.65536,24.45578 -0.35618,0.78414 -1.12126,1.81602 -1.70017,2.29306 -0.57891,0.47704 -7.34408,4.59797 -15.03371,9.15763 l -13.98115,8.29027 -0.01,11.03245 -0.01,11.03245 6.26181,-0.0963 6.26181,-0.0963 0.0344,-6.89003 c 0.0189,-3.78951 0.15099,-7.51137 0.29346,-8.27079 0.60603,-3.23041 3.23311,-6.63527 6.48529,-8.40533 2.8499,-1.55111 5.32069,-1.71852 23.24618,-1.57505 18.40845,0.14733 18.04424,0.10207 21.4462,2.66497 0.97014,0.73086 2.28121,2.09858 2.91349,3.03937 2.29097,3.40879 2.23282,2.50388 2.12395,33.05651 l -0.0985,27.65535 -0.9825,1.86475 c -1.98276,3.7632 -4.89405,6.11588 -8.66687,7.0039 -1.27878,0.30099 -4.35554,0.47091 -8.59101,0.47445 l -6.5987,0.006 -0.10407,13.31736 c -0.11765,15.05528 -0.13474,15.15636 -2.86744,16.96481 l -1.41838,0.93866 -70.93413,0.0818 c -68.23789,0.0787 -70.98776,0.0571 -72.34523,-0.56754 z m 134.9375,-22.06911 c 0,-6.22981 -0.1422,-10.40755 -0.37522,-11.02431 -0.51062,-1.35145 -2.03298,-2.9186 -3.40581,-3.50599 -0.94862,-0.40589 -10.69514,-0.48572 -59.29938,-0.48572 h -58.16417 l -1.53619,0.81235 c -1.04998,0.55525 -1.7933,1.29856 -2.34854,2.34854 -0.79367,1.50086 -0.81236,1.77022 -0.81236,11.71126 v 10.17507 h 62.97083 62.97084 z m -94.54445,-37.0489 v -9.33289 l -6.20387,-0.10392 c -3.41214,-0.0572 -6.26964,-0.0378 -6.35,0.0431 -0.0804,0.0808 -0.14613,4.3274 -0.14613,9.4368 v 9.28982 h 6.35 6.35 z m 50.45497,-19.50671 c 0.007,-27.22876 0.0439,-28.9184 0.65573,-30.25069 0.3564,-0.77611 0.94822,-1.67255 1.31517,-1.99209 0.36695,-0.31954 6.85844,-4.27244 14.42552,-8.78423 7.56708,-4.51179 14.03615,-8.37635 14.3757,-8.58791 0.57586,-0.3588 0.6172,-1.68902 0.61505,-19.79077 l -0.002,-19.40611 -15.16587,-21.27568 c -8.34123,-11.70163 -15.36487,-21.62351 -15.60811,-22.04862 -0.33163,-0.57961 -0.49519,-5.49347 -0.65394,-19.646539 -0.18142,-16.173386 -0.3183,-19.740011 -0.95673,-24.929439 -1.85661,-15.091226 -4.85761,-29.078775 -9.8079,-45.714311 -0.16787,-0.564118 -0.86513,-0.617361 -8.085,-0.617361 h -7.90129 l -1.07893,3.439584 c -2.58711,8.246657 -6.16914,23.944813 -7.74819,33.954861 -1.73105,10.973627 -1.87218,13.220934 -2.09533,33.364043 l -0.21523,19.429322 -0.9168,1.38457 c -0.50424,0.76151 -7.52893,10.65496 -15.61042,21.98544 l -14.69362,20.60088 -0.0358,2.15329 c -0.0197,1.18431 -0.0446,9.9304 -0.0554,19.43576 l -0.0196,17.28248 14.74962,8.82308 c 12.38453,7.40832 14.89652,9.04496 15.66579,10.20678 l 0.91618,1.3837 0.0961,29.21977 0.0961,29.21978 h 18.86572 18.86571 z m -40.4008,-53.67162 c -1.63252,-0.75346 -2.79281,-1.91272 -3.32789,-3.32495 -0.24806,-0.65472 -0.37628,-6.94044 -0.37628,-18.44751 0,-14.52663 0.0935,-17.91052 0.55748,-20.17357 2.45296,-11.96463 12.5218,-20.21751 24.66613,-20.21751 9.71023,0 17.94525,5.08319 22.39978,13.82659 2.68378,5.26774 2.64745,4.91201 2.64745,25.92217 v 18.72262 l -0.99348,1.5016 c -1.93901,2.93075 -1.18632,2.84183 -24.05375,2.84183 -18.80486,0 -20.1998,-0.0422 -21.51944,-0.65127 z m 33.96989,-26.23254 -0.10322,-14.19931 -0.94199,-2.0096 c -1.1986,-2.55706 -3.46287,-4.82287 -6.1175,-6.12166 -1.76114,-0.86165 -2.51966,-1.02027 -4.91968,-1.02878 -1.56062,-0.006 -3.49748,0.19005 -4.30411,0.43464 -2.13909,0.64862 -4.67913,2.48246 -6.15623,4.44462 -2.37207,3.15101 -2.43133,3.61315 -2.43133,18.96157 v 13.71782 h 12.53865 12.53864 z m 31.68915,99.48333 c -0.0233,-5.09323 -0.16144,-9.3001 -0.30696,-9.34861 -0.14552,-0.0485 -2.96333,-0.0882 -6.2618,-0.0882 h -5.99723 v 9.34861 9.34861 h 6.30419 6.30418 z M -256.52502,90.981094 v -3.18314 l -6.2618,0.09634 -6.26181,0.09633 -0.10193,3.086806 -0.10193,3.086806 h 6.36374 6.36373 z m 75.7822,0.09633 -0.11136,-3.086806 -6.26181,-0.09633 -6.26181,-0.09634 v 3.18314 3.183141 h 6.37318 6.37317 z m -68.56677,-53.798606 c 0.0757,-0.242535 0.80265,-2.822222 1.61532,-5.732639 0.81268,-2.910417 1.55798,-5.569479 1.65624,-5.909028 0.16871,-0.583057 -0.98999,-0.617361 -20.85279,-0.617361 h -21.03142 v 6.35 6.35 h 19.23746 c 15.08133,0 19.26722,-0.09527 19.37519,-0.440972 z m 87.32902,-5.909028 v -6.35 h -20.99028 c -11.54465,0 -20.99028,0.109283 -20.99028,0.24285 0,0.196501 2.85891,10.399237 3.36705,12.016178 0.10864,0.345692 4.29517,0.440972 19.37605,0.440972 h 19.23746 z" />
-          </g>
-        </svg>
-    </div>
-    <!-- Vrchní vrstva: Avatar napozicovaný doprostřed (do kokpitu) -->
-    <div style="position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border-radius: 50%; overflow: hidden; border: 1.5px solid white; background: #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-        <img src="${avatarUrl}" style="width: 100%; height: 100%; object-fit: cover;">
-    </div>
-</div>
-`;
-// --------------------------------------------------------
-
-
-
-
-
-    
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-    
+ 
     let currentChallengeIdForShare = null;
     let currentChallengeNameForShare = "";
     let hasCheckedSharedLink = false;
@@ -2507,23 +2471,45 @@ Otevřít mapu akce </button>
 
                             let customIcon;
 
-                            // NOVÁ VÝHYBKA: Bude to Formule, nebo klasika?
-                            if (c.customMarkerType === 'formula') {
-                                // 1. Varianta: FORMULE F1
+                            // NOVÁ VÝHYBKA: Má to být vlastní tvar?
+                            if (c.customMarkerType === 'formula' || c.customMarkerType === 'custom') {
+                                
+                                // 1. Úhel a barva uživatele
                                 let angle = getBearing(prevPosForAngle, lastPos);
-                                let carColor = userObj.userColor || "#FF5E00"; // Nyní si vezme barvu uživatele z profilu!
+                                let carColor = userObj.userColor || "#FF5E00"; 
                                 let finalAvatarUrl = userObj.avatarUrl || 'icon.png';
                                 
-                                let f1HtmlWithRotation = `<div style="transform: rotate(${angle}deg); transform-origin: center center;">
-                                    ${getFormulaHtml(carColor, finalAvatarUrl)}
+                                // 2. Vytáhneme kód z databáze a nahradíme v něm barvu
+                                let customSvgCode = "";
+                                if (c.customMarkerSvg && c.customMarkerSvg.trim() !== "") {
+                                    // TADY JE TO KOUZLO: Aplikace najde slovo a přepíše ho barvou
+                                    customSvgCode = c.customMarkerSvg.replace(/BARVA_UZIVATELE/g, carColor);
+                                } else {
+                                    // Pokud organizátor kód zapomněl vyplnit, dáme tam jako pojistku barevné kolečko
+                                    customSvgCode = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="${carColor}" /></svg>`;
+                                }
+
+                                // 3. Obalíme SVG (spodní vrstva) a Avatara (vrchní vrstva)
+                                let dynamicHtmlWithRotation = `<div style="transform: rotate(${angle}deg); transform-origin: center center;">
+                                    <div style="position: relative; width: 40px; height: 60px;">
+                                        <!-- Spodní vrstva: Váš vložený vektor -->
+                                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                                            ${customSvgCode}
+                                        </div>
+                                        <!-- Vrchní vrstva: Avatar napozicovaný do horní půlky (do "kokpitu") -->
+                                        <div style="position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border-radius: 50%; overflow: hidden; border: 1.5px solid white; background: #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                                            <img src="${finalAvatarUrl}" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                    </div>
                                 </div>`;
 
                                 customIcon = L.divIcon({ 
                                     className: 'custom-map-marker', 
-                                    html: f1HtmlWithRotation, 
+                                    html: dynamicHtmlWithRotation, 
                                     iconSize: [40, 60], 
                                     iconAnchor: [20, 30] 
                                 });
+
                             } else {
                                 // 2. Varianta: KLASICKÝ AVATAR (Výchozí stav)
                                 customIcon = L.divIcon({ 
@@ -2730,6 +2716,7 @@ Otevřít mapu akce </button>
         const name = document.getElementById('new-chal-name').value.trim(); const targetKm = parseFloat(document.getElementById('new-chal-km').value);
         const challengeType = document.querySelector('#new-chal-type .chip.active').getAttribute('data-val');
         const customMarkerType = document.querySelector('#new-chal-marker-type .chip.active').getAttribute('data-val');
+        const customMarkerSvg = document.getElementById('new-chal-custom-svg').value.trim(); // NOVÉ
 
         const mapType = document.querySelector('#new-chal-map-type .chip.active').getAttribute('data-val');
         const mapUrl = document.getElementById('new-chal-map').value.trim(); 
@@ -2764,7 +2751,7 @@ Otevřít mapu akce </button>
 
         isSaving = true; const btn = document.getElementById('btn-create-chal'); btn.innerText = "Vytvářím..."; btn.disabled = true;
         try { 
-            await addDoc(collection(db, "challenges"), { name, targetKm, subtitle, visibility, challengeType, customMarkerType, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, virtualLineWidth: vLineWidth, virtualLineStyle: vLineStyle, virtualLineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities, creatorId: currentUser.uid, members: [currentUser.uid], createdAt: new Date() }); 
+            await addDoc(collection(db, "challenges"), { name, targetKm, subtitle, visibility, challengeType, customMarkerType, customMarkerSvg, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, virtualLineWidth: vLineWidth, virtualLineStyle: vLineStyle, virtualLineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities, creatorId: currentUser.uid, members: [currentUser.uid], createdAt: new Date() });
             window.closeCreateChallengeModal(); 
             document.getElementById('new-chal-name').value = ''; document.getElementById('new-chal-km').value = ''; document.getElementById('new-chal-map').value = ''; document.getElementById('new-chal-desc').value = ''; document.getElementById('new-chal-rules').value = ''; document.getElementById('new-chal-subtitle').value = '';
             document.getElementById('new-chal-v-img').value = ''; document.getElementById('new-chal-v-svg').value = ''; document.getElementById('new-chal-v-file').value = '';
@@ -2800,6 +2787,7 @@ Otevřít mapu akce </button>
                 c.classList.remove('active'); 
                 if(c.getAttribute('data-val') === storedMarker) c.classList.add('active'); 
             });
+            document.getElementById('edit-chal-custom-svg').value = data.customMarkerSvg || '';
             document.getElementById('edit-chal-v-img').value = data.virtualMapUrl || '';
             document.getElementById('edit-chal-v-w').value = data.virtualMapWidth || 3200;
             document.getElementById('edit-chal-v-h').value = data.virtualMapHeight || 2400;
@@ -2864,6 +2852,7 @@ Otevřít mapu akce </button>
         const name = document.getElementById('edit-chal-name').value.trim(); const targetKm = parseFloat(document.getElementById('edit-chal-km').value);
         const challengeType = document.querySelector('#edit-chal-type .chip.active').getAttribute('data-val');
         const customMarkerType = document.querySelector('#edit-chal-marker-type .chip.active').getAttribute('data-val');
+        const customMarkerSvg = document.getElementById('edit-chal-custom-svg').value.trim(); // NOVÉ
 
         const mapType = document.querySelector('#edit-chal-map-type .chip.active').getAttribute('data-val');
         const mapUrl = document.getElementById('edit-chal-map').value.trim();
@@ -2894,7 +2883,7 @@ Otevřít mapu akce </button>
 
         if(selectedChallengeId) { 
             isSaving = true; const btn = document.getElementById('btn-edit-chal'); btn.innerText = "Ukládám..."; btn.disabled = true;
-            try { await updateDoc(doc(db, "challenges", selectedChallengeId), { name, targetKm, subtitle, visibility, challengeType, customMarkerType, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, virtualLineWidth: vLineWidth, virtualLineStyle: vLineStyle, virtualLineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities }); window.closeEditChallengeModal(); } 
+            try { await updateDoc(doc(db, "challenges", selectedChallengeId), { name, targetKm, subtitle, visibility, challengeType, customMarkerType, customMarkerSvg, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, virtualLineWidth: vLineWidth, virtualLineStyle: vLineStyle, virtualLineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities }); window.closeEditChallengeModal(); } 
             catch (e) { alert("Chyba."); console.error(e); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; }
         }
     };
