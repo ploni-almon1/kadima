@@ -769,8 +769,13 @@
                   <input type="number" id="new-chal-v-width" class="date-input" style="background:var(--gray-light); margin-bottom:0;" value="10">
               </div>
               <div style="flex:1;">
-                  <label>Typ čáry:</label>
-                  <div class="activity-chips" id="new-chal-v-style" style="margin-bottom:0; justify-content:flex-start;">
+                  <label>Krytí čáry (%):</label>
+                  <input type="number" id="new-chal-v-opacity" class="date-input" style="background:var(--gray-light); margin-bottom:0;" value="100" min="10" max="100">
+              </div>
+          </div>
+          <div style="margin-bottom:10px;">
+              <label>Typ čáry:</label>
+              <div class="activity-chips" id="new-chal-v-style" style="margin-bottom:0; justify-content:flex-start;">
                       <div class="chip active" data-val="solid" onclick="selectSingleChip(this, 'new-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Plná</div>
                       <div class="chip" data-val="dashed" onclick="selectSingleChip(this, 'new-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Čárkovaná</div>
                   </div>
