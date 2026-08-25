@@ -659,6 +659,10 @@
     <div class="modal-content">
       <h3>Upravit profil</h3>
       <div class="date-input-wrapper"><label>Tvoje jméno / Přezdívka:</label><input type="text" id="profile-edit-name-input" class="date-input" placeholder="Jméno"></div>
+      <div class="date-input-wrapper" style="display:flex; align-items:center; justify-content:space-between; padding: 10px 15px; border: 1px solid var(--gray-border); border-radius: 12px; margin-bottom: 15px;">
+          <label style="margin-bottom:0; font-weight:600; color:var(--text-dark);">Moje závodní barva:</label>
+          <input type="color" id="profile-edit-color-input" style="width: 40px; height: 40px; padding: 0; border: none; border-radius: 8px; cursor: pointer; background: transparent;">
+      </div>
       <div class="date-input-wrapper"><label>Nová profilová fotka:</label><input type="file" id="profile-file-input" class="date-input" accept="image/*" onchange="handleProfileFileSelect(this)">
         <button type="button" class="btn-delete-photo" id="btn-delete-avatar" onclick="deleteProfilePhoto()">Smazat stávající fotku</button>
       </div>
@@ -2471,6 +2475,7 @@ Otevřít mapu akce </button>
                             }
 
                             let traveled = 0; let lastPos = latlngsFlat[0];
+                            let prevPosForAngle = latlngsFlat[0];
 
                             if (trackMetersToTravel > 0) {
                                 for (let i = 1; i < latlngsFlat.length; i++) {
@@ -2479,17 +2484,47 @@ Otevřít mapu akce </button>
                                         let ratio = segmentDist > 0 ? (trackMetersToTravel - traveled) / segmentDist : 0;
                                         let lat = p1.lat + (p2.lat - p1.lat) * ratio; let lng = p1.lng + (p2.lng - p1.lng) * ratio; 
                                         lastPos = L.latLng(lat, lng);
+                                        prevPosForAngle = p1;
                                         break; 
                                     }
                                     traveled += segmentDist;
                                     lastPos = p2;
+                                    prevPosForAngle = p1;
                                 }
+                            } else if (latlngsFlat.length > 1) {
+                                prevPosForAngle = latlngsFlat[0];
+                                lastPos = latlngsFlat[1];
                             }
 
-                            const customIcon = L.divIcon({ 
-                                className: 'custom-map-marker', html: `<div class="race-marker-container" style="border-color: ${borderColor};">${avatarHtml}</div>`, 
-                                iconSize: [34, 34], iconAnchor: [17, 17] 
-                            });
+                            let customIcon;
+
+                            // NOVÁ VÝHYBKA: Bude to Formule, nebo klasika?
+                            if (c.customMarkerType === 'formula') {
+                                // 1. Varianta: FORMULE F1
+                                let angle = getBearing(prevPosForAngle, lastPos);
+                                let carColor = userObj.userColor || "#FF5E00"; // Nyní si vezme barvu uživatele z profilu!
+                                let finalAvatarUrl = userObj.avatarUrl || 'icon.png';
+                                
+                                let f1HtmlWithRotation = `<div style="transform: rotate(${angle}deg); transform-origin: center center;">
+                                    ${getFormulaHtml(carColor, finalAvatarUrl)}
+                                </div>`;
+
+                                customIcon = L.divIcon({ 
+                                    className: 'custom-map-marker', 
+                                    html: f1HtmlWithRotation, 
+                                    iconSize: [40, 60], 
+                                    iconAnchor: [20, 30] 
+                                });
+                            } else {
+                                // 2. Varianta: KLASICKÝ AVATAR (Výchozí stav)
+                                customIcon = L.divIcon({ 
+                                    className: 'custom-map-marker', 
+                                    html: `<div class="race-marker-container" style="border-color: ${borderColor};">${avatarHtml}</div>`, 
+                                    iconSize: [34, 34], 
+                                    iconAnchor: [17, 17] 
+                                });
+                            }
+
                             const m = L.marker(lastPos, {icon: customIcon}).addTo(leafletMap).bindPopup(popupText);
                             mapLayers.push(m);
                         });
@@ -2589,7 +2624,12 @@ Otevřít mapu akce </button>
     window.openProfileEditModal = async () => {
         window.pushModalState();
         if(!currentUser) return; const userSnap = await getDoc(doc(db, "users", currentUser.uid)); const deleteBtn = document.getElementById('btn-delete-avatar');
-        if(userSnap.exists()){ const data = userSnap.data(); document.getElementById('profile-edit-name-input').value = data.name || ""; if(data.avatarUrl) { deleteBtn.style.display = "block"; } else { deleteBtn.style.display = "none"; } }
+        if(userSnap.exists()){ 
+    const data = userSnap.data(); 
+    document.getElementById('profile-edit-name-input').value = data.name || ""; 
+    document.getElementById('profile-edit-color-input').value = data.userColor || "#FF5E00"; // Načte barvu nebo dá výchozí Kadima oranžovou
+    if(data.avatarUrl) { deleteBtn.style.display = "block"; } else { deleteBtn.style.display = "none"; } 
+}
         document.getElementById('profile-file-input').value = ""; document.getElementById('cropper-wrapper').style.display = "none";
         if(cropper) { cropper.destroy(); cropper = null; } document.getElementById('profile-edit-modal').classList.add('active');
     };
@@ -2611,7 +2651,10 @@ Otevřít mapu akce </button>
         }; reader.readAsDataURL(file);
     };
     window.saveProfileEdit = async () => {
-        const newName = document.getElementById('profile-edit-name-input').value.trim(); if(!newName) return; let updateData = { name: newName };
+        const newName = document.getElementById('profile-edit-name-input').value.trim(); 
+        const newColor = document.getElementById('profile-edit-color-input').value; // Získá barvu
+        if(!newName) return; 
+        let updateData = { name: newName, userColor: newColor }; // Uloží barvu
         if(cropper) { const canvas = cropper.getCroppedCanvas({ width: 150, height: 150 }); updateData.avatarUrl = canvas.toDataURL('image/jpeg', 0.75); }
         await updateDoc(doc(db, "users", currentUser.uid), updateData); window.closeProfileEditModal();
     };
