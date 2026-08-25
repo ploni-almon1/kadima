@@ -1803,8 +1803,8 @@
                 } else {
                     statsCollabDiv.appendChild(statsCard);
                 }
-            } else if (!isCreator) {
-                // Uživatel v akci NENÍ a zároveň ji NEVYTVOŘIL. Nyní to chytře roztřídíme:
+            } else {
+                // Uživatel v akci NENÍ. (Je jedno, kdo ji vytvořil)
                 if (isPublic) {
                     // 1. Veřejné akce jdou VŽDY do sekce "Další komunitní akce"
                     const oCard = document.createElement('div'); 
@@ -1813,8 +1813,8 @@
                     oCard.onclick = () => { openChallengeDetail(c.id); };
                     oCard.innerHTML = previewCardHtml;
                     statsOtherList.appendChild(oCard);
-                } else if (isFollowingCreator || isUserAdmin) {
-                    // 2. Soukromé akce jdou do "Akce mých sledujících" (Admin je vidí také)
+                } else if (isFollowingCreator || isUserAdmin || isCreator) {
+                    // 2. Soukromé akce jdou do "Akce mých sledujících" (Zobrazí se i tobě jako tvůrci)
                     followerChalCount++;
                     const fCard = document.createElement('div');
                     fCard.style.cssText = "background-color: var(--white); border: 1px solid var(--gray-border); border-radius: 20px; padding: 20px; margin-bottom:15px; text-align:left; cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,0.06);";
