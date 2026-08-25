@@ -719,14 +719,25 @@
           <input type="number" id="new-chal-km" class="date-input" placeholder="Např. 300">
       </div>
 
-      <div id="new-chal-gpx-fields">
-          <div class="date-input-wrapper">
-              <label>URL odkaz na GPX mapu (volitelné):</label>
-              <div style="display:flex; gap:10px;">
-                  <input type="text" id="new-chal-map" class="date-input" placeholder="https://..." style="flex:1;">
-                  <button type="button" class="btn-fetch-gpx" onclick="calculateGpxDistance('new-chal-map', 'new-chal-gpx-hint')">Spočítat km</button>
+      <div id="new-chal-gpx-fields" style="background: var(--gray-light); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
+          <div class="date-input-wrapper" style="margin-bottom: 15px;">
+              <label style="text-align:center;">Tvar GPX trasy:</label>
+              <div class="activity-chips" style="margin-bottom:0; display:flex; flex-wrap:nowrap; gap:10px;" id="new-chal-gpx-shape">
+                <div class="chip active" style="flex:1; text-align:center; padding: 8px;" data-val="route" onclick="selectSingleChip(this, 'new-chal-gpx-shape'); document.getElementById('new-chal-laps-wrapper').style.display='none';">Z bodu A do B</div>
+                <div class="chip" style="flex:1; text-align:center; padding: 8px;" data-val="circuit" onclick="selectSingleChip(this, 'new-chal-gpx-shape'); document.getElementById('new-chal-laps-wrapper').style.display='block';">Okruh (více kol)</div>
               </div>
-              <div id="new-chal-gpx-hint" style="font-size: 0.85em; color: var(--primary-orange); font-weight: 600; margin-top: 5px;"></div>
+          </div>
+          <div class="date-input-wrapper" id="new-chal-laps-wrapper" style="display:none; margin-bottom: 15px;">
+              <label>Počet okruhů (kol):</label>
+              <input type="number" id="new-chal-gpx-laps" class="date-input" style="background:var(--white); margin-bottom:0;" value="1" min="1">
+          </div>
+          <div class="date-input-wrapper" style="margin-bottom: 0;">
+              <label>URL odkaz na GPX mapu:</label>
+              <div style="display:flex; gap:10px;">
+                  <input type="text" id="new-chal-map" class="date-input" style="background:var(--white); margin-bottom:0;" placeholder="https://..." style="flex:1;">
+                  <button type="button" class="btn-fetch-gpx" onclick="calculateGpxDistance('new-chal-map', 'new-chal-gpx-hint', 'new-chal-gpx-laps', 'new-chal-km')">Spočítat km</button>
+              </div>
+              <div id="new-chal-gpx-hint" style="font-size: 0.85em; color: var(--primary-orange); font-weight: 600; margin-top: 8px;"></div>
           </div>
       </div>
 
@@ -750,7 +761,7 @@
       </div>
 
       <!-- PŘESUNUTO: Společný vzhled čáry pro všechny mapy -->
-      <div class="date-input-wrapper" style="background: var(--white); border: 1px solid var(--gray-border); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
+      <div id="new-chal-line-styling" class="date-input-wrapper" style="background: var(--white); border: 1px solid var(--gray-border); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
           <label style="text-align:center; font-weight:700;">Vzhled vyznačené trasy (GPX i Fiktivní)</label>
           <div style="display:flex; gap:10px; margin-bottom:10px; margin-top: 10px;">
               <div style="flex:1;">
@@ -876,14 +887,25 @@
 
       <div class="date-input-wrapper"><label>Cílová vzdálenost pro splnění výzvy (km):</label><input type="number" id="edit-chal-km" class="date-input"></div>
 
-      <div id="edit-chal-gpx-fields">
-          <div class="date-input-wrapper">
-              <label>URL odkaz na GPX mapu (volitelné):</label>
-              <div style="display:flex; gap:10px;">
-                  <input type="text" id="edit-chal-map" class="date-input" placeholder="https://..." style="flex:1;">
-                  <button type="button" class="btn-fetch-gpx" onclick="calculateGpxDistance('edit-chal-map', 'edit-chal-gpx-hint')">Spočítat km</button>
+      <div id="edit-chal-gpx-fields" style="background: var(--gray-light); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
+          <div class="date-input-wrapper" style="margin-bottom: 15px;">
+              <label style="text-align:center;">Tvar GPX trasy:</label>
+              <div class="activity-chips" style="margin-bottom:0; display:flex; flex-wrap:nowrap; gap:10px;" id="edit-chal-gpx-shape">
+                <div class="chip active" style="flex:1; text-align:center; padding: 8px;" data-val="route" onclick="selectSingleChip(this, 'edit-chal-gpx-shape'); document.getElementById('edit-chal-laps-wrapper').style.display='none';">Z bodu A do B</div>
+                <div class="chip" style="flex:1; text-align:center; padding: 8px;" data-val="circuit" onclick="selectSingleChip(this, 'edit-chal-gpx-shape'); document.getElementById('edit-chal-laps-wrapper').style.display='block';">Okruh (více kol)</div>
               </div>
-              <div id="edit-chal-gpx-hint" style="font-size: 0.85em; color: var(--primary-orange); font-weight: 600; margin-top: 5px;"></div>
+          </div>
+          <div class="date-input-wrapper" id="edit-chal-laps-wrapper" style="display:none; margin-bottom: 15px;">
+              <label>Počet okruhů (kol):</label>
+              <input type="number" id="edit-chal-gpx-laps" class="date-input" style="background:var(--white); margin-bottom:0;" value="1" min="1">
+          </div>
+          <div class="date-input-wrapper" style="margin-bottom: 0;">
+              <label>URL odkaz na GPX mapu:</label>
+              <div style="display:flex; gap:10px;">
+                  <input type="text" id="edit-chal-map" class="date-input" style="background:var(--white); margin-bottom:0;" placeholder="https://..." style="flex:1;">
+                  <button type="button" class="btn-fetch-gpx" onclick="calculateGpxDistance('edit-chal-map', 'edit-chal-gpx-hint', 'edit-chal-gpx-laps', 'edit-chal-km')">Spočítat km</button>
+              </div>
+              <div id="edit-chal-gpx-hint" style="font-size: 0.85em; color: var(--primary-orange); font-weight: 600; margin-top: 8px;"></div>
           </div>
       </div>
 
@@ -907,7 +929,7 @@
       </div>
       
       <!-- PŘESUNUTO: Společný vzhled čáry pro všechny mapy -->
-      <div class="date-input-wrapper" style="background: var(--white); border: 1px solid var(--gray-border); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
+      <div id="edit-chal-line-styling" class="date-input-wrapper" style="background: var(--white); border: 1px solid var(--gray-border); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
           <label style="text-align:center; font-weight:700;">Vzhled vyznačené trasy (GPX i Fiktivní)</label>
           <div style="display:flex; gap:10px; margin-bottom:10px; margin-top: 10px;">
               <div style="flex:1;">
