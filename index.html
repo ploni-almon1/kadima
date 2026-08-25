@@ -2090,24 +2090,78 @@ Otevřít mapu akce </button>
         reader.readAsDataURL(file);
     };
 
-    window.calculateGpxDistance = async (urlInputId, hintId) => {
-        const url = document.getElementById(urlInputId).value.trim(); if(!url) { alert("Zadejte nejdříve platný odkaz na GPX mapu."); return; }
-        const btn = event.target; const originalText = btn.innerText; btn.innerText = "Počítám..."; btn.disabled = true;
+    window.calculateGpxDistance = async (urlInputId, hintId, lapsInputId, targetKmInputId) => {
+        const url = document.getElementById(urlInputId).value.trim(); 
+        if(!url) { alert("Zadejte nejdříve platný odkaz na GPX mapu."); return; }
+        
+        const btn = event.target; 
+        const originalText = btn.innerText; 
+        btn.innerText = "Počítám..."; 
+        btn.disabled = true;
+        
         try {
-            const res = await fetch(url); const gpxText = await res.text(); const gpxXml = new DOMParser().parseFromString(gpxText, "application/xml"); const geojson = toGeoJSON.gpx(gpxXml);
-            let latlngsFlat = []; const tempLayer = L.geoJSON(geojson);
-            tempLayer.eachLayer(layer => { if (layer.getLatLngs) { const coords = layer.getLatLngs(); if (Array.isArray(coords[0])) { coords.forEach(seg => latlngsFlat.push(...seg)); } else { latlngsFlat.push(...coords); } } });
+            const res = await fetch(url); 
+            const gpxText = await res.text(); 
+            const gpxXml = new DOMParser().parseFromString(gpxText, "application/xml"); 
+            const geojson = toGeoJSON.gpx(gpxXml);
+            
+            let latlngsFlat = []; 
+            const tempLayer = L.geoJSON(geojson);
+            tempLayer.eachLayer(layer => { 
+                if (layer.getLatLngs) { 
+                    const coords = layer.getLatLngs(); 
+                    if (Array.isArray(coords[0])) { 
+                        coords.forEach(seg => latlngsFlat.push(...seg)); 
+                    } else { 
+                        latlngsFlat.push(...coords); 
+                    } 
+                } 
+            });
+            
             if(latlngsFlat.length > 1) {
-                let totalMeters = 0; for(let i=1; i<latlngsFlat.length; i++) { totalMeters += latlngsFlat[i-1].distanceTo(latlngsFlat[i]); }
-                let totalKm = totalMeters / 1000; 
+                let totalMeters = 0; 
+                for(let i=1; i<latlngsFlat.length; i++) { 
+                    totalMeters += latlngsFlat[i-1].distanceTo(latlngsFlat[i]); 
+                }
+                let singleLapKm = totalMeters / 1000; 
                 
-                // Místo natvrdo vložení do inputu vypíšeme nápovědu o délce okruhu
+                // Zjistíme počet okruhů (pokud je vybrána volba Okruh)
+                let laps = 1;
+                const lapsInput = document.getElementById(lapsInputId);
+                const lapsWrapper = lapsInput ? lapsInput.closest('.date-input-wrapper') : null;
+                // Pokud je wrapper zobrazený, vezmeme číslo od uživatele, jinak to bereme jako 1 trasu
+                if (lapsWrapper && lapsWrapper.style.display !== 'none' && lapsInput) {
+                    laps = parseInt(lapsInput.value) || 1;
+                }
+                
+                let finalTotalKm = singleLapKm * laps;
+                
+                // Vypíšeme chytrou nápovědu pod tlačítko
                 const hintEl = document.getElementById(hintId);
                 if(hintEl) {
-                    hintEl.innerText = `Délka jednoho okruhu z GPX: ${totalKm.toFixed(2)} km`;
+                    if (laps > 1) {
+                        hintEl.innerText = `Délka 1 okruhu: ${singleLapKm.toFixed(2)} km | Celkem (${laps} kol): ${finalTotalKm.toFixed(2)} km`;
+                    } else {
+                        hintEl.innerText = `Délka trasy z GPX: ${singleLapKm.toFixed(2)} km`;
+                    }
                 }
-            } else { alert("Z této mapy se nepodařilo přečíst body trasy."); }
-        } catch(e) { alert("Chyba při načítání GPX. Zkontrolujte, zda je odkaz veřejný a platný."); console.error(e); } finally { btn.innerText = originalText; btn.disabled = false; }
+
+                // Automaticky propíšeme výsledek do políčka "Cílová vzdálenost" (zaokrouhleno na 1 des. místo)
+                const targetKmInput = document.getElementById(targetKmInputId);
+                if (targetKmInput) {
+                    targetKmInput.value = finalTotalKm.toFixed(1);
+                }
+
+            } else { 
+                alert("Z této mapy se nepodařilo přečíst body trasy."); 
+            }
+        } catch(e) { 
+            alert("Chyba při načítání GPX. Zkontrolujte, zda je odkaz veřejný a platný."); 
+            console.error(e); 
+        } finally { 
+            btn.innerText = originalText; 
+            btn.disabled = false; 
+        }
     };
 
     function generateLeaderboardHtml(kmDataMap) {
