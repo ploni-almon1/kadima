@@ -2272,7 +2272,13 @@ Otevřít mapu akce </button>
                     isCircuit = true;
                 }
 
-                const baseLine = L.polyline(latlngsFlat, {color: '#9CA3AF', weight: 4, dashArray: '5, 10', lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap);
+                // NOVÉ: Načtení společných stylů pro GPX
+                const vColor = c.virtualLineColor || '#4F46E5';
+                const vWidth = c.virtualLineWidth || 6;
+                const vStyle = c.virtualLineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 1.5}` : '';
+
+                // Základní čára (šedá, poloprůhledná, aby na ní pak hezky vynikla ta barevná)
+                const baseLine = L.polyline(latlngsFlat, {color: '#9CA3AF', weight: vWidth, opacity: 0.5, dashArray: vStyle, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap);
                 mapLayers.push(baseLine); leafletMap.fitBounds(baseLine.getBounds());
 
                 if (isRace) {
@@ -2310,21 +2316,20 @@ Otevřít mapu akce </button>
                                 popupText = `<div style="text-align:center; font-family:'Inter',sans-serif;"><b>${userObj.name}</b><br><strong style="font-size:1.2em;">${currentKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} km</strong></div>`;
                             }
 
-                            let traveled = 0; let lastPos = latlngsFlat[0];
-
-                            if (trackMetersToTravel > 0) {
-                                for (let i = 1; i < latlngsFlat.length; i++) {
-                                    let p1 = latlngsFlat[i-1]; let p2 = latlngsFlat[i]; let segmentDist = p1.distanceTo(p2);
-                                    if (traveled + segmentDist >= trackMetersToTravel) {
-                                        let ratio = segmentDist > 0 ? (trackMetersToTravel - traveled) / segmentDist : 0;
-                                        let lat = p1.lat + (p2.lat - p1.lat) * ratio; let lng = p1.lng + (p2.lng - p1.lng) * ratio; 
-                                        lastPos = L.latLng(lat, lng);
-                                        break; 
-                                    }
-                                    traveled += segmentDist;
-                                    lastPos = p2;
-                                }
+                          let traveled = 0; let lastPos = latlngsFlat[0];
+                    if (trackMetersToTravel > 0) {
+                        for (let i = 1; i < latlngsFlat.length; i++) {
+                            let p1 = latlngsFlat[i-1]; let p2 = latlngsFlat[i]; let segmentDist = p1.distanceTo(p2);
+                            if (traveled + segmentDist >= trackMetersToTravel) {
+                                let ratio = segmentDist > 0 ? (trackMetersToTravel - traveled) / segmentDist : 0;
+                                let lat = p1.lat + (p2.lat - p1.lat) * ratio; let lng = p1.lng + (p2.lng - p1.lng) * ratio; lastPos = L.latLng(lat, lng);
+                                let segLine = L.polyline([p1, lastPos], {color: vColor, weight: vWidth, dashArray: vStyle, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap); mapLayers.push(segLine); break; 
+                            } else {
+                                let segLine = L.polyline([p1, p2], {color: vColor, weight: vWidth, dashArray: vStyle, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap); mapLayers.push(segLine);
                             }
+                            traveled += segmentDist;
+                        }
+                    }
 
                             const customIcon = L.divIcon({ 
                                 className: 'custom-map-marker', html: `<div class="race-marker-container" style="border-color: ${borderColor};">${avatarHtml}</div>`, 
