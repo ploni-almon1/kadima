@@ -933,17 +933,7 @@
           </div>
       </div>
       
-      <!-- PŘESUNUTO: Společný vzhled čáry pro všechny mapy -->
-      <div id="edit-chal-line-styling" class="date-input-wrapper" style="background: var(--white); border: 1px solid var(--gray-border); padding: 15px; border-radius: 16px; margin-bottom: 20px;">
-          <label style="text-align:center; font-weight:700;">Vzhled vyznačené trasy (GPX i Fiktivní)</label>
-          <div style="display:flex; gap:10px; margin-bottom:10px; margin-top: 10px;">
-              <div style="flex:1;">
-                  <label>Šířka čáry (px):</label>
-                  <input type="number" id="edit-chal-v-width" class="date-input" style="background:var(--gray-light); margin-bottom:0;" value="10">
-              </div>
-              <div style="flex:1;">
-                  <label>Typ čáry:</label>
-                  <div class="activity-chips" id="edit-chal-v-style" style="margin-bottom:0; justify-content:flex-start;">
+      <div id="edit-chal-line-styling" class="date-input-wrapper" style="background: var(--white); border: 1px solid var(--gray-border); padding:
                       <div class="chip active" data-val="solid" onclick="selectSingleChip(this, 'edit-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Plná</div>
                       <div class="chip" data-val="dashed" onclick="selectSingleChip(this, 'edit-chal-v-style')" style="padding: 8px 12px; font-size:0.8em;">Čárkovaná</div>
                   </div>
@@ -2366,14 +2356,16 @@ Otevřít mapu akce </button>
                 // Načtení společných stylů
                 const vColor = c.virtualLineColor || '#4F46E5';
                 const vWidth = c.virtualLineWidth || 6;
+                const vOpacity = c.virtualLineOpacity !== undefined ? c.virtualLineOpacity : 1; // Načte naši uloženou průhlednost
                 const vStyle = c.virtualLineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 1.5}` : '';
 
                 // Zjistíme, co vykreslit: u závodu dáme vybranou barvu a styl, u výzvy necháme šedou klasiku pro gradient
                 let baseColor = isRace ? vColor : '#9CA3AF';
                 let baseThickness = isRace ? vWidth : 4;
+                let baseOpacityFinal = isRace ? vOpacity : 1; 
                 let baseDash = isRace ? vStyle : '5, 10';
 
-                const baseLine = L.polyline(latlngsFlat, {color: baseColor, weight: baseThickness, dashArray: baseDash, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap);
+                const baseLine = L.polyline(latlngsFlat, {color: baseColor, weight: baseThickness, opacity: baseOpacityFinal, dashArray: baseDash, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap);
                 mapLayers.push(baseLine); leafletMap.fitBounds(baseLine.getBounds());
 
                 if (isRace) {
@@ -2628,6 +2620,7 @@ Otevřít mapu akce </button>
         const vSvg = document.getElementById('new-chal-v-svg').value.trim();
 
         const vLineWidth = parseFloat(document.getElementById('new-chal-v-width').value) || 10;
+        const vLineOpacity = (parseFloat(document.getElementById('new-chal-v-opacity').value) || 100) / 100;
         const vLineStyle = document.querySelector('#new-chal-v-style .chip.active').getAttribute('data-val');
         const vLineColor = document.querySelector('#new-chal-v-color .color-chip.active').getAttribute('data-val');
 
