@@ -710,7 +710,7 @@
           <label style="text-align:center;">Druh mapy pro tuto akci:</label>
           <div class="activity-chips" style="margin-bottom:0; display:flex; flex-wrap:nowrap; gap:10px;" id="new-chal-map-type">
             <div class="chip active" style="flex:1; text-align:center;" data-val="gpx" onclick="selectSingleChip(this, 'new-chal-map-type'); document.getElementById('new-chal-gpx-fields').style.display='block'; document.getElementById('new-chal-virtual-fields').style.display='none';">Reálná (GPX)</div>
-            <div class="chip" style="flex:1; text-align:center;" data-val="virtual" onclick="selectSingleChip(this, 'new-chal-map-type'); document.getElementById('new-chal-gpx-fields').style.display='none'; document.getElementById('new-chal-virtual-fields').style.display='block';">Virtuální mapa</div>
+            <div class="chip" style="flex:1; text-align:center;" data-val="virtual" onclick="selectSingleChip(this, 'new-chal-map-type'); document.getElementById('new-chal-gpx-fields').style.display='none'; document.getElementById('new-chal-virtual-fields').style.display='block';">Fiktivní mapa</div>
           </div>
       </div>
 
@@ -868,7 +868,7 @@
           <label style="text-align:center;">Druh mapy pro tuto akci:</label>
           <div class="activity-chips" style="margin-bottom:0; display:flex; flex-wrap:nowrap; gap:10px;" id="edit-chal-map-type">
             <div class="chip" data-val="gpx" style="flex:1; text-align:center;" onclick="selectSingleChip(this, 'edit-chal-map-type'); document.getElementById('edit-chal-gpx-fields').style.display='block'; document.getElementById('edit-chal-virtual-fields').style.display='none';">Reálná (GPX)</div>
-            <div class="chip" data-val="virtual" style="flex:1; text-align:center;" onclick="selectSingleChip(this, 'edit-chal-map-type'); document.getElementById('edit-chal-gpx-fields').style.display='none'; document.getElementById('edit-chal-virtual-fields').style.display='block';">Virtuální mapa</div>
+            <div class="chip" data-val="virtual" style="flex:1; text-align:center;" onclick="selectSingleChip(this, 'edit-chal-map-type'); document.getElementById('edit-chal-gpx-fields').style.display='none'; document.getElementById('edit-chal-virtual-fields').style.display='block';">Fiktivní mapa</div>
           </div>
       </div>
 
@@ -1675,7 +1675,7 @@
 
                 if(hasMap) {
                     let mapBtn = document.createElement('div'); mapBtn.className = 'leaderboard-item'; mapBtn.style.padding = '15px'; mapBtn.style.borderRadius = '12px'; mapBtn.style.background = 'var(--gray-light)';
-                    let typIkony = c.mapType === 'virtual' ? 'Virtuální mapa' : 'GPX mapa';
+                    let typIkony = c.mapType === 'virtual' ? 'Fiktivní mapa' : 'GPX mapa';
                     mapBtn.innerHTML = `<div style="text-align: left;"><div class="lb-name" style="font-size:1.05em;">${c.name}</div><div style="font-size:0.8em; color:#4F46E5; font-weight:600; margin-top:4px;">${typIkony}</div></div><div style="margin-left:auto; font-size:0.8em; color:var(--text-gray); font-weight:600;">${totalChallengeKm.toLocaleString('cs-CZ', {maximumFractionDigits:1})} /${c.targetKm} km</div>`;
                     mapBtn.onclick = () => { closeMapListModal(); handleMapSelect(c.id); }; mapListModal.appendChild(mapBtn);
                 }
