@@ -718,6 +718,15 @@
           </div>
       </div>
 
+      <!-- NOVÝ BLOK PRO FORMULI -->
+      <div class="date-input-wrapper" style="margin-top: 20px;">
+          <label style="text-align:center;">Tvar závodníka na mapě:</label>
+          <div class="activity-chips" style="margin-bottom:0; display:flex; flex-wrap:nowrap; gap:10px;" id="new-chal-marker-type">
+            <div class="chip active" style="flex:1; text-align:center;" data-val="avatar" onclick="selectSingleChip(this, 'new-chal-marker-type')">Kulatý avatar</div>
+            <div class="chip" style="flex:1; text-align:center;" data-val="formula" onclick="selectSingleChip(this, 'new-chal-marker-type')">Formule</div>
+          </div>
+      </div>
+
       <div class="date-input-wrapper">
           <label>Cílová vzdálenost pro splnění výzvy (km):</label>
           <input type="number" id="new-chal-km" class="date-input" placeholder="Např. 300">
@@ -2720,6 +2729,7 @@ Otevřít mapu akce </button>
         if(isSaving) return;
         const name = document.getElementById('new-chal-name').value.trim(); const targetKm = parseFloat(document.getElementById('new-chal-km').value);
         const challengeType = document.querySelector('#new-chal-type .chip.active').getAttribute('data-val');
+        const customMarkerType = document.querySelector('#new-chal-marker-type .chip.active').getAttribute('data-val');
 
         const mapType = document.querySelector('#new-chal-map-type .chip.active').getAttribute('data-val');
         const mapUrl = document.getElementById('new-chal-map').value.trim(); 
@@ -2754,7 +2764,7 @@ Otevřít mapu akce </button>
 
         isSaving = true; const btn = document.getElementById('btn-create-chal'); btn.innerText = "Vytvářím..."; btn.disabled = true;
         try { 
-            await addDoc(collection(db, "challenges"), { name, targetKm, subtitle, visibility, challengeType, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, virtualLineWidth: vLineWidth, virtualLineStyle: vLineStyle, virtualLineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities, creatorId: currentUser.uid, members: [currentUser.uid], createdAt: new Date() }); 
+            await addDoc(collection(db, "challenges"), { name, targetKm, subtitle, visibility, challengeType, customMarkerType, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, virtualLineWidth: vLineWidth, virtualLineStyle: vLineStyle, virtualLineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities, creatorId: currentUser.uid, members: [currentUser.uid], createdAt: new Date() }); 
             window.closeCreateChallengeModal(); 
             document.getElementById('new-chal-name').value = ''; document.getElementById('new-chal-km').value = ''; document.getElementById('new-chal-map').value = ''; document.getElementById('new-chal-desc').value = ''; document.getElementById('new-chal-rules').value = ''; document.getElementById('new-chal-subtitle').value = '';
             document.getElementById('new-chal-v-img').value = ''; document.getElementById('new-chal-v-svg').value = ''; document.getElementById('new-chal-v-file').value = '';
@@ -2783,6 +2793,13 @@ Otevřít mapu akce </button>
             } else {
                 document.getElementById('edit-chal-gpx-fields').style.display='block'; document.getElementById('edit-chal-virtual-fields').style.display='none';
             }
+
+            // NOVÉ: Načtení výběru ikonky pro mapu
+            let storedMarker = data.customMarkerType || 'avatar'; 
+            document.querySelectorAll('#edit-chal-marker-type .chip').forEach(c => { 
+                c.classList.remove('active'); 
+                if(c.getAttribute('data-val') === storedMarker) c.classList.add('active'); 
+            });
             document.getElementById('edit-chal-v-img').value = data.virtualMapUrl || '';
             document.getElementById('edit-chal-v-w').value = data.virtualMapWidth || 3200;
             document.getElementById('edit-chal-v-h').value = data.virtualMapHeight || 2400;
@@ -2846,6 +2863,7 @@ Otevřít mapu akce </button>
         if(isSaving) return;
         const name = document.getElementById('edit-chal-name').value.trim(); const targetKm = parseFloat(document.getElementById('edit-chal-km').value);
         const challengeType = document.querySelector('#edit-chal-type .chip.active').getAttribute('data-val');
+        const customMarkerType = document.querySelector('#edit-chal-marker-type .chip.active').getAttribute('data-val');
 
         const mapType = document.querySelector('#edit-chal-map-type .chip.active').getAttribute('data-val');
         const mapUrl = document.getElementById('edit-chal-map').value.trim();
@@ -2876,7 +2894,7 @@ Otevřít mapu akce </button>
 
         if(selectedChallengeId) { 
             isSaving = true; const btn = document.getElementById('btn-edit-chal'); btn.innerText = "Ukládám..."; btn.disabled = true;
-            try { await updateDoc(doc(db, "challenges", selectedChallengeId), { name, targetKm, subtitle, visibility, challengeType, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, virtualLineWidth: vLineWidth, virtualLineStyle: vLineStyle, virtualLineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities }); window.closeEditChallengeModal(); } 
+            try { await updateDoc(doc(db, "challenges", selectedChallengeId), { name, targetKm, subtitle, visibility, challengeType, customMarkerType, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, virtualLineWidth: vLineWidth, virtualLineStyle: vLineStyle, virtualLineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities }); window.closeEditChallengeModal(); } 
             catch (e) { alert("Chyba."); console.error(e); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; }
         }
     };
