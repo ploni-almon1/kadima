@@ -2266,13 +2266,23 @@ Otevřít mapu akce </button>
                 const stats = window.challengeStatsMap[challengeId];
                 const isRace = stats && stats.type === 'race';
 
-                // DETEKCE OKRUHU (Pokud je cíl aspoň 1.5x větší než délka GPX)
+               // DETEKCE OKRUHU (Pokud je cíl aspoň 1.5x větší než délka GPX)
                 let isCircuit = false;
                 if (c.targetKm > (physicalKm * 1.5)) {
                     isCircuit = true;
                 }
 
-                const baseLine = L.polyline(latlngsFlat, {color: '#9CA3AF', weight: 4, dashArray: '5, 10', lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap);
+                // Načtení společných stylů
+                const vColor = c.virtualLineColor || '#4F46E5';
+                const vWidth = c.virtualLineWidth || 6;
+                const vStyle = c.virtualLineStyle === 'dashed' ? `${vWidth * 1.5}, ${vWidth * 1.5}` : '';
+
+                // Zjistíme, co vykreslit: u závodu dáme vybranou barvu a styl, u výzvy necháme šedou klasiku pro gradient
+                let baseColor = isRace ? vColor : '#9CA3AF';
+                let baseThickness = isRace ? vWidth : 4;
+                let baseDash = isRace ? vStyle : '5, 10';
+
+                const baseLine = L.polyline(latlngsFlat, {color: baseColor, weight: baseThickness, dashArray: baseDash, lineCap: 'round', lineJoin: 'round'}).addTo(leafletMap);
                 mapLayers.push(baseLine); leafletMap.fitBounds(baseLine.getBounds());
 
                 if (isRace) {
