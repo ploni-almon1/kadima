@@ -2140,9 +2140,9 @@ Otevřít mapu akce </button>
                 const hintEl = document.getElementById(hintId);
                 if(hintEl) {
                     if (laps > 1) {
-                        hintEl.innerText = `Délka 1 okruhu: ${singleLapKm.toFixed(2)} km | Celkem (${laps} kol): ${finalTotalKm.toFixed(2)} km`;
+                        hintEl.innerHTML = `Délka 1 okruhu: ${singleLapKm.toFixed(2)} km<br>Celkem (${laps} kol): ${finalTotalKm.toFixed(2)} km`;
                     } else {
-                        hintEl.innerText = `Délka trasy z GPX: ${singleLapKm.toFixed(2)} km`;
+                        hintEl.innerHTML = `Délka trasy z GPX: ${singleLapKm.toFixed(2)} km`;
                     }
                 }
 
