@@ -2456,33 +2456,30 @@ Otevřít mapu akce </button>
 
                             let customIcon;
 
-                            if (c.customMarkerType === 'formula' || c.customMarkerType === 'custom') {
+                            let wantsCustom = (c.customMarkerType === 'formula' || c.customMarkerType === 'custom');
+                            let hasSvg = (c.customMarkerSvg && c.customMarkerSvg.trim() !== "");
+
+                            if (wantsCustom && hasSvg) {
                                 
                                 let angle = getBearing(prevPosForAngle, lastPos);
                                 let carColor = userObj.userColor || "#FF5E00"; 
                                 let finalAvatarUrl = userObj.avatarUrl || 'icon.png';
                                 
-                                let customSvgCode = "";
-                                if (c.customMarkerSvg && c.customMarkerSvg.trim() !== "") {
-                                    customSvgCode = c.customMarkerSvg.replace(/BARVA_UZIVATELE/g, carColor);
-                                } else {
-                                    customSvgCode = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="${carColor}" /></svg>`;
-                                }
+                                let customSvgCode = c.customMarkerSvg.replace(/BARVA_UZIVATELE/g, carColor);
 
-                                let dynamicHtmlWithRotation = `<div style="transform: rotate(${angle}deg); transform-origin: center center;">
-                                    <div style="position: relative; width: 40px; height: 60px;">
-                                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-                                            ${customSvgCode}
-                                        </div>
-                                        <div style="position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border-radius: 50%; overflow: hidden; border: 1.5px solid white; background: #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-                                            <img src="${finalAvatarUrl}" style="width: 100%; height: 100%; object-fit: cover;">
-                                        </div>
+                                let dynamicHtml = `
+                                <div style="position: relative; width: 40px; height: 60px;">
+                                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(${angle}deg); transform-origin: center center;">
+                                        ${customSvgCode}
+                                    </div>
+                                    <div style="position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border-radius: 50%; overflow: hidden; border: 1.5px solid white; background: #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 2;">
+                                        <img src="${finalAvatarUrl}" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
                                 </div>`;
 
                                 customIcon = L.divIcon({ 
                                     className: 'custom-map-marker', 
-                                    html: dynamicHtmlWithRotation, 
+                                    html: dynamicHtml, 
                                     iconSize: [40, 60], 
                                     iconAnchor: [20, 30] 
                                 });
