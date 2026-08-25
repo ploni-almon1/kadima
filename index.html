@@ -1719,10 +1719,10 @@
 
                 let dashHeaderHTML = `
                 <div style="padding: 20px;">
-                    <div style="display:flex; gap:15px; margin-bottom:12px;">
+                    <div style="display:flex; gap:15px; margin-bottom:12px; cursor:pointer;" onclick="openChallengeDetail('${c.id}')">
                         <div style="width: 64px; height: 64px; border-radius: 16px; overflow: hidden; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid var(--gray-border); background: var(--white);">${badgeImgHtml}</div>
                         <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
-                            <h3 style="color: var(--text-dark); font-size: 1.25em; font-weight: 800; margin:0 0 6px 0; cursor:pointer; line-height:1.2;" onclick="openChallengeDetail('${c.id}')">${c.name}</h3>
+                            <h3 style="color: var(--text-dark); font-size: 1.25em; font-weight: 800; margin:0 0 6px 0; line-height:1.2;">${c.name}</h3>
                             <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                                 <div style="color: var(--text-dark); font-size: 1.15em; font-weight: 800; line-height: 1;">${displayKm.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} / ${c.targetKm} <span style="font-size:0.7em; font-weight:700; color:var(--text-gray);">km</span></div>
                                 <div style="color: var(--text-gray); font-size: 0.75em; font-weight: 500; line-height: 1; padding-bottom: 2px;">${daysText}</div>
