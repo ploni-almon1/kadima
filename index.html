@@ -111,10 +111,10 @@
 
     /* SPODNÍ NAVIGAČNÍ LIŠTA */
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--white); display: flex; justify-content: space-around; padding: 12px 0 20px 0; border-top: 1px solid var(--gray-border); z-index: 1000; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
-    .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #000000; font-size: 0.7em; font-weight: 600; cursor: pointer; transition: color 0.2s; gap: 4px; }
-    .nav-item svg { width: 24px; height: 24px; fill: #000000; transition: fill 0.2s; }
-    .nav-item.active { color: #4F46E5; }
-    .nav-item.active svg { fill: #4F46E5; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #9CA3AF; font-size: 0.7em; font-weight: 600; cursor: pointer; transition: color 0.2s; gap: 4px; }
+    .nav-item svg { width: 24px; height: 24px; fill: #9CA3AF; transition: fill 0.2s; }
+    .nav-item.active { color: var(--primary-dark); }
+    .nav-item.active svg { fill: var(--primary-dark); }
 
     /* MAPA A FAB TLAČÍTKA */
     #tab-map { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 50; overflow: hidden; background: #E5E5F7; }
@@ -1977,9 +1977,9 @@
 
         let explanationHtml = "";
         if (c.challengeType === 'race') {
-            explanationHtml += "Tato akce je <b>Závod</b>. Každý účastník plní cíl sám za sebe, nesčítáte se dohromady a soutěžíte s ostatními.";
+            explanationHtml += "Tato akce je <b>Závod</b>. Každý účastník plní cíl sám za sebe. Kilometry jednotlivých účastníků se nesčítají a každý soutěží s ostatními.";
         } else {
-            explanationHtml += "Tato akce je <b>Společná výzva</b>. Kilometry všech zúčastněných se sčítají, takže společnými silami táhnete za jeden provaz a plníte jeden velký cíl.";
+            explanationHtml += "Tato akce je <b>Společná výzva</b>. Kilometry všech účastníků se sčítají, takže společnými silami a každý podle svých možností plníte jeden velký cíl.";
         }
         const hasMap = c.mapType === 'virtual' ? !!(c.virtualMapUrl && c.virtualSvgPath) : !!c.mapUrl;
         if (hasMap) {
