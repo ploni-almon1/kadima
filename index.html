@@ -597,6 +597,11 @@
       </div>
 
       <div class="date-input-wrapper">
+          <label>Datum aktivity:</label>
+          <input type="date" id="activity-date-input" class="date-input">
+      </div>
+
+      <div class="date-input-wrapper">
           <label>Odkaz na Stravu (volitelné):</label>
           <input type="text" id="strava-link-input" class="date-input" placeholder="https://strava.app.link/... nebo celý text ze Stravy">
       </div>
@@ -2551,12 +2556,23 @@ Otevřít mapu akce </button>
     };
 
     window.saveActivity = async () => {
-      if(isSaving) return; let rawInput = document.getElementById('km-input').value.replace(',', '.'); const km = parseFloat(rawInput);
+      if(isSaving) return; 
+      let rawInput = document.getElementById('km-input').value.replace(',', '.'); 
+      const km = parseFloat(rawInput);
       const stravaUrl = extractStravaUrl(document.getElementById('strava-link-input').value);
+      
+      // Načtení data z políčka
+      const dateInputVal = document.getElementById('activity-date-input').value;
+      const activityDate = dateInputVal ? new Date(dateInputVal) : new Date();
 
       if(km > 0 && currentUser) {
         isSaving = true; const btn = document.getElementById('btn-save-activity'); btn.innerText = "Ukládám..."; btn.disabled = true;
-        try { await addDoc(collection(db, "activities"), { uid: currentUser.uid, km: km, type: currentActivityType, stravaUrl: stravaUrl, timestamp: new Date() }); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(km) }); window.closeModal(); } 
+        try { 
+            // Změněno timestamp: new Date() na timestamp: activityDate
+            await addDoc(collection(db, "activities"), { uid: currentUser.uid, km: km, type: currentActivityType, stravaUrl: stravaUrl, timestamp: activityDate }); 
+            await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(km) }); 
+            window.closeModal(); 
+        } 
         catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; }
       } else { alert("Zadej počet kilometrů."); }
     };
@@ -2982,9 +2998,23 @@ Otevřít mapu akce </button>
     const modal = document.getElementById('activity-modal');
     window.openModal = () => { 
         window.pushModalState();
-        modal.classList.add('active'); document.getElementById('km-input').value = ''; document.getElementById('calc-minutes').value = ''; document.getElementById('calc-speed').value = '4.5'; document.getElementById('calc-result').innerText = '0';
+        modal.classList.add('active'); 
+        document.getElementById('km-input').value = ''; 
+        document.getElementById('calc-minutes').value = ''; 
+        document.getElementById('calc-speed').value = '4.5'; 
+        document.getElementById('calc-result').innerText = '0';
         document.getElementById('strava-link-input').value = '';
-        currentActivityType = "Chůze"; document.querySelectorAll('#activity-modal .chip').forEach(c => c.classList.remove('active')); document.querySelector('#activity-modal .chip[data-type="Chůze"]').classList.add('active'); 
+        
+        // Nastavení dnešního data
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        document.getElementById('activity-date-input').value = `${yyyy}-${mm}-${dd}`;
+
+        currentActivityType = "Chůze"; 
+        document.querySelectorAll('#activity-modal .chip').forEach(c => c.classList.remove('active')); 
+        document.querySelector('#activity-modal .chip[data-type="Chůze"]').classList.add('active'); 
     };
     window.closeModal = () => window.handleUIClose('activity-modal');
     window.selectChip = (element) => { document.querySelectorAll('#activity-modal .chip').forEach(c => c.classList.remove('active')); element.classList.add('active'); currentActivityType = element.getAttribute('data-type'); };
