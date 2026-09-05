@@ -1,4 +1,3 @@
-<script type="module">
     const ADMIN_EMAILS = ["ter_ka@centrum.cz"];
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -1947,4 +1946,3 @@ Otevřít mapu akce </button>
 
     window.setCalcPreset = (type, speed) => { document.getElementById('calc-speed').value = speed; window.calculateKm(); const chip = document.querySelector(`#activity-modal .chip[data-type="${type}"]`); if(chip) { window.selectChip(chip); } };
     window.calculateKm = () => { const mins = parseFloat(document.getElementById('calc-minutes').value) || 0; const speed = parseFloat(document.getElementById('calc-speed').value) || 0; const km = (mins / 60) * speed; document.getElementById('calc-result').innerText = km.toFixed(1); document.getElementById('km-input').value = km.toFixed(1); };
-  </script>
