@@ -11,7 +11,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#F0F2F5">
+  <meta name="theme-color" id="theme-color-meta" content="#F0F2F5">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
@@ -1135,6 +1135,13 @@
         if (input.type === "password") { input.type = "text"; } 
         else { input.type = "password"; }
     };
+    
+    window.updateStatusBarColor = (color) => {
+        const metaTheme = document.getElementById('theme-color-meta');
+        if (metaTheme) {
+            metaTheme.setAttribute('content', color);
+        }
+    };
 
     window.handleVirtualImgUrlInput = (url) => {
         if (!url) return;
@@ -1248,6 +1255,7 @@
         if(cropper) { cropper.destroy(); cropper = null; }
         if(chalCropper) { chalCropper.destroy(); chalCropper = null; }
         if(chalBadgeCropper) { chalBadgeCropper.destroy(); chalBadgeCropper = null; }
+        window.updateStatusBarColor('#F0F2F5');
     });
 
     window.handleUIClose = (modalId) => {
@@ -1891,6 +1899,7 @@
     }
 
     window.openChallengeDetail = async (cid) => {
+        window.updateStatusBarColor('#1E1B4B');
         let c = null;
         if (globalChallenges.length > 0) {
             c = globalChallenges.find(x => x.id === cid);
@@ -2112,8 +2121,11 @@ Otevřít mapu akce </button>
         if (scrollArea) scrollArea.scrollTop = 0;
     };
 
-    window.closeChallengeDetail = () => window.handleUIClose('chal-detail-fullscreen');
-
+window.closeChallengeDetail = () => {
+        window.handleUIClose('chal-detail-fullscreen');
+        window.updateStatusBarColor('#F0F2F5');
+    };
+    
     window.handleChalFileSelect = (input, mode) => {
         const file = input.files[0]; if(!file) return;
         const reader = new FileReader(); 
@@ -2901,7 +2913,13 @@ Otevřít mapu akce </button>
       document.getElementById('tab-dashboard').classList.add('hidden'); document.getElementById('tab-statistics').classList.add('hidden'); document.getElementById('tab-profile').classList.add('hidden'); document.getElementById('tab-map').classList.add('hidden');
       document.getElementById('nav-dashboard').classList.remove('active'); document.getElementById('nav-statistics').classList.remove('active'); document.getElementById('nav-profile').classList.remove('active'); document.getElementById('nav-map').classList.remove('active');
       document.getElementById('tab-' + tabId).classList.remove('hidden'); document.getElementById('nav-' + tabId).classList.add('active');
-      if(tabId === 'map') { setTimeout(() => { if (leafletMap) leafletMap.invalidateSize(); if (currentSelectedChallengeIdForMap) window.handleMapSelect(currentSelectedChallengeIdForMap); }, 100); }
+      
+      if(tabId === 'map') { 
+          window.updateStatusBarColor('#E5E5F7'); 
+          setTimeout(() => { if (leafletMap) leafletMap.invalidateSize(); if (currentSelectedChallengeIdForMap) window.handleMapSelect(currentSelectedChallengeIdForMap); }, 100); 
+      } else {
+          window.updateStatusBarColor('#F0F2F5');
+      }
     };
 
     window.openPublicProfile = async (uid) => {
