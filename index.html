@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
@@ -244,6 +244,76 @@
     .members-dropdown-content { background-color: var(--bg-color); border-radius: 16px; padding: 10px 15px; margin-top: 15px; transition: all 0.3s ease; }
     .challenge-member-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
     .challenge-member-row:last-child { border-bottom: none; }
+
+    /* --- DESKTOP LAYOUT (RESPONSIVE) --- */
+    .desktop-header { display: none; }
+    .mobile-hidden { display: none; }
+
+    @media (min-width: 1024px) {
+      .bottom-nav { display: none !important; }
+      .desktop-hidden { display: none !important; }
+      .mobile-hidden { display: flex; }
+      
+      /* Horní navigační lišta pro PC */
+      .desktop-header { 
+        display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 70px; 
+        background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+        z-index: 2000; align-items: center; justify-content: space-between; padding: 0 40px; 
+      }
+      .dh-left h1 { color: var(--primary-dark); font-weight: 800; font-size: 1.5em; margin: 0; cursor: pointer; display: flex; align-items: center; gap: 10px;}
+      .dh-center { display: flex; gap: 40px; height: 100%; }
+      .dh-nav-item { 
+        display: flex; align-items: center; font-weight: 600; color: var(--text-gray); 
+        cursor: pointer; border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; font-size: 1.05em; 
+      }
+      .dh-nav-item:hover { color: var(--text-dark); }
+      .dh-nav-item.active { color: var(--primary-dark); border-bottom-color: var(--primary-dark); }
+      .dh-right { display: flex; align-items: center; gap: 20px; }
+      .dh-profile-btn { 
+        display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; 
+        color: var(--text-dark); padding: 5px 10px; border-radius: 50px; transition: background 0.2s; 
+      }
+      .dh-profile-btn:hover { background: var(--gray-light); }
+      .dh-avatar { 
+        width: 36px; height: 36px; border-radius: 50%; background: var(--primary-dark); 
+        color: white; display: flex; align-items: center; justify-content: center; overflow: hidden; 
+        font-weight: bold; font-size: 0.9em; 
+      }
+      .dh-avatar img { width: 100%; height: 100%; object-fit: cover; }
+      
+      /* Přizpůsobení hlavního kontejneru */
+      #private-view { max-width: 1200px; padding-top: 100px; padding-bottom: 40px; margin: 0 auto; }
+      .page-title { padding: 0 0 20px 0; font-size: 2em; margin-bottom: 10px; }
+      
+      /* Přehled (Dashboard) Desktop Grid */
+      .dashboard-desktop-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; align-items: start; }
+      .dash-left-col { display: flex; flex-direction: column; gap: 30px; }
+      .dash-right-col { display: flex; flex-direction: column; gap: 30px; }
+      
+      /* Přestylování karet na PC */
+      .main-distance-card { 
+        margin: 0; background: var(--white); box-shadow: 0 6px 24px rgba(0,0,0,0.06); 
+        padding: 40px 30px; border-radius: 20px; 
+      }
+      .main-distance-label { color: var(--text-dark); font-size: 1.1em; font-weight: 700; opacity: 1; }
+      .main-distance-value { color: var(--text-dark); font-size: 5em; }
+      .main-distance-value span { color: var(--text-dark); font-size: 0.4em; }
+      .badge-green { top: 40px; right: 30px; font-size: 0.9em; padding: 8px 16px; }
+      
+      #dash-joined-challenges { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+      .card, .card-no-padding { margin: 0; }
+      .section-title { margin: 0 0 15px 0 !important; font-size: 1.2em; }
+      
+      /* Tlačítko přidat aktivitu pro pravý sloupec */
+      .dash-right-col .action-row { margin: 0; flex-direction: column; width: 100%; }
+      .dash-right-col .btn-add-activity { background: #4F46E5; color: white; transition: 0.2s; padding: 20px; }
+      .dash-right-col .btn-add-activity:hover { background: #4338ca; }
+      .dash-right-col .btn-add-text h4 { color: white; }
+      .dash-right-col .btn-add-icon { background: rgba(255,255,255,0.2); }
+      
+      /* Úprava tabulek Leaderboardu a výzev na PC */
+      .real-map-container { bottom: 0; }
+}
   </style>
 </head>
 <body>
@@ -280,41 +350,81 @@
   <!-- SOUKROMÁ ČÁST -->
   <div id="private-view" class="hidden">
 
-    <!-- ZÁLOŽKA 1: PŘEHLED -->
-    <div id="tab-dashboard">
-      <div class="page-title">Kadima</div>
-
-      <div class="main-distance-card">
-        <div class="main-distance-label">Moje celková vzdálenost</div>
-        <div class="main-distance-value" id="my-km-text">0<span> km</span></div>
-        <div id="daily-progress-badge" class="badge-green inactive">0 km dnes</div>
+    <!-- DESKTOP HLAVIČKA -->
+    <div class="desktop-header">
+      <div class="dh-left">
+        <h1><svg viewBox="0 0 24 24" width="28" height="28" fill="var(--primary-dark)"><path d="M12 2L2 22h5l5-10 5 10h5L12 2z"/></svg> KADIMA</h1>
       </div>
-
-      <div class="action-row">
-        <button class="btn-add-activity" onclick="openModal()">
-            <div class="btn-add-icon">
-                <img src="assets/plus.svg" alt="Plus" style="width: 20px; height: 20px; object-fit: contain;">
-            </div>
-            <div class="btn-add-text"><h4>Zapsat novou aktivitu</h4></div>
-        </button>
-        <a href="https://www.strava.com" target="_blank" class="btn-strava">
-            <img src="strava.png" alt="Strava" onerror="this.style.display='none'">
-        </a>
+      <div class="dh-center">
+        <div class="dh-nav-item active" id="dh-nav-dashboard" onclick="switchTab('dashboard')">Přehled</div>
+        <div class="dh-nav-item" id="dh-nav-statistics" onclick="switchTab('statistics')">Statistika</div>
+        <div class="dh-nav-item" id="dh-nav-map" onclick="switchTab('map')">Mapa</div>
+        <div class="dh-nav-item" id="dh-nav-profile" onclick="switchTab('profile')">Profil</div>
       </div>
-
-      <div id="dash-joined-wrapper" style="display:none;">
-        <div class="section-title" id="dash-joined-title" style="margin: 0 20px 10px 20px;">Moje výzvy</div>
-        <div id="dash-joined-challenges"></div>
-      </div>
-
-      <div class="section-title" style="margin: 20px 20px 10px 20px;">Top 3 (Celkově)</div>
-      <div class="card" style="padding: 8px 20px;">
-        <div id="dashboard-leaderboard-list" class="leaderboard-list">
-          <div style="text-align: center; color: var(--text-gray); padding: 10px; font-size:0.9em;">Načítám data...</div>
+      <div class="dh-right">
+        <div class="dh-profile-btn" onclick="switchTab('profile')">
+          <div class="dh-avatar" id="desktop-avatar">?</div>
+          <span id="desktop-name">Jméno</span>
         </div>
       </div>
-    </div> 
+    </div>
 
+    <!-- ZÁLOŽKA 1: PŘEHLED -->
+    <div id="tab-dashboard">
+      <!-- Nadpis pro mobil -->
+      <div class="page-title desktop-hidden">Kadima</div>
+      
+      <!-- Nadpis a akční tlačítko pro desktop (podle grafiky) -->
+      <div class="page-title mobile-hidden" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding-left: 20px; padding-right: 20px;">
+        <span>Přehled</span>
+        <button class="btn-add-activity" style="max-width: 220px; padding: 12px 20px; background: #4F46E5; color: white; margin: 0; box-shadow: none;" onclick="openModal()">
+            <span style="font-size: 1.2em; margin-right: 5px;">+</span> Zapsat aktivitu
+        </button>
+      </div>
+
+      <!-- GRID PRO DESKTOP (Rozdělení na dva sloupce) -->
+      <div class="dashboard-desktop-layout">
+        
+        <!-- LEVÝ SLOUPEC -->
+        <div class="dash-left-col">
+          <div class="main-distance-card">
+            <div class="main-distance-label">Moje celková vzdálenost</div>
+            <div class="main-distance-value" id="my-km-text">0<span> km</span></div>
+            <div id="daily-progress-badge" class="badge-green inactive">0 km dnes</div>
+          </div>
+
+          <!-- Původní mobilní tlačítka se na PC skryjí (nahradí je tlačítko v hlavičce) -->
+          <div class="action-row desktop-hidden">
+            <button class="btn-add-activity" onclick="openModal()">
+                <div class="btn-add-icon">
+                    <img src="assets/plus.svg" alt="Plus" style="width: 20px; height: 20px; object-fit: contain;">
+                </div>
+                <div class="btn-add-text"><h4>Zapsat novou aktivitu</h4></div>
+            </button>
+            <a href="https://www.strava.com" target="_blank" class="btn-strava">
+                <img src="strava.png" alt="Strava" onerror="this.style.display='none'">
+            </a>
+          </div>
+
+          <div id="dash-joined-wrapper" style="display:none;">
+            <div class="section-title" id="dash-joined-title" style="margin: 0 20px 10px 20px;">Moje výzvy</div>
+            <div id="dash-joined-challenges"></div>
+          </div>
+        </div> <!-- konec dash-left-col -->
+
+        <!-- PRAVÝ SLOUPEC -->
+        <div class="dash-right-col">
+          <div class="section-title" style="margin: 0 20px 10px 20px;">Top 5 (Celkově)</div>
+          <div class="card" style="padding: 8px 20px;">
+            <div id="dashboard-leaderboard-list" class="leaderboard-list">
+              <div style="text-align: center; color: var(--text-gray); padding: 10px; font-size:0.9em;">Načítám data...</div>
+            </div>
+          </div>
+        </div> <!-- konec dash-right-col -->
+
+      </div> <!-- konec dashboard-desktop-layout -->
+    </div> 
+    
     <!-- ZÁLOŽKA 2: STATISTIKA -->
     <div id="tab-statistics" class="hidden">
       <div class="page-title">Statistika</div>
@@ -1078,7 +1188,7 @@
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://unpkg.com/togeojson"></script>
 
-  <script type="module">
+    <script type="module">
     const ADMIN_EMAILS = ["ter_ka@centrum.cz"];
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -1370,6 +1480,18 @@
           document.getElementById('profile-total-km').innerText = formattedStr + ' km';
           const pAvatarNode = document.getElementById('profile-avatar');
           if (data.avatarUrl) { pAvatarNode.innerHTML = `<img src="${data.avatarUrl}">`; } else { pAvatarNode.innerHTML = (data.name || 'N').charAt(0).toUpperCase(); }
+
+          // AKTUALIZACE PRO DESKTOP HLAVIČKU
+          const desktopName = document.getElementById('desktop-name');
+          const desktopAvatar = document.getElementById('desktop-avatar');
+          if(desktopName) desktopName.innerText = data.name || 'Neznámý';
+          if(desktopAvatar) {
+              if (data.avatarUrl) {
+                  desktopAvatar.innerHTML = `<img src="${data.avatarUrl}">`;
+              } else {
+                  desktopAvatar.innerHTML = (data.name || 'N').charAt(0).toUpperCase();
+              }
+          }
 
           if (data.customStatsNote) {
               document.getElementById('p-custom-note').value = data.customStatsNote;
@@ -2895,13 +3017,44 @@ Otevřít mapu akce </button>
     };
     window.deleteChallenge = async () => { if(selectedChallengeId && confirm("Smazat akci pro všechny?")) { await deleteDoc(doc(db, "challenges", selectedChallengeId)); window.closeEditChallengeModal(); } };
 
+    // AKTUALIZOVÁNO PRO DESKTOP MENU
     window.switchTab = (tabId) => {
       if (tabId !== 'map') window.lastOpenedChallengeId = null; 
       window.scrollTo({ top: 0, behavior: 'instant' }); 
-      document.getElementById('tab-dashboard').classList.add('hidden'); document.getElementById('tab-statistics').classList.add('hidden'); document.getElementById('tab-profile').classList.add('hidden'); document.getElementById('tab-map').classList.add('hidden');
-      document.getElementById('nav-dashboard').classList.remove('active'); document.getElementById('nav-statistics').classList.remove('active'); document.getElementById('nav-profile').classList.remove('active'); document.getElementById('nav-map').classList.remove('active');
-      document.getElementById('tab-' + tabId).classList.remove('hidden'); document.getElementById('nav-' + tabId).classList.add('active');
-      if(tabId === 'map') { setTimeout(() => { if (leafletMap) leafletMap.invalidateSize(); if (currentSelectedChallengeIdForMap) window.handleMapSelect(currentSelectedChallengeIdForMap); }, 100); }
+      
+      document.getElementById('tab-dashboard').classList.add('hidden'); 
+      document.getElementById('tab-statistics').classList.add('hidden'); 
+      document.getElementById('tab-profile').classList.add('hidden'); 
+      document.getElementById('tab-map').classList.add('hidden');
+      
+      document.getElementById('nav-dashboard').classList.remove('active'); 
+      document.getElementById('nav-statistics').classList.remove('active'); 
+      document.getElementById('nav-profile').classList.remove('active'); 
+      document.getElementById('nav-map').classList.remove('active');
+      
+      // Desktop nav items
+      const dhDash = document.getElementById('dh-nav-dashboard');
+      const dhStats = document.getElementById('dh-nav-statistics');
+      const dhProf = document.getElementById('dh-nav-profile');
+      const dhMap = document.getElementById('dh-nav-map');
+      
+      if(dhDash) dhDash.classList.remove('active');
+      if(dhStats) dhStats.classList.remove('active');
+      if(dhProf) dhProf.classList.remove('active');
+      if(dhMap) dhMap.classList.remove('active');
+
+      document.getElementById('tab-' + tabId).classList.remove('hidden'); 
+      document.getElementById('nav-' + tabId).classList.add('active');
+      
+      const dhActive = document.getElementById('dh-nav-' + tabId);
+      if(dhActive) dhActive.classList.add('active');
+
+      if(tabId === 'map') { 
+        setTimeout(() => { 
+            if (leafletMap) leafletMap.invalidateSize(); 
+            if (currentSelectedChallengeIdForMap) window.handleMapSelect(currentSelectedChallengeIdForMap); 
+        }, 100); 
+      }
     };
 
     window.openPublicProfile = async (uid) => {
@@ -3030,3 +3183,4 @@ Otevřít mapu akce </button>
   </script>
 </body>
 </html>
+  
