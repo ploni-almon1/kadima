@@ -1,4 +1,4 @@
-    const ADMIN_EMAILS = ["ter_ka@centrum.cz"];
+const ADMIN_EMAILS = ["ter_ka@centrum.cz"];
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -33,7 +33,6 @@
 
     let leafletMap = null; let mapLayers = []; let layerOsm = null; let layerSat = null; let currentMapLayerType = 'osm'; let currentSelectedChallengeIdForMap = null;
 
-    // Funkce pro výpočet úhlu natočení mezi dvěma body na mapě
     function getBearing(latlng1, latlng2) {
         if (!latlng1 || !latlng2) return 0;
         const lat1 = latlng1.lat * Math.PI / 180;
@@ -728,9 +727,7 @@
                     statsCollabDiv.appendChild(statsCard);
                 }
             } else {
-                // Uživatel v akci NENÍ. (Je jedno, kdo ji vytvořil)
                 if (isPublic) {
-                    // 1. Veřejné akce jdou VŽDY do sekce "Další komunitní akce"
                     const oCard = document.createElement('div'); 
                     oCard.className = 'card';
                     oCard.style.cssText = 'text-align:left; cursor:pointer;';
@@ -738,7 +735,6 @@
                     oCard.innerHTML = previewCardHtml;
                     statsOtherList.appendChild(oCard);
                 } else if (isFollowingCreator || isUserAdmin || isCreator) {
-                    // 2. Soukromé akce jdou do "Akce mých sledujících" (Zobrazí se i tobě jako tvůrci)
                     followerChalCount++;
                     const fCard = document.createElement('div');
                     fCard.style.cssText = "background-color: var(--white); border: 1px solid var(--gray-border); border-radius: 20px; padding: 20px; margin-bottom:15px; text-align:left; cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,0.06);";
@@ -851,7 +847,6 @@
         document.getElementById('chal-detail-type-badge').innerText = c.challengeType === 'race' ? 'Závod' : 'Společná výzva';
         document.getElementById('chal-detail-title').innerText = c.name;
 
-      // Zobrazení tlačítka pro úpravu, pokud je aktuální uživatel autorem akce
         const detailEditBtn = document.getElementById('chal-detail-edit-btn');
         if (currentUser && currentUser.uid === c.creatorId) {
             detailEditBtn.style.display = 'flex';
@@ -1480,14 +1475,12 @@ Otevřít mapu akce </button>
       const km = parseFloat(rawInput);
       const stravaUrl = extractStravaUrl(document.getElementById('strava-link-input').value);
       
-      // Načtení data z políčka
       const dateInputVal = document.getElementById('activity-date-input').value;
       const activityDate = dateInputVal ? new Date(dateInputVal) : new Date();
 
       if(km > 0 && currentUser) {
         isSaving = true; const btn = document.getElementById('btn-save-activity'); btn.innerText = "Ukládám..."; btn.disabled = true;
         try { 
-            // Změněno timestamp: new Date() na timestamp: activityDate
             await addDoc(collection(db, "activities"), { uid: currentUser.uid, km: km, type: currentActivityType, stravaUrl: stravaUrl, timestamp: activityDate }); 
             await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(km) }); 
             window.closeModal(); 
@@ -1495,8 +1488,6 @@ Otevřít mapu akce </button>
         catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; }
       } else { alert("Zadej počet kilometrů."); }
     };
-
-    
 
     window.openEditModal = (id, km, type, isoDate, stravaUrl) => {
         window.pushModalState();
@@ -1632,7 +1623,6 @@ Otevřít mapu akce </button>
         const name = document.getElementById('new-chal-name').value.trim(); const targetKm = parseFloat(document.getElementById('new-chal-km').value);
         const challengeType = document.querySelector('#new-chal-type .chip.active').getAttribute('data-val');
 
-        // NOVÉ: Načtení markeru a SVG
         const customMarkerType = document.querySelector('#new-chal-marker-type .chip.active').getAttribute('data-val');
         const customMarkerSvgInput = document.getElementById('new-chal-custom-svg');
         const customMarkerSvg = customMarkerSvgInput ? customMarkerSvgInput.value.trim() : "";
@@ -1701,7 +1691,6 @@ Otevřít mapu akce </button>
                 document.getElementById('edit-chal-gpx-fields').style.display='block'; document.getElementById('edit-chal-virtual-fields').style.display='none';
             }
             
-            // NOVÉ: Načtení výběru ikonky pro mapu a SVG
             let storedMarker = data.customMarkerType || 'avatar'; 
             document.querySelectorAll('#edit-chal-marker-type .chip').forEach(c => { 
                 c.classList.remove('active'); 
@@ -1774,7 +1763,6 @@ Otevřít mapu akce </button>
         const name = document.getElementById('edit-chal-name').value.trim(); const targetKm = parseFloat(document.getElementById('edit-chal-km').value);
         const challengeType = document.querySelector('#edit-chal-type .chip.active').getAttribute('data-val');
 
-        // NOVÉ: Uložení markeru a SVG při úpravě
         const customMarkerType = document.querySelector('#edit-chal-marker-type .chip.active').getAttribute('data-val');
         const customMarkerSvgInput = document.getElementById('edit-chal-custom-svg');
         const customMarkerSvg = customMarkerSvgInput ? customMarkerSvgInput.value.trim() : "";
@@ -1924,7 +1912,6 @@ Otevřít mapu akce </button>
         document.getElementById('calc-result').innerText = '0';
         document.getElementById('strava-link-input').value = '';
         
-        // Nastavení dnešního data
         const today = new Date();
         const yyyy = today.getFullYear();
         const mm = String(today.getMonth() + 1).padStart(2, '0');
