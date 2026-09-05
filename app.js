@@ -1,5 +1,14 @@
 const ADMIN_EMAILS = ["ter_ka@centrum.cz"];
 
+window.showAuthForm = () => {
+    document.getElementById('onboarding-screen').classList.add('hidden');
+    document.getElementById('auth-screen').classList.remove('hidden');
+};
+window.hideAuthForm = () => {
+    document.getElementById('auth-screen').classList.add('hidden');
+    document.getElementById('onboarding-screen').classList.remove('hidden');
+};
+
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { initializeFirestore, persistentLocalCache, persistentSingleTabManager, doc, setDoc, getDoc, updateDoc, deleteDoc, increment, onSnapshot, collection, query, orderBy, addDoc, where, getDocs, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
