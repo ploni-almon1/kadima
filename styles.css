@@ -1,4 +1,3 @@
- <style>
     :root { 
       --bg-color: #F0F2F5; 
       --text-dark: #111827; 
@@ -224,4 +223,3 @@
     .members-dropdown-content { background-color: var(--bg-color); border-radius: 16px; padding: 10px 15px; margin-top: 15px; transition: all 0.3s ease; }
     .challenge-member-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
     .challenge-member-row:last-child { border-bottom: none; }
-  </style>
