@@ -1008,8 +1008,8 @@ window.openChallengeDetail = async (cid) => {
         if (hasMap) {
             mapContainer.style.display = 'block';
             mapContainer.innerHTML = `
-               <button style="width: 100%; background: transparent; color: #000000; border: 1px solid rgba(0, 0, 0, 0.25); padding: 15px; border-radius: 54px; font-weight: 700; font-size: 1.05em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: none;" 
-                     onclick="window.lastOpenedChallengeId = '${c.id}'; window.closeChallengeDetail(); setTimeout(() => { window.switchTab('map'); window.handleMapSelect('${c.id}'); history.pushState({ isMapTab: true }, ''); }, 300);"> <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+                <button style="width: 100%; background: transparent; color: #000000; border: 1px solid rgba(0, 0, 0, 0.25); padding: 15px; border-radius: 54px; font-weight: 700; font-size: 1.05em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: none;" 
+                      onclick="window.lastOpenedChallengeId = '${c.id}'; window.closeChallengeDetail(); setTimeout(() => { window.switchTab('map'); window.handleMapSelect('${c.id}'); history.pushState({ isMapTab: true }, ''); }, 300);"> <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
 Otevřít mapu akce </button>
             `;
         } else {
@@ -1490,6 +1490,30 @@ window.handleMapSelect = async (challengeId) => {
     }
 };
 
+// === NOVÁ POMOCNÁ FUNKCE PRO PŘIPOČÍTÁNÍ KM DO VÝZEV ===
+async function updateChallengesTotalKm(kmDifference, activityDate, activityType) {
+    if (kmDifference === 0 || !currentUser) return;
+    const actDate = new Date(activityDate);
+    const typeLower = (activityType || "").trim().toLowerCase();
+    const updatePromises = [];
+
+    globalChallenges.forEach(c => {
+        if (c.members && c.members.includes(currentUser.uid)) {
+            let cStart = new Date(c.start); cStart.setHours(0,0,0,0);
+            let cEnd = new Date(c.end); cEnd.setHours(23,59,59,999);
+            let allowedLower = (c.allowedActivities || []).map(a => a.trim().toLowerCase());
+
+            if (actDate >= cStart && actDate <= cEnd && allowedLower.includes(typeLower)) {
+                // Přičteme/odečteme km z celkového počtu (totalKm) ve výzvě
+                updatePromises.push(updateDoc(doc(db, "challenges", c.id), { totalKm: increment(kmDifference) }));
+            }
+        }
+    });
+    if (updatePromises.length > 0) {
+        await Promise.all(updatePromises);
+    }
+}
+
 window.saveActivity = async () => {
   if(isSaving) return; 
   let rawInput = document.getElementById('km-input').value.replace(',', '.'); 
@@ -1504,9 +1528,11 @@ window.saveActivity = async () => {
     try { 
         await addDoc(collection(db, "activities"), { uid: currentUser.uid, km: km, type: currentActivityType, stravaUrl: stravaUrl, timestamp: activityDate }); 
         await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(km) }); 
+        // Zápis nového součtu do výzev
+        await updateChallengesTotalKm(km, activityDate, currentActivityType); 
         window.closeModal(); 
     } 
-    catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; }
+    catch (error) { alert("Chyba při ukládání."); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; }
   } else { alert("Zadej počet kilometrů."); }
 };
 
@@ -1526,8 +1552,15 @@ window.saveEditActivity = async () => {
     if(newKm > 0 && selectedActivityId && currentUser) {
         isSaving = true; const btn = document.getElementById('btn-edit-activity'); btn.innerText = "Ukládám..."; btn.disabled = true;
         const diffKm = newKm - selectedActivityOldKm; const newDate = newDateVal ? new Date(newDateVal) : new Date();
-        try { await updateDoc(doc(db, "activities", selectedActivityId), { km: newKm, type: editActivityType, stravaUrl: stravaUrl, timestamp: newDate }); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(diffKm) }); window.closeEditModal(); } 
-        catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Uložit změny"; btn.disabled = false; }
+        try { 
+            await updateDoc(doc(db, "activities", selectedActivityId), { km: newKm, type: editActivityType, stravaUrl: stravaUrl, timestamp: newDate }); 
+            await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(diffKm) }); 
+            // Odečteme starou aktivitu z výzev a přičteme novou upravenou
+            await updateChallengesTotalKm(-selectedActivityOldKm, selectedActivityDate, editActivityType);
+            await updateChallengesTotalKm(newKm, newDate, editActivityType);
+            window.closeEditModal(); 
+        } 
+        catch (error) { alert("Chyba při úpravě."); } finally { isSaving = false; btn.innerText = "Uložit změny"; btn.disabled = false; }
     } else { alert("Zadej platné hodnoty."); }
 };
 
@@ -1535,8 +1568,14 @@ window.deleteActivity = async () => {
     if(isSaving) return;
     if(selectedActivityId && currentUser && confirm("Opravdu smazat aktivitu?")) {
         isSaving = true; const btn = document.getElementById('btn-delete-activity'); btn.innerText = "Mažu..."; btn.disabled = true; const minusKm = -selectedActivityOldKm;
-        try { await deleteDoc(doc(db, "activities", selectedActivityId)); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(minusKm) }); window.closeEditModal(); } 
-        catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Smazat aktivitu"; btn.disabled = false; }
+        try { 
+            await deleteDoc(doc(db, "activities", selectedActivityId)); 
+            await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(minusKm) }); 
+            // Odečtení smazaných kilometrů z výzvy
+            await updateChallengesTotalKm(minusKm, selectedActivityDate, editActivityType);
+            window.closeEditModal(); 
+        } 
+        catch (error) { alert("Chyba při mazání."); } finally { isSaving = false; btn.innerText = "Smazat aktivitu"; btn.disabled = false; }
     }
 };
 
@@ -1816,7 +1855,7 @@ window.saveEditedChallenge = async () => {
     if(!name || !targetKm || !start || !end || allowedActivities.length === 0) return;
 
     if(selectedChallengeId) { 
-        isSaving = true; const btn = document.getElementById('btn-edit-chal'); btn.innerText = "Ukládám..."; btn.disabled = true;
+        isSaving = true; const btn = document.getElementById('edit-chal'); btn.innerText = "Ukládám..."; btn.disabled = true;
         try { await updateDoc(doc(db, "challenges", selectedChallengeId), { name, targetKm, subtitle, visibility, challengeType, customMarkerType, customMarkerSvg, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, virtualLineWidth: vLineWidth, virtualLineStyle: vLineStyle, virtualLineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities }); window.closeEditChallengeModal(); } 
         catch (e) { alert("Chyba."); console.error(e); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; }
     }
