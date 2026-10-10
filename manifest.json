@@ -3,8 +3,8 @@
   "short_name": "Kadima",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#4E46E5",
-  "theme_color": "#000000",
+  "background_color": "#F3F4F6",
+  "theme_color": "#F3F4F6",
   "icons": [
     {
       "src": "icon.png",
