@@ -33,67 +33,14 @@ let personalFilterTo = '';
 
 let leafletMap = null; let mapLayers = []; let layerOsm = null; let layerSat = null; let currentMapLayerType = 'osm'; let currentSelectedChallengeIdForMap = null;
 
-// --- PWA INSTALACE ---
-let deferredPrompt;
-const installBanner = document.getElementById('pwa-install-banner');
-const manualInstallBtn = document.getElementById('btn-manual-install');
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    
-    if (manualInstallBtn) manualInstallBtn.style.display = 'block';
-    
-    const dismissedTime = localStorage.getItem('pwa-dismissed-time');
-    const now = Date.now();
-    const waitTime = 24 * 60 * 60 * 1000; 
-
-    if (!dismissedTime || (now - parseInt(dismissedTime)) > waitTime) {
-        installBanner.classList.remove('hidden');
-    }
-});
-
-window.installPWA = async () => {
-    installBanner.classList.add('hidden'); 
-    if (deferredPrompt) {
-        deferredPrompt.prompt(); 
-        await deferredPrompt.userChoice; 
-        deferredPrompt = null;
-        if (manualInstallBtn) manualInstallBtn.style.display = 'none'; 
-    }
-};
-
-window.dismissPWAInstall = () => {
-    installBanner.classList.add('hidden');
-    localStorage.setItem('pwa-dismissed-time', Date.now().toString()); 
-};
-
-// --- NAVIGACE ONBOARDINGU ---
-window.showLogin = () => {
-    document.getElementById('theme-color-meta').setAttribute('content', '#ffffff');
+window.showAuthForm = () => {
     document.getElementById('onboarding-screen').classList.add('hidden');
-    document.getElementById('register-screen').classList.add('hidden');
-    document.getElementById('login-screen').classList.remove('hidden');
+    document.getElementById('auth-screen').classList.remove('hidden');
 };
-window.showRegister = () => {
-    document.getElementById('theme-color-meta').setAttribute('content', '#ffffff');
-    document.getElementById('onboarding-screen').classList.add('hidden');
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('register-screen').classList.remove('hidden');
-};
-window.goBackToStart = () => {
-    document.getElementById('theme-color-meta').setAttribute('content', '#4E46E5');
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('register-screen').classList.add('hidden');
+window.hideAuthForm = () => {
+    document.getElementById('auth-screen').classList.add('hidden');
     document.getElementById('onboarding-screen').classList.remove('hidden');
 };
-window.hideAuthForm = window.goBackToStart;
-
-window.openTermsModal = () => {
-    window.pushModalState();
-    document.getElementById('terms-modal').classList.add('active');
-};
-window.closeTermsModal = () => window.handleUIClose('terms-modal');
 
 function getBearing(latlng1, latlng2) {
     if (!latlng1 || !latlng2) return 0;
@@ -305,6 +252,128 @@ if(yearSel) {
         yearSel.appendChild(o);
     }
 }
+
+onAuthStateChanged(auth, async (user) => {
+    // Skrytí fialového načítacího okna hned jak Firebase odpoví
+    const loader = document.getElementById('app-loader');
+    if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => { loader.style.visibility = 'hidden'; }, 400);
+    }
+
+    if (user) {
+        currentUser = user; 
+        publicView.classList.add('hidden'); 
+        privateView.classList.remove('hidden');
+        isUserAdmin = user.email && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(user.email.toLowerCase());
+
+        if (isUserAdmin) {
+            document.getElementById('btn-create-challenge-admin').style.display = 'block';
+            document.getElementById('admin-author-toggle').style.display = 'block';
+            document.getElementById('edit-admin-author-toggle').style.display = 'block';
+            document.getElementById('admin-visibility-toggle').style.display = 'block';
+            document.getElementById('edit-admin-visibility-toggle').style.display = 'block';
+        } else {
+            document.getElementById('btn-create-challenge-admin').style.display = 'block';
+            document.getElementById('admin-author-toggle').style.display = 'none';
+            document.getElementById('edit-admin-author-toggle').style.display = 'none';
+            document.getElementById('admin-visibility-toggle').style.display = 'none';
+            document.getElementById('edit-admin-visibility-toggle').style.display = 'none';
+        }
+
+        const userRef = doc(db, "users", user.uid);
+        if (!(await getDoc(userRef)).exists()) { 
+            await setDoc(userRef, { personalKm: 0, name: user.displayName || user.email.split('@')[0], avatarUrl: "", followers: [], following: [], followRequests: [], sentRequests: [], isPrivate: false, customStatsNote: "", userColor: "#FF5E00" }); 
+        }
+
+        unsubscribeUsersList = onSnapshot(collection(db, "users"), (snapshot) => {
+            globalUsersMap = {}; let rankArr = [];
+            snapshot.forEach(doc => { let data = doc.data(); globalUsersMap[doc.id] = data; rankArr.push({ id: doc.id, ...data }); });
+            rankArr.sort((a,b) => (b.personalKm || 0) - (a.personalKm || 0));
+            const dashList = document.getElementById('dashboard-leaderboard-list'); dashList.innerHTML = '';
+            for(let i=0; i<Math.min(3, rankArr.length); i++) {
+                let u = rankArr[i]; let avatarHtml = u.avatarUrl ? `<img src="${u.avatarUrl}">` : (u.name || 'N').charAt(0).toUpperCase();
+                dashList.innerHTML += `<div class="leaderboard-item" onclick="openPublicProfile('${u.id}')"><div class="lb-rank">${i+1}</div><div class="lb-avatar">${avatarHtml}</div><div class="lb-name">${u.name || 'Neznámý'}</div><div class="lb-score">${Math.max(0, u.personalKm || 0).toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km</div></div>`;
+            }
+            renderDynamicContent();
+        });
+
+        unsubscribeUser = onSnapshot(userRef, (docSnap) => {
+          if (!docSnap.exists()) return; const data = docSnap.data(); const myKm = Math.max(0, data.personalKm || 0); 
+          let formattedStr = myKm.toLocaleString('cs-CZ', {maximumFractionDigits: 1});
+          document.getElementById('my-km-text').innerHTML = `${formattedStr}<span> km</span>`;
+          document.getElementById('profile-name').innerText = data.name || 'Neznámý';
+          document.getElementById('profile-total-km').innerText = formattedStr + ' km';
+          const pAvatarNode = document.getElementById('profile-avatar');
+          if (data.avatarUrl) { pAvatarNode.innerHTML = `<img src="${data.avatarUrl}">`; } else { pAvatarNode.innerHTML = (data.name || 'N').charAt(0).toUpperCase(); }
+
+          if (data.customStatsNote) {
+              document.getElementById('p-custom-note').value = data.customStatsNote;
+          } else {
+              document.getElementById('p-custom-note').value = "";
+          }
+
+          let followersCount = data.followers ? data.followers.length : 0;
+          let followingCount = data.following ? data.following.length : 0;
+          let requestsCount = data.followRequests ? data.followRequests.length : 0;
+
+          document.getElementById('profile-followers').innerText = followersCount;
+          document.getElementById('profile-following').innerText = followingCount;
+
+          const reqBtn = document.getElementById('profile-requests-btn');
+          if(requestsCount > 0) { reqBtn.style.display = 'block'; reqBtn.innerText = `Nové žádosti o sledování (${requestsCount})`; } 
+          else { reqBtn.style.display = 'none'; }
+        });
+
+        unsubscribeActivities = onSnapshot(query(collection(db, "activities"), where("uid", "==", user.uid), orderBy("timestamp", "desc")), (snapshot) => {
+           const listContainer = document.getElementById('profile-activity-list'); listContainer.innerHTML = '';
+           document.getElementById('profile-total-activities').innerText = snapshot.size;
+           let todayKm = 0; const todayStr = new Date().toLocaleDateString('cs-CZ');
+           if(snapshot.empty) { listContainer.innerHTML = '<div style="text-align: center; color: var(--text-gray); padding: 10px; font-size:0.9em;">Zatím nemáš zapsanou žádnou aktivitu.</div>'; }
+           else {
+               snapshot.forEach(docSnap => {
+                   const data = docSnap.data(); const dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
+                   if (dateObj.toLocaleDateString('cs-CZ') === todayStr) { todayKm += data.km; }
+
+                   const stravaHtml = data.stravaUrl ? `<a href="${data.stravaUrl}" target="_blank" onclick="event.stopPropagation()" style="display:flex; align-items:center; margin-right: 10px;"><img src="strava.png" style="width:20px; height:20px; border-radius:4px;"></a>` : '';
+
+                   const item = document.createElement('div'); item.className = 'leaderboard-item';
+                   item.innerHTML = `${icons[data.type] || icons["Chůze"]}<div class="lb-name">${dateObj.toLocaleDateString('cs-CZ')} <span style="font-size: 0.8em; color: var(--text-gray); margin-left: 5px; font-weight:400;">(${data.type})</span></div>${stravaHtml}<div class="lb-score">${data.km.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km</div><button class="btn-inline-edit" onclick="openEditModal('${docSnap.id}', ${data.km}, '${data.type}', '${dateObj.toISOString().split('T')[0]}', '${data.stravaUrl || ''}')"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button>`;
+                   listContainer.appendChild(item);
+               });
+           }
+           const badge = document.getElementById('daily-progress-badge');
+           if (todayKm > 0) { badge.className = 'badge-green active'; badge.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg> +${todayKm.toLocaleString('cs-CZ', {maximumFractionDigits: 1})} km`; } 
+           else { badge.className = 'badge-green inactive'; badge.innerHTML = `0 km dnes`; }
+        });
+
+        unsubscribeAllActivities = onSnapshot(collection(db, "activities"), (snapshot) => {
+            globalActivities = []; snapshot.forEach(docSnap => { globalActivities.push({ id: docSnap.id, ...docSnap.data() }); }); renderDynamicContent();
+        });
+
+        unsubscribeChallengesList = onSnapshot(query(collection(db, "challenges"), orderBy("createdAt", "desc")), async (snap) => {
+            globalChallenges = []; snap.forEach(docSnap => { globalChallenges.push({ id: docSnap.id, ...docSnap.data() }); }); renderDynamicContent();
+        });
+
+    } else {
+        currentUser = null; isUserAdmin = false; 
+        publicView.classList.remove('hidden'); 
+        privateView.classList.add('hidden');
+        window.hideAuthForm();
+        
+        if(unsubscribeUser) unsubscribeUser(); if(unsubscribeUsersList) unsubscribeUsersList(); if(unsubscribeActivities) unsubscribeActivities(); if(unsubscribeChallengesList) unsubscribeChallengesList(); if(unsubscribeAllActivities) unsubscribeAllActivities();
+    }
+
+    if (!hasCheckedSharedLink) {
+        hasCheckedSharedLink = true;
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedChallengeId = urlParams.get('challenge');
+        if (sharedChallengeId) {
+            window.openChallengeDetail(sharedChallengeId);
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    }
+});
 
 window.setPersonalFilter = (type) => {
     personalFilterType = type;
@@ -939,8 +1008,8 @@ window.openChallengeDetail = async (cid) => {
         if (hasMap) {
             mapContainer.style.display = 'block';
             mapContainer.innerHTML = `
-               <button style="width: 100%; background: transparent; color: #000000; border: 1px solid rgba(0, 0, 0, 0.25); padding: 15px; border-radius: 54px; font-weight: 700; font-size: 1.05em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: none;" 
-                     onclick="window.lastOpenedChallengeId = '${c.id}'; window.closeChallengeDetail(); setTimeout(() => { window.switchTab('map'); window.handleMapSelect('${c.id}'); history.pushState({ isMapTab: true }, ''); }, 300);"> <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+                <button style="width: 100%; background: transparent; color: #000000; border: 1px solid rgba(0, 0, 0, 0.25); padding: 15px; border-radius: 54px; font-weight: 700; font-size: 1.05em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: none;" 
+                      onclick="window.lastOpenedChallengeId = '${c.id}'; window.closeChallengeDetail(); setTimeout(() => { window.switchTab('map'); window.handleMapSelect('${c.id}'); history.pushState({ isMapTab: true }, ''); }, 300);"> <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
 Otevřít mapu akce </button>
             `;
         } else {
@@ -1421,6 +1490,30 @@ window.handleMapSelect = async (challengeId) => {
     }
 };
 
+// === NOVÁ POMOCNÁ FUNKCE PRO PŘIPOČÍTÁNÍ KM DO VÝZEV ===
+async function updateChallengesTotalKm(kmDifference, activityDate, activityType) {
+    if (kmDifference === 0 || !currentUser) return;
+    const actDate = new Date(activityDate);
+    const typeLower = (activityType || "").trim().toLowerCase();
+    const updatePromises = [];
+
+    globalChallenges.forEach(c => {
+        if (c.members && c.members.includes(currentUser.uid)) {
+            let cStart = new Date(c.start); cStart.setHours(0,0,0,0);
+            let cEnd = new Date(c.end); cEnd.setHours(23,59,59,999);
+            let allowedLower = (c.allowedActivities || []).map(a => a.trim().toLowerCase());
+
+            if (actDate >= cStart && actDate <= cEnd && allowedLower.includes(typeLower)) {
+                // Přičteme/odečteme km z celkového počtu (totalKm) ve výzvě
+                updatePromises.push(updateDoc(doc(db, "challenges", c.id), { totalKm: increment(kmDifference) }));
+            }
+        }
+    });
+    if (updatePromises.length > 0) {
+        await Promise.all(updatePromises);
+    }
+}
+
 window.saveActivity = async () => {
   if(isSaving) return; 
   let rawInput = document.getElementById('km-input').value.replace(',', '.'); 
@@ -1435,9 +1528,11 @@ window.saveActivity = async () => {
     try { 
         await addDoc(collection(db, "activities"), { uid: currentUser.uid, km: km, type: currentActivityType, stravaUrl: stravaUrl, timestamp: activityDate }); 
         await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(km) }); 
+        // Zápis nového součtu do výzev
+        await updateChallengesTotalKm(km, activityDate, currentActivityType); 
         window.closeModal(); 
     } 
-    catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; }
+    catch (error) { alert("Chyba při ukládání."); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; }
   } else { alert("Zadej počet kilometrů."); }
 };
 
@@ -1457,8 +1552,15 @@ window.saveEditActivity = async () => {
     if(newKm > 0 && selectedActivityId && currentUser) {
         isSaving = true; const btn = document.getElementById('btn-edit-activity'); btn.innerText = "Ukládám..."; btn.disabled = true;
         const diffKm = newKm - selectedActivityOldKm; const newDate = newDateVal ? new Date(newDateVal) : new Date();
-        try { await updateDoc(doc(db, "activities", selectedActivityId), { km: newKm, type: editActivityType, stravaUrl: stravaUrl, timestamp: newDate }); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(diffKm) }); window.closeEditModal(); } 
-        catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Uložit změny"; btn.disabled = false; }
+        try { 
+            await updateDoc(doc(db, "activities", selectedActivityId), { km: newKm, type: editActivityType, stravaUrl: stravaUrl, timestamp: newDate }); 
+            await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(diffKm) }); 
+            // Odečteme starou aktivitu z výzev a přičteme novou upravenou
+            await updateChallengesTotalKm(-selectedActivityOldKm, selectedActivityDate, editActivityType);
+            await updateChallengesTotalKm(newKm, newDate, editActivityType);
+            window.closeEditModal(); 
+        } 
+        catch (error) { alert("Chyba při úpravě."); } finally { isSaving = false; btn.innerText = "Uložit změny"; btn.disabled = false; }
     } else { alert("Zadej platné hodnoty."); }
 };
 
@@ -1466,8 +1568,14 @@ window.deleteActivity = async () => {
     if(isSaving) return;
     if(selectedActivityId && currentUser && confirm("Opravdu smazat aktivitu?")) {
         isSaving = true; const btn = document.getElementById('btn-delete-activity'); btn.innerText = "Mažu..."; btn.disabled = true; const minusKm = -selectedActivityOldKm;
-        try { await deleteDoc(doc(db, "activities", selectedActivityId)); await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(minusKm) }); window.closeEditModal(); } 
-        catch (error) { alert("Chyba."); } finally { isSaving = false; btn.innerText = "Smazat aktivitu"; btn.disabled = false; }
+        try { 
+            await deleteDoc(doc(db, "activities", selectedActivityId)); 
+            await updateDoc(doc(db, "users", currentUser.uid), { personalKm: increment(minusKm) }); 
+            // Odečtení smazaných kilometrů z výzvy
+            await updateChallengesTotalKm(minusKm, selectedActivityDate, editActivityType);
+            window.closeEditModal(); 
+        } 
+        catch (error) { alert("Chyba při mazání."); } finally { isSaving = false; btn.innerText = "Smazat aktivitu"; btn.disabled = false; }
     }
 };
 
@@ -1747,7 +1855,7 @@ window.saveEditedChallenge = async () => {
     if(!name || !targetKm || !start || !end || allowedActivities.length === 0) return;
 
     if(selectedChallengeId) { 
-        isSaving = true; const btn = document.getElementById('btn-edit-chal'); btn.innerText = "Ukládám..."; btn.disabled = true;
+        isSaving = true; const btn = document.getElementById('edit-chal'); btn.innerText = "Ukládám..."; btn.disabled = true;
         try { await updateDoc(doc(db, "challenges", selectedChallengeId), { name, targetKm, subtitle, visibility, challengeType, customMarkerType, customMarkerSvg, mapType, mapUrl, virtualMapUrl: vImg, virtualMapWidth: vW, virtualMapHeight: vH, virtualSvgPath: vSvg, virtualLineWidth: vLineWidth, virtualLineStyle: vLineStyle, virtualLineColor: vLineColor, bgUrl: finalBgUrl, badgeUrl: finalBadgeUrl, description: desc, rules: rules, authorDisplay: authorDisplay, start, end, startDay, allowedActivities }); window.closeEditChallengeModal(); } 
         catch (e) { alert("Chyba."); console.error(e); } finally { isSaving = false; btn.innerText = "Uložit"; btn.disabled = false; }
     }
@@ -1822,33 +1930,13 @@ window.openPublicProfile = async (uid) => {
 
 window.closePublicProfile = () => window.handleUIClose('public-profile-modal');
 
-// --- PŘIHLÁŠOVACÍ/REGISTRAČNÍ FUNKCE ---
-window.resetPassword = (event) => { 
-    event.preventDefault(); 
-    const email = document.getElementById('login-email').value.trim(); 
-    if(!email) { alert("Zadejte prosím svůj e-mail do přihlašovacího pole pro obnovu."); return; }
-    sendPasswordResetEmail(auth, email); 
-};
+window.resetPassword = (event) => { event.preventDefault(); const email = document.getElementById('email-input').value.trim(); if(!email) return; sendPasswordResetEmail(auth, email); };
 
 window.registerUser = () => { 
-    const email = document.getElementById('register-email').value.trim(); 
-    const password = document.getElementById('register-password').value.trim();
-    const passwordConfirm = document.getElementById('register-password-confirm').value.trim();
-    const termsChecked = document.getElementById('register-terms').checked;
-    const errorEl = document.getElementById('register-error');
+    const email = document.getElementById('email-input').value.trim(); 
+    const password = document.getElementById('password-input').value.trim();
+    const errorEl = document.getElementById('auth-error');
     errorEl.style.display = 'none';
-
-    if (!termsChecked) {
-        errorEl.innerText = "Musíte souhlasit se zpracováním údajů a podmínkami.";
-        errorEl.style.display = 'block';
-        return;
-    }
-
-    if (password !== passwordConfirm) {
-        errorEl.innerText = "Zadaná hesla se neshodují.";
-        errorEl.style.display = 'block';
-        return;
-    }
 
     createUserWithEmailAndPassword(auth, email, password).catch(error => {
         errorEl.innerText = "Chyba registrace: " + error.message;
@@ -1857,9 +1945,9 @@ window.registerUser = () => {
 };
 
 window.loginUser = () => { 
-    const email = document.getElementById('login-email').value.trim(); 
-    const password = document.getElementById('login-password').value.trim(); 
-    const errorEl = document.getElementById('login-error');
+    const email = document.getElementById('email-input').value.trim(); 
+    const password = document.getElementById('password-input').value.trim(); 
+    const errorEl = document.getElementById('auth-error');
     errorEl.style.display = 'none';
 
     signInWithEmailAndPassword(auth, email, password).catch(error => {
@@ -1867,7 +1955,6 @@ window.loginUser = () => {
         errorEl.style.display = 'block';
     });
 };
-
 window.loginWithGoogle = () => { signInWithPopup(auth, googleProvider); };
 
 window.logoutUser = () => { 
@@ -1908,6 +1995,7 @@ window.setCalcPreset = (type, speed) => { document.getElementById('calc-speed').
 window.calculateKm = () => { const mins = parseFloat(document.getElementById('calc-minutes').value) || 0; const speed = parseFloat(document.getElementById('calc-speed').value) || 0; const km = (mins / 60) * speed; document.getElementById('calc-result').innerText = km.toFixed(1); document.getElementById('km-input').value = km.toFixed(1); };
 
 onAuthStateChanged(auth, async (user) => {
+    // Skrytí fialového načítacího okna hned jak Firebase odpoví
     const loader = document.getElementById('app-loader');
     if (loader) {
         loader.style.opacity = '0';
@@ -1915,8 +2003,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     if (user) {
-        document.getElementById('theme-color-meta').setAttribute('content', '#F0F2F5');
-        
         currentUser = user; 
         publicView.classList.add('hidden'); 
         privateView.classList.remove('hidden');
@@ -2011,8 +2097,6 @@ onAuthStateChanged(auth, async (user) => {
         });
 
     } else {
-        document.getElementById('theme-color-meta').setAttribute('content', '#4E46E5');
-        
         currentUser = null; isUserAdmin = false; 
         publicView.classList.remove('hidden'); 
         privateView.classList.add('hidden');
