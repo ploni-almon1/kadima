@@ -11,7 +11,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#F0F2F5">
+  <meta id="theme-color-meta" name="theme-color" content="#4E46E5">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
@@ -22,6 +22,17 @@
 </head>
 <body>
 
+  <!-- PWA INSTALAČNÍ BANNER -->
+  <div id="pwa-install-banner" class="hidden" style="position: fixed; top: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: var(--white); border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); z-index: 10000; display: flex; align-items: center; padding: 12px 15px; gap: 15px;">
+      <img src="icon.png" alt="Kadima" style="width: 40px; height: 40px; border-radius: 10px;">
+      <div style="flex: 1; text-align: left;">
+          <div style="font-weight: 700; font-size: 0.95em; color: var(--text-dark);">Nainstalovat Kadima</div>
+          <div style="font-size: 0.8em; color: var(--text-gray);">Rychlejší přístup z plochy</div>
+      </div>
+      <button onclick="installPWA()" style="background: transparent; color: var(--primary-dark); border: none; font-weight: 700; font-size: 0.9em; cursor: pointer;">Instalovat</button>
+      <button onclick="dismissPWAInstall()" style="background: transparent; border: none; color: var(--text-gray); font-size: 1.2em; cursor: pointer; padding: 0 5px;">✕</button>
+  </div>
+
   <!-- NAČÍTACÍ OBRAZOVKA -->
   <div id="app-loader">
       <div class="spinner"></div>
@@ -30,56 +41,101 @@
   <!-- VEŘEJNÁ ČÁST -->
   <div id="public-view" class="hidden">
     
-    <!-- NOVÁ ÚVODNÍ OBRAZOVKA PODLE NÁVRHU -->
+    <!-- ÚVODNÍ OBRAZOVKA (Modrá) -->
     <div id="onboarding-screen" class="onboarding-container">
       <div class="onboarding-content">
-        <div class="onboarding-logo">
-          <svg viewBox="0 0 24 24" width="100" height="100" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="17 11 12 6 7 11"></polyline>
-            <polyline points="17 18 12 13 7 18"></polyline>
-          </svg>
+        <div class="onboarding-logo" style="background: transparent; border: none;">
+          <img src="icon.png" alt="Kadima" style="width: 100px; height: 100px; border-radius: 20px;">
         </div>
         <h1 class="onboarding-title">Kadima</h1>
-        <p class="onboarding-subtitle">Každý kilometr se počítá.</p>
+        <p class="onboarding-desc" style="margin-bottom: 5px; font-weight: 700;">Každý kilometr se počítá.</p>
         <p class="onboarding-desc">Výzvy. Sport. Posun vpřed.</p>
       </div>
 
       <div class="onboarding-bottom">
-        <div class="onboarding-dots">
-          <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
-        </div>
-        <button class="btn-start" onclick="showAuthForm()">Začít</button>
-        <p class="login-link">Už máte účet? <span onclick="showAuthForm()">Přihlásit se</span></p>
+        <button class="btn-start" onclick="showRegister()">Začít</button>
+        <p class="login-link">Už máte účet? <span onclick="showLogin()">Přihlásit se</span></p>
       </div>
     </div>
 
-    <!-- PŮVODNÍ PŘIHLAŠOVACÍ FORMULÁŘ -->
-    <div id="auth-screen" class="hidden" style="max-width: 400px; margin: 0 auto; padding: 20px;">
-      <div style="display:flex; align-items:center; margin-top: 40px; margin-bottom: 20px; cursor: pointer; color: var(--text-gray);" onclick="hideAuthForm()">
+    <!-- PŘIHLAŠOVACÍ OBRAZOVKA (Bílá) -->
+    <div id="login-screen" class="hidden auth-wrapper" style="max-width: 400px; margin: 0 auto; padding: 20px;">
+      <div style="display:flex; align-items:center; margin-top: 40px; margin-bottom: 20px; cursor: pointer; color: var(--text-gray);" onclick="goBackToStart()">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="margin-right: 8px;"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> Zpět
       </div>
-      <h2 style="font-weight: 800; font-size: 1.8em; margin-bottom: 20px; color: var(--text-dark);">Vítejte zpět</h2>
+      <h2 style="font-weight: 800; font-size: 1.8em; margin-bottom: 5px; color: var(--text-dark);">Přihlášení</h2>
+      <p style="color: var(--text-gray); margin-bottom: 20px;">Vítejte zpět! Přihlaste se do svého účtu.</p>
       <div class="auth-form" style="margin-top:0;">
-        <input type="email" id="email-input" class="auth-input" placeholder="Tvůj e-mail">
+        <input type="email" id="login-email" class="auth-input" placeholder="E-mail">
         
         <div style="position: relative; margin-bottom: 12px;">
-          <input type="password" id="password-input" class="auth-input" placeholder="Heslo (min. 6 znaků)" style="margin-bottom:0; padding-right:45px;">
-          <div onclick="togglePassword('password-input')" style="position: absolute; right: 15px; top: 15px; cursor: pointer; color: var(--text-gray);">
+          <input type="password" id="login-password" class="auth-input" placeholder="Heslo" style="margin-bottom:0; padding-right:45px;">
+          <div onclick="togglePassword('login-password')" style="position: absolute; right: 15px; top: 15px; cursor: pointer; color: var(--text-gray);">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
           </div>
         </div>
 
-        <a href="#" style="display:block; text-align:right; font-size:0.85em; font-weight:600; color:var(--primary-dark); margin-bottom:15px; text-decoration:none;" onclick="resetPassword(event)">Zapomněl(a) jsi heslo?</a>
+        <a href="#" style="display:block; text-align:right; font-size:0.85em; font-weight:600; color:var(--primary-dark); margin-bottom:20px; text-decoration:none;" onclick="resetPassword(event)">Zapomenuté heslo?</a>
 
-        <button onclick="loginUser()" class="btn-login" style="background:#5A52E5;">Přihlásit se</button>
-        <button onclick="registerUser()" class="btn-register" style="background:var(--primary-dark);">Vytvořit nový účet</button>
-        <div style="display:flex; align-items:center; color:var(--text-gray); font-size:0.85em; margin-bottom:15px;">
+        <button onclick="loginUser()" class="btn-login" style="background:#4E46E5;">Přihlásit se</button>
+        
+        <div style="display:flex; align-items:center; color:var(--text-gray); font-size:0.85em; margin: 20px 0;">
             <div style="flex:1; height:1px; background:var(--gray-border);"></div><span style="padding:0 10px;">nebo</span><div style="flex:1; height:1px; background:var(--gray-border);"></div>
         </div>
+        
         <button onclick="loginWithGoogle()" class="btn-google">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" style="width:20px;height:20px;"> Přihlásit se přes Google
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:20px;height:20px;"> Přihlásit se s Googlem
         </button>
-        <p id="auth-error" style="color:#EF4444; font-size:0.85em; font-weight:600; text-align:center; margin-top:15px; display:none;"></p>
+        
+        <p style="text-align:center; font-size: 0.9em; margin-top: 20px; color: var(--text-gray);">Ještě nemáte účet? <span style="color: var(--primary-dark); font-weight: 700; cursor: pointer;" onclick="showRegister()">Zaregistrovat se</span></p>
+        <p id="login-error" style="color:#EF4444; font-size:0.85em; font-weight:600; text-align:center; margin-top:15px; display:none;"></p>
+      </div>
+    </div>
+
+    <!-- REGISTRAČNÍ OBRAZOVKA (Bílá) -->
+    <div id="register-screen" class="hidden auth-wrapper" style="max-width: 400px; margin: 0 auto; padding: 20px;">
+      <div style="display:flex; align-items:center; margin-top: 40px; margin-bottom: 20px; cursor: pointer; color: var(--text-gray);" onclick="goBackToStart()">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="margin-right: 8px;"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> Zpět
+      </div>
+      <h2 style="font-weight: 800; font-size: 1.8em; margin-bottom: 5px; color: var(--text-dark);">Vytvoření účtu</h2>
+      <p style="color: var(--text-gray); margin-bottom: 20px;">Vyplňte své údaje pro vytvoření nového účtu.</p>
+      
+      <div class="auth-form" style="margin-top:0;">
+        <input type="email" id="register-email" class="auth-input" placeholder="E-mail">
+        
+        <div style="position: relative; margin-bottom: 12px;">
+          <input type="password" id="register-password" class="auth-input" placeholder="Heslo" style="margin-bottom:0; padding-right:45px;">
+          <div onclick="togglePassword('register-password')" style="position: absolute; right: 15px; top: 15px; cursor: pointer; color: var(--text-gray);">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+          </div>
+        </div>
+        
+        <div style="position: relative; margin-bottom: 20px;">
+          <input type="password" id="register-password-confirm" class="auth-input" placeholder="Potvrďte heslo" style="margin-bottom:0; padding-right:45px;">
+          <div onclick="togglePassword('register-password-confirm')" style="position: absolute; right: 15px; top: 15px; cursor: pointer; color: var(--text-gray);">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom: 20px;">
+          <input type="checkbox" id="register-terms" style="margin-top: 3px; width: 16px; height: 16px; cursor: pointer;">
+          <label for="register-terms" style="font-size: 0.8em; color: var(--text-gray); line-height: 1.4; cursor: pointer;">
+            Souhlasím se <span onclick="openTermsModal()" style="color: var(--primary-dark); font-weight: 700; text-decoration: underline;">zpracováním údajů a podmínkami</span>.
+          </label>
+        </div>
+
+        <button onclick="registerUser()" class="btn-login" style="background:#4E46E5;">Vytvořit účet</button>
+        
+        <div style="display:flex; align-items:center; color:var(--text-gray); font-size:0.85em; margin: 20px 0;">
+            <div style="flex:1; height:1px; background:var(--gray-border);"></div><span style="padding:0 10px;">nebo</span><div style="flex:1; height:1px; background:var(--gray-border);"></div>
+        </div>
+        
+        <button onclick="loginWithGoogle()" class="btn-google">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:20px;height:20px;"> Pokračovat s Googlem
+        </button>
+        
+        <p style="text-align:center; font-size: 0.9em; margin-top: 20px; color: var(--text-gray);">Už máte účet? <span style="color: var(--primary-dark); font-weight: 700; cursor: pointer;" onclick="showLogin()">Přihlásit se</span></p>
+        <p id="register-error" style="color:#EF4444; font-size:0.85em; font-weight:600; text-align:center; margin-top:15px; display:none;"></p>
       </div>
     </div>
   </div>
@@ -364,6 +420,10 @@
             <button class="btn-cancel" onclick="closeSettingsModal()">Zavřít</button>
             <button class="btn-save" onclick="saveSettings()">Uložit</button>
         </div>
+        
+        <!-- TRVALÉ TLAČÍTKO PRO INSTALACI PWA -->
+        <button id="btn-manual-install" class="btn-save" style="margin-top:15px; width:100%; display:none; background-color: var(--primary-dark);" onclick="installPWA()">Nainstalovat aplikaci do telefonu</button>
+        
         <button class="btn-delete" style="margin-top:15px;" onclick="logoutUser()">Odhlásit z aplikace</button>
     </div>
   </div>
@@ -872,6 +932,30 @@
               <div style="text-align:left; font-weight:700; font-size:1.05em; margin-bottom:10px; margin-top:10px;">Přehled aktivit</div>
               <div id="public-profile-activity-list" class="leaderboard-list"></div>
           </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="terms-modal" class="modal-overlay" onclick="if(event.target===this) closeTermsModal()">
+    <div class="modal-content" style="max-width: 500px; text-align: left;">
+      <h3 style="margin-bottom:15px; text-align: center;">Ochrana soukromí a podmínky</h3>
+      <div style="font-size: 0.85em; color: var(--text-dark); line-height: 1.6; max-height: 50vh; overflow-y: auto; padding-right: 10px;">
+          <p>Tato aplikace je vytvořena pro komunitní a osobní účely. Aby vše správně fungovalo, potřebujeme zpracovávat několik základních údajů.</p>
+          <br>
+          <p><strong>1. Jaká data sbíráme</strong><br>
+          Ukládáme tvůj e-mail (slouží pouze pro bezpečné přihlášení), jméno nebo přezdívku, profilovou fotku a záznamy o tvých aktivitách (kilometry, typ sportu, datum, poznámky a případné odkazy na Stravu).</p>
+          <br>
+          <p><strong>2. K čemu data slouží</strong><br>
+          Data využíváme výhradně k chodu aplikace – pro výpočet tvých osobních statistik, tvůj posun v mapách a pro sestavování žebříčků v závodech a výzvách.</p>
+          <br>
+          <p><strong>3. Kdo tvoje data vidí</strong><br>
+          Tvé statistiky mohou vidět uživatelé, se kterými sdílíš společnou výzvu, nebo tví sledující. Data nikdy neprodáváme ani neposkytujeme žádným třetím stranám pro reklamní účely. Vše je bezpečně uloženo na serverech Google Firebase.</p>
+          <br>
+          <p><strong>4. Tvoje práva a smazání dat</strong><br>
+          Máš nad svými daty plnou kontrolu. V nastavení profilu můžeš kdykoliv využít tlačítko „Odstranit celý můj profil“. Tím se z databáze nevratně smažou veškeré tvé záznamy, kilometry i přihlašovací e-mail.</p>
+      </div>
+      <div class="modal-buttons-row">
+          <button class="btn-cancel" onclick="closeTermsModal()" style="width: 100%;">Rozumím a zavřít</button>
       </div>
     </div>
   </div>
